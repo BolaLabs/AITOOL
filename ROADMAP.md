@@ -23,13 +23,11 @@ below that are still open are stated as limits in the README rather than hidden.
 - **Machine-readable marking of generated content.** The other half of AI Act
   Article 50: the disclosure to the reader now exists, but exported conversations
   and generated documents carry no marker saying a model produced them.
-- **Screenshots in the README.** Still none. Three static images carry it: the chat
-  answering from ERP data, a preview card awaiting confirmation, the audit table.
 - **Settle the `Lib/` question in writing** with the Cegid partner agreement. The
   position is stated in DISTRIBUTION.md. With the source repository private, no Cegid
   binary leaves the building; the conversation is needed only before any source release.
 
-Closed on this list: the capabilities-and-limits statement ("What it will not do" in
+Closed on this list: the README screenshots (2026-08-21), the capabilities-and-limits statement ("What it will not do" in
 the README), the minimum-model floor (~8B at q4, in the README's cost section), the
 Cegid Pulse comparison, and the Article 50 disclosure to the user — stated on the
 welcome screen and standing under the message box for the whole session, because a
@@ -69,6 +67,12 @@ What a customer hits in the first week of real use.
 
 Measured gaps, not preferences.
 
+- **Pending-items date window.** `get_pending_items` passes a 24-month `DataInicial` to the
+  ERP's own query, and the tool description says so, yet a run without dates returned the
+  same 138 documents as a run from 2015 on the demo company. Establish what `TipoDataRef=0`
+  does with the dates, then either make the window real or drop the claim. The same query
+  pays dozens of catalog round trips through the DSO; on a server with slow compiles it
+  took 60-125 s where the SQL itself took under a second.
 - **Prompt caching that works.** Every request carries a fixed ~11k-token prefix
   (16 KB system prompt + ~20 KB of schemas for 21 tools) re-sent on every tool
   continuation. Only 1 of Anthropic's 4 cache breakpoints is used, and because

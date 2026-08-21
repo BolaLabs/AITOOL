@@ -60,6 +60,27 @@ funcionar em minutos.
 
 ---
 
+## Como é
+
+<table>
+<tr>
+<td><img src="docs/assets/screenshot-pendentes-kpi.png" alt="Pendentes: cartões KPI, filtros e tabela viva, ancorados ao lado do ERP" width="300"></td>
+<td><img src="docs/assets/screenshot-preview-confirmacao.png" alt="Alteração a uma ficha de cliente em pré-visualização, à espera da confirmação do utilizador" width="300"></td>
+<td><img src="docs/assets/screenshot-auditoria.png" alt="A vista /auditoria sobre a AI_AuditLog no chat" width="300"></td>
+</tr>
+<tr>
+<td><sub>"Dá-me a lista de pendentes desde 2015" — a consulta de pendentes do próprio ERP, em cartões e tabela viva.</sub></td>
+<td><sub>Uma escrita é pré-visualizada pelo ERP e só gravada depois do "sim".</sub></td>
+<td><sub>Cada gravação, recusa e falha fica na <code>AI_AuditLog</code>, na sua base de dados.</sub></td>
+</tr>
+</table>
+
+<img src="docs/assets/screenshot-ficha-ao-lado.jpg" alt="O assistente ancorado à direita do cliente Primavera, com a ficha de cliente que abriu ao lado" width="920">
+
+Capturas na DEMOV10, a empresa de demonstração da Cegid, com a build 2.8.0.
+
+---
+
 ## O que faz
 
 O AITOOL é uma extensão WinForms (.NET Framework 4.8) que embute um assistente de chat no

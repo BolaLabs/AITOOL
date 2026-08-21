@@ -59,6 +59,27 @@ The product is free to use, for companies and partners alike. Install it from th
 
 ---
 
+## What it looks like
+
+<table>
+<tr>
+<td><img src="docs/assets/screenshot-pendentes-kpi.png" alt="Pending items: KPI cards, filters and the live table, docked beside the ERP" width="300"></td>
+<td><img src="docs/assets/screenshot-preview-confirmacao.png" alt="A change to a client record previewed and waiting for the user's confirmation" width="300"></td>
+<td><img src="docs/assets/screenshot-auditoria.png" alt="The /auditoria view over AI_AuditLog in the chat" width="300"></td>
+</tr>
+<tr>
+<td><sub>"Dá-me a lista de pendentes desde 2015" — the ERP's own pending-items query, as cards and a live table.</sub></td>
+<td><sub>A write is previewed by the ERP first and saved only after "sim".</sub></td>
+<td><sub>Every save, refusal and failure lands in <code>AI_AuditLog</code>, in your database.</sub></td>
+</tr>
+</table>
+
+<img src="docs/assets/screenshot-ficha-ao-lado.jpg" alt="The assistant docked at the right of the Primavera client, with the client record it opened beside it" width="920">
+
+Captured on DEMOV10, the Cegid demo company, with the 2.8.0 build.
+
+---
+
 ## What it does
 
 AITOOL is a WinForms extension (.NET Framework 4.8) that embeds a chat assistant into the

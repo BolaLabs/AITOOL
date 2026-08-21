@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses [Conventional Commits](https://www.conventionalcommits.org/).
 Unreleased work is tracked under **Unreleased** until it is tagged.
 
+## [2.8.1] - 2026-08-21
+
+### Fixed
+
+- A conversation started from the sidebar's "Nova conversa" button, or left behind after
+  deleting the current one, ran without the system prompt — no ERP rules, no tool guidance,
+  no date — until the ERP was restarted. Both paths now reset the way `/novo` does.
+- The chat resources (markdown, sanitiser, syntax highlighting, diagrams) are found in the
+  installed folder when the ERP's shadow copy carries only the DLLs; until now that start fell
+  back to the embedded page and rendered plain text.
+- `open_record` waits up to 90 s for the ERP window (was 45 s) and logs at 30 s that the ERP
+  is slow; on a slow SQL server a plain client record took 51 s and was reported as a failure
+  one poll before it appeared.
+- The session cost in the footer is priced at the active provider's model, and hidden when
+  that model has no pricing row.
+
+### Changed
+
+- The dock panel is named after the product; provider, model and context stay in the chat
+  header. Its default width follows the screen (600-860 px) so the KPI cards fit in one row.
+- Refusals of irreversible actions name what the action touches (balances, account, fiscal
+  maps, stock) instead of asking a bare "are you sure?".
+
+- `close_all_windows` now also closes the PDF viewer the assistant opened and the legacy
+  VB6 editors, which are native top-level windows rather than forms; it still stops at the
+  first window that raises a save prompt.
+
 ## [2.8.0] - 2026-08-21
 
 ### Fixed
