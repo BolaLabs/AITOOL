@@ -1,0 +1,8 @@
+# These are supported funding model platforms
+#
+# GitHub Sponsors is not listed because the account is not enrolled; a `github:`
+# entry for an account without a Sponsors listing renders nothing. Add
+# `github: brunobola` here once enrolment (Stripe Connect + tax details) is done.
+
+ko_fi: brunobola
+custom: ['https://buymeacoffee.com/brunobola']

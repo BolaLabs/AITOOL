@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="120" viewBox="0 0 500 120" role="img" aria-label="AI Tool">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#24466E"/>
+      <stop offset="1" stop-color="#16304F"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(14,14) scale(1.4375)">
+    <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#tile)"/>
+    <path d="M19 45 L32 19 L45 45" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="32" cy="44.5" r="4.6" fill="#D9A441"/>
+  </g>
+  <text x="132" y="74" font-family="'Segoe UI', Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="4">
+    <tspan fill="#D9A441">AI</tspan><tspan fill="#1E3A5F" dx="10">TOOL</tspan>
+  </text>
+  <text x="135" y="100" font-family="'Segoe UI', Arial, sans-serif" font-size="15" fill="#586575" letter-spacing="0.5">Assistente inteligente para o ERP PRIMAVERA</text>
+</svg>

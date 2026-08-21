@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-label="Repository layout: the AITOOL addon folders (AI, Chat, ERP, Common, UI, Infrastructure), sibling projects (OpenAI.SDK, Shared.Config, ReportEngine) and support folders (Installer, docs, sql, Lib)">
+  <g font-family="-apple-system, 'Segoe UI', system-ui, sans-serif">
+
+    <!-- ============ Left column: the addon ============ -->
+    <text x="20" y="44" font-size="11" fill="#8b98a5" letter-spacing="2.5" font-weight="600">THE ADDON — AITOOL.CSPROJ</text>
+
+    <rect x="20" y="62" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="34" y="82" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">AI/</text>
+    <text x="205" y="82" font-size="12" fill="#8b98a5">provider abstraction, the 19 tools, view-models</text>
+
+    <rect x="20" y="108" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="34" y="128" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Chat/</text>
+    <text x="205" y="128" font-size="12" fill="#8b98a5">orchestrator, history (Dapper), exporters</text>
+
+    <rect x="20" y="154" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="34" y="174" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">ERP/</text>
+    <text x="205" y="174" font-size="12" fill="#8b98a5">BSO services, window automation, editors</text>
+
+    <rect x="20" y="200" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="34" y="220" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Common/</text>
+    <text x="205" y="220" font-size="12" fill="#8b98a5">helpers, Result types, data access</text>
+
+    <rect x="20" y="246" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="34" y="266" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">UI/</text>
+    <text x="205" y="266" font-size="12" fill="#8b98a5">main form, dialogs, chat page + vendored JS</text>
+
+    <rect x="20" y="292" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="34" y="312" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Infrastructure/</text>
+    <text x="205" y="312" font-size="12" fill="#8b98a5">dependency injection wiring</text>
+
+    <!-- ============ Right column: sibling projects ============ -->
+    <text x="500" y="44" font-size="11" fill="#8b98a5" letter-spacing="2.5" font-weight="600">SIBLING PROJECTS</text>
+
+    <rect x="500" y="62" width="170" height="30" rx="7" fill="#D9A441" fill-opacity="0.07" stroke="#D9A441" stroke-width="1.2"/>
+    <text x="514" y="82" font-size="12.5" font-weight="600" fill="#D9A441" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">OpenAI.SDK/</text>
+    <text x="685" y="82" font-size="12" fill="#8b98a5">vendored Betalgo-based client</text>
+
+    <rect x="500" y="108" width="170" height="30" rx="7" fill="#D9A441" fill-opacity="0.07" stroke="#D9A441" stroke-width="1.2"/>
+    <text x="514" y="128" font-size="12.5" font-weight="600" fill="#D9A441" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Shared.Config/</text>
+    <text x="685" y="128" font-size="12" fill="#8b98a5">unified config, telemetry</text>
+
+    <rect x="500" y="154" width="170" height="30" rx="7" fill="#D9A441" fill-opacity="0.07" stroke="#D9A441" stroke-width="1.2"/>
+    <text x="514" y="174" font-size="12.5" font-weight="600" fill="#D9A441" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">ReportEngine/</text>
+    <text x="685" y="174" font-size="12" fill="#8b98a5">Crystal Reports wrapper for PDFs</text>
+
+    <!-- ============ Right column: support ============ -->
+    <text x="500" y="224" font-size="11" fill="#8b98a5" letter-spacing="2.5" font-weight="600">SUPPORT</text>
+
+    <rect x="500" y="242" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="514" y="262" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Installer/</text>
+    <text x="685" y="262" font-size="12" fill="#8b98a5">Inno Setup + build-installer.ps1</text>
+
+    <rect x="500" y="288" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="514" y="308" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">docs/</text>
+    <text x="685" y="308" font-size="12" fill="#8b98a5">configuration reference, assets</text>
+
+    <rect x="500" y="334" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="514" y="354" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">sql/</text>
+    <text x="685" y="354" font-size="12" fill="#8b98a5">index scripts</text>
+
+    <rect x="500" y="380" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
+    <text x="514" y="400" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Lib/</text>
+    <text x="685" y="400" font-size="12" fill="#8b98a5">vendored Primavera reference assemblies</text>
+
+  </g>
+</svg>

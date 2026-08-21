@@ -1,0 +1,111 @@
+Licença Community do AITOOL
+Versão 1.0, 21 de agosto de 2026
+
+Copyright (c) 2025-2026 Bruno Marques - Bola Labs. Todos os direitos reservados.
+
+Tradução de cortesia. Em caso de conflito prevalece o texto inglês (LICENSE).
+
+Esta licença cobre o AITOOL, o addon de assistente de IA para o Cegid PRIMAVERA
+v10 ("o Software"), tal como distribuído pela Bola Labs em forma binária através
+do instalador oficial. É uma licença de freeware: o Software é gratuito e não é
+open source.
+
+1. O que pode fazer
+
+   a. Instalar e usar o Software, para qualquer fim incluindo comercial, em
+      qualquer número de máquinas e de utilizadores, pelo tempo que quiser.
+      Não há custo, subscrição, licença por posto nem medição de utilização no
+      Software.
+   b. Redistribuir o instalador oficial, inalterado e completo, incluindo aos
+      seus próprios clientes - por exemplo como parceiro Primavera que o instala
+      num cliente. Não pode cobrar pelo Software em si; pode cobrar pelos seus
+      serviços de instalação, configuração, formação ou suporte.
+   c. Configurar o Software através das suas definições, incluindo instruções
+      personalizadas, fornecedores e modelos, e ligá-lo a qualquer fornecedor de
+      IA ou modelo local que tenha direito a usar.
+
+2. O que não pode fazer
+
+   a. Modificar, traduzir, adaptar ou criar obras derivadas do Software.
+   b. Fazer engenharia inversa, descompilar ou desmontar o Software, salvo na
+      medida em que a lei aplicável o permita expressamente apesar desta
+      cláusula.
+   c. Remover ou alterar avisos de copyright, marca ou licença, ou os avisos
+      de terceiros que o acompanham.
+   d. Distribuir o Software modificado, parcial, reempacotado ou com outro
+      nome; ou sublicenciá-lo, alugá-lo ou emprestá-lo.
+   e. Usar os nomes ou logótipos AITOOL ou Bola Labs exceto para identificar o
+      Software inalterado - ver TRADEMARKS.md.
+
+3. Código fonte e funcionalidades premium
+
+   O código fonte não faz parte desta licença. Licenças de código, builds
+   white-label e OEM, ferramentas e integrações à medida, instalações em
+   produção com suporte e futuras funcionalidades premium estão disponíveis em
+   termos comerciais separados - ver COMMERCIAL.md. Tudo o que é distribuído na
+   edição Community ao abrigo desta licença continua gratuito ao abrigo dela;
+   funcionalidades lançadas mais tarde como premium serão identificadas como
+   tal.
+
+4. Componentes de terceiros
+
+   O Software corre dentro de uma instalação PRIMAVERA v10 que tem de licenciar
+   à Cegid separadamente; nenhum binário da Cegid ou da SAP é distribuído com
+   ele. O instalador transporta o runtime DevExpress ao abrigo dos termos de
+   redistribuição da DevExpress, e o Software incorpora componentes open source
+   sob as respetivas licenças, listados em THIRD-PARTY-NOTICES.md. Essas
+   licenças continuam a aplicar-se a esses componentes.
+
+5. Dados e rede
+
+   O Software envia os dados que escolher ao fornecedor de IA e ao fornecedor
+   de pesquisa que configurar, e só a eles, mais os hosts documentados em
+   docs/SECURITY-AND-PRIVACY.pt.md. A Bola Labs não opera nenhum servidor nesse
+   caminho e não recebe conteúdo das conversas. A telemetria opcional de erros
+   está descrita no mesmo documento. É responsável pelos termos do fornecedor e
+   pelas obrigações de proteção de dados da sua organização.
+
+6. Escritas no ERP
+
+   O Software pode criar e alterar registos no seu ERP através dos objetos de
+   negócio do PRIMAVERA, depois de um passo de pré-visualização e com registo de
+   auditoria na sua base de dados. Continua responsável por rever o que ele
+   propõe, pelas permissões das contas Windows e SQL em que corre, e por
+   qualquer registo gravado através dele.
+
+7. Sem garantia
+
+   O SOFTWARE É FORNECIDO "TAL COMO ESTÁ", SEM GARANTIA DE QUALQUER TIPO,
+   EXPRESSA OU IMPLÍCITA, INCLUINDO SEM LIMITAÇÃO GARANTIAS DE COMERCIALIZAÇÃO,
+   ADEQUAÇÃO A UM FIM ESPECÍFICO E NÃO VIOLAÇÃO. O que é produzido com ajuda de
+   modelos de IA pode estar errado; não constitui aconselhamento de nenhum tipo.
+
+8. Limitação de responsabilidade
+
+   NA MÁXIMA MEDIDA PERMITIDA PELA LEI, A BOLA LABS NÃO É RESPONSÁVEL POR DANOS
+   INDIRETOS, INCIDENTAIS, ESPECIAIS, CONSEQUENCIAIS OU PUNITIVOS, NEM POR PERDA
+   DE DADOS, LUCROS OU NEGÓCIO, DECORRENTES DO USO OU DA IMPOSSIBILIDADE DE USO
+   DO SOFTWARE. Nada nesta licença limita responsabilidade que não possa ser
+   limitada pela lei aplicável.
+
+9. Duração
+
+   Esta licença vigora até ser terminada. Termina automaticamente se a violar;
+   nesse caso deve deixar de usar e distribuir o Software. As secções 4 a 9
+   sobrevivem à terminação.
+
+10. Atualizações e alterações
+
+   A Bola Labs pode lançar atualizações ao abrigo desta ou de uma versão
+   posterior da Licença Community. Cada release indica a licença em que sai;
+   uma versão posterior nunca retira os direitos concedidos sobre uma release
+   que já tenha.
+
+11. Lei
+
+   Esta licença rege-se pela lei portuguesa. Os litígios ficam sujeitos aos
+   tribunais portugueses, sem prejuízo das normas imperativas de proteção do
+   consumidor do seu país de residência.
+
+Contacto: https://github.com/BolaLabs/AITOOL/discussions ou o perfil Bola Labs
+em https://github.com/BolaLabs.

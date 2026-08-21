@@ -1,0 +1,108 @@
+AITOOL Community License
+Version 1.0, 21 August 2026
+
+Copyright (c) 2025-2026 Bruno Marques - Bola Labs. All rights reserved.
+
+Portuguese version: LICENSE.pt. In case of conflict the English text governs.
+
+This licence covers AITOOL, the AI assistant addon for Cegid PRIMAVERA v10
+("the Software"), as distributed by Bola Labs in binary form through the
+official installer. It is a freeware licence: the Software is free of charge,
+and it is not open source.
+
+1. What you may do
+
+   a. Install and use the Software, for any purpose including commercial use,
+      on any number of machines and for any number of users, for as long as
+      you wish. There is no fee, no subscription, no per-seat licence and no
+      usage metering in the Software.
+   b. Redistribute the official installer, unmodified and complete, including
+      to your own customers - for example as a Primavera partner deploying it
+      for a client. You may not charge for the Software itself; you may charge
+      for your own installation, configuration, training or support services.
+   c. Configure the Software through its settings, including custom
+      instructions, providers and models, and connect it to any AI provider or
+      local model you hold the rights to use.
+
+2. What you may not do
+
+   a. Modify, translate, adapt or create derivative works of the Software.
+   b. Reverse engineer, decompile or disassemble the Software, except to the
+      extent that applicable law expressly permits this despite this clause.
+   c. Remove or alter any copyright, trademark or licence notice, or the
+      third-party notices that ship with it.
+   d. Distribute the Software modified, partially, repackaged, or under another
+      name; or sublicense, rent, lease or lend it.
+   e. Use the AITOOL or Bola Labs names or logos except to identify the
+      unmodified Software - see TRADEMARKS.md.
+
+3. Source code and premium features
+
+   The source code is not part of this licence. Source licences, white-label
+   and OEM builds, custom tools and integrations, supported production
+   deployments and future premium features are available under separate
+   commercial terms - see COMMERCIAL.md. Everything that ships in the
+   Community edition under this licence stays free of charge under this
+   licence; features released later as premium will be marked as such.
+
+4. Third-party components
+
+   The Software runs inside a PRIMAVERA v10 installation that you must license
+   from Cegid separately; no Cegid or SAP binary is distributed with it. The
+   installer carries the DevExpress runtime under DevExpress's redistribution
+   terms, and the Software embeds open-source components under their own
+   licences, listed in THIRD-PARTY-NOTICES.md. Those licences continue to
+   apply to those components.
+
+5. Data and network
+
+   The Software sends the data you choose to the AI provider and search
+   provider you configure, and only to them, plus the hosts documented in
+   docs/SECURITY-AND-PRIVACY.md. Bola Labs operates no server in that path
+   and receives no chat content. Optional error telemetry is described in the
+   same document. You are responsible for the provider terms and for the data
+   protection obligations of your own organisation.
+
+6. Writes to the ERP
+
+   The Software can create and change records in your ERP through the
+   PRIMAVERA business objects, after a preview step and with an audit log in
+   your database. You remain responsible for reviewing what it proposes, for
+   the permissions of the Windows and SQL accounts it runs under, and for any
+   record saved through it.
+
+7. No warranty
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. Output produced with
+   the help of AI models may be wrong; it is not advice of any kind.
+
+8. Limitation of liability
+
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, BOLA LABS SHALL NOT BE LIABLE FOR
+   ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES, OR
+   FOR LOSS OF DATA, PROFITS OR BUSINESS, ARISING FROM THE USE OF OR INABILITY
+   TO USE THE SOFTWARE. Nothing in this licence limits liability that cannot be
+   limited under applicable law.
+
+9. Term
+
+   This licence is effective until terminated. It terminates automatically if
+   you breach it; on termination you must stop using and distributing the
+   Software. Sections 4 to 9 survive termination.
+
+10. Updates and changes
+
+   Bola Labs may release updates under this or a later version of the
+   Community License. Each release states the licence it ships under; a later
+   version never withdraws the rights granted over a release you already hold.
+
+11. Law
+
+   This licence is governed by the laws of Portugal. Disputes are subject to
+   the courts of Portugal, without prejudice to mandatory consumer rules of
+   your country of residence.
+
+Contact: https://github.com/BolaLabs/AITOOL/discussions or the Bola Labs
+profile at https://github.com/BolaLabs.

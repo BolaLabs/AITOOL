@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="330" viewBox="0 0 960 330" role="img" aria-label="Anatomy of a turn: user message, model streaming, tool calls, human confirmation for writes, ERP Primavera">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b98a5"/>
+    </marker>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#D9A441"/>
+    </marker>
+  </defs>
+
+  <g font-family="-apple-system, 'Segoe UI', system-ui, sans-serif">
+
+    <!-- Results loop (top, dashed) -->
+    <path d="M 865 60 L 865 26 L 320 26 L 320 54" fill="none" stroke="#8b98a5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+    <text x="592" y="18" font-size="12" fill="#8b98a5" text-anchor="middle">tool results feed the next round (up to 15 per turn)</text>
+
+    <!-- User message -->
+    <rect x="20" y="60" width="150" height="70" rx="10" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.5"/>
+    <text x="95" y="90" font-size="15" font-weight="600" fill="#768390" text-anchor="middle">User message</text>
+    <text x="95" y="110" font-size="11.5" fill="#8b98a5" text-anchor="middle">WebView2 chat</text>
+
+    <path d="M 170 95 L 224 95" fill="none" stroke="#8b98a5" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <!-- Model streaming -->
+    <rect x="230" y="60" width="180" height="70" rx="10" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.5"/>
+    <text x="320" y="90" font-size="15" font-weight="600" fill="#768390" text-anchor="middle">Model streaming</text>
+    <text x="320" y="110" font-size="11.5" fill="#8b98a5" text-anchor="middle">OpenAI · OpenRouter · Anthropic</text>
+
+    <path d="M 410 95 L 464 95" fill="none" stroke="#8b98a5" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <!-- Tool call -->
+    <rect x="470" y="60" width="150" height="70" rx="10" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.5"/>
+    <text x="545" y="90" font-size="15" font-weight="600" fill="#768390" text-anchor="middle">Tool call</text>
+    <text x="545" y="110" font-size="11.5" fill="#8b98a5" text-anchor="middle">19 ERP tools</text>
+
+    <!-- Reads: straight to ERP -->
+    <path d="M 620 95 L 784 95" fill="none" stroke="#8b98a5" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="702" y="84" font-size="11.5" fill="#8b98a5" text-anchor="middle">reads (SELECT only)</text>
+
+    <!-- ERP Primavera -->
+    <rect x="790" y="60" width="150" height="70" rx="10" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.5"/>
+    <text x="865" y="90" font-size="15" font-weight="600" fill="#768390" text-anchor="middle">ERP Primavera</text>
+    <text x="865" y="110" font-size="11.5" fill="#8b98a5" text-anchor="middle">BSO · SQL · UIA</text>
+
+    <!-- Writes: down through the confirmation gate -->
+    <path d="M 545 130 L 545 215 L 604 215" fill="none" stroke="#D9A441" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+    <text x="555" y="172" font-size="11.5" fill="#D9A441">writes</text>
+
+    <rect x="610" y="185" width="185" height="60" rx="10" fill="#D9A441" fill-opacity="0.08" stroke="#D9A441" stroke-width="1.8"/>
+    <text x="702" y="211" font-size="15" font-weight="600" fill="#D9A441" text-anchor="middle">Human confirmation</text>
+    <text x="702" y="230" font-size="11.5" fill="#8b98a5" text-anchor="middle">preview first, save only on a yes</text>
+
+    <path d="M 795 215 L 865 215 L 865 136" fill="none" stroke="#D9A441" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+    <text x="880" y="180" font-size="11.5" fill="#8b98a5">BSO save,</text>
+    <text x="880" y="196" font-size="11.5" fill="#8b98a5">ERP validations</text>
+
+    <!-- Final answer back to the chat -->
+    <path d="M 320 130 L 320 290 L 95 290 L 95 136" fill="none" stroke="#8b98a5" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+    <text x="212" y="282" font-size="12" fill="#8b98a5" text-anchor="middle">answer streams into the chat</text>
+  </g>
+</svg>

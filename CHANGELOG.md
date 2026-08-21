@@ -1,0 +1,220 @@
+﻿# Changelog
+
+All notable changes to this project are documented here.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and the project uses [Conventional Commits](https://www.conventionalcommits.org/).
+Unreleased work is tracked under **Unreleased** until it is tagged.
+
+## [2.8.0] - 2026-08-21
+
+### Fixed
+
+- The first request after a long tool call or a pause stalled about 20 seconds before the
+  single retry rescued it: a pooled keep-alive socket was reused after the provider had
+  closed it. Every provider request now closes its connection.
+
+### Changed
+
+- Licence: the product ships under the AITOOL Community License (free of charge, binary
+  only, unmodified redistribution allowed) instead of MIT. The source repository is private;
+  the public repository carries documentation, releases and the issue tracker.
+- The installer shows the licence; the setup is not code-signed and the docs now say so
+  next to the download.
+- Documentation corrected where it overstated the code: no print button on the PDF card,
+  RELEASE logs at Info level, Sentry sessions and traces, the favicon host on web-search
+  cards, `Shared.Config.dll` in the loose-file list, the Betalgo notice for the vendored SDK.
+
+### Added
+
+- The assistant states that it is one. The welcome screen says so in full, and the line
+  under the message box says so for the rest of the session — a returning conversation
+  never shows a welcome screen, so a first-interaction-only notice would leave most
+  sessions unmarked. AI Act Article 50 has applied since 2 August 2026.
+- `.github/FUNDING.yml`, so the repository carries the same sponsorship links as the rest of
+  the BolaLabs products.
+
+- The assistant is told today's date. It is stamped onto the system message when each request
+  is built, not when the prompt is stored, so a window left open past midnight does not carry
+  yesterday's date; the block also resolves the common windows (this month, last year, last 30
+  days) so relative questions never depend on the model's own arithmetic. Without it, "what did
+  we sell this year" was answered against whatever year the model's training data suggested.
+- Rules for reading documents by their business name. `TipoDoc` codes are per-installation, so
+  "orçamentos"/"propostas" now get resolved before any query runs, and the answer names the
+  codes it used. An empty result is treated as a suspect filter to verify, not as proof that no
+  such documents exist.
+- `get_sales_document_types` now returns each type's **nature** — the ERP's own classification
+  in `DocumentosVenda.TipoDocumento` (request for quote, quote/proposal, order, delivery note,
+  invoice) — instead of leaving the model to infer meaning from a free-text description. It was
+  already being read and then dropped. On the demo company, matching by nature finds three quote
+  types where matching the word "orçamento" finds one: "Fatura Pró-Forma" and "Cotação base de
+  Avenças" are both quotes, and neither contains the word.
+- Golden set section 8, covering exactly those three failures — relative dates, business
+  vocabulary, and empty results reported as absence.
+- Portuguese mirrors of the three documents non-developers read: `README.pt.md`,
+  `INSTALL.pt.md` and `docs/SECURITY-AND-PRIVACY.pt.md`, with a language switcher at the
+  top of each pair. English stays canonical; everything else remains English-only.
+- `scripts/checks/Test-DocsSync.ps1` fails the release build when a Portuguese mirror lags
+  its English original, so translations can drift during development but never in a tagged
+  release. `Installer/build-installer.ps1` runs it automatically (`-SkipDocsSync` opts out).
+- `docs/brand/index.html` — visual brand specification (symbol at every size, ribbon
+  preview in both themes, palette, wordmark, variants, misuse examples). It loads the real
+  SVGs from the repository, so it doubles as a smoke test for the brand assets.
+- Portuguese OpenGraph card (`png/og-1200x630.pt.png`) alongside the English one.
+
+### Fixed
+
+- `analyze_sales` overstated every total, ranking and margin it produced. It scoped sales with
+  a hardcoded list of document codes (`FA`, `FT`, `FR`, `FS`, `VD`) — codes are configured per
+  installation, so it both missed an installation's own invoice types and, more seriously,
+  never subtracted credit notes and returns. It now scopes by the ERP's own classification
+  (`DocumentosVenda.TipoDocumento = 4`), which includes them; the ERP stores them with negative
+  amounts, so they deduct themselves. On the demo company the difference is 701.896,25 gross
+  against 683.480,99 net, and two customers whose credit notes exceed their invoices move from
+  positive to negative — one of them did not appear in the ranking at all. The result now
+  carries the scope it used so the answer can say the figures are net.
+- SQL results dropped a column whenever two columns shared a name. SQL Server returns an empty
+  name for every unaliased expression, so `SELECT COUNT(*), SUM(Total)` and a join selecting
+  `c.Nome` alongside `cl.Nome` both collapsed onto one dictionary key and the earlier column
+  vanished from the answer without any error. Column names are now resolved once per result
+  set and disambiguated, and `run_query`'s interactive table binds to the same resolution.
+- `run_query` turned an unaliased calculated column into SQL error 8155 naming `_q`, the
+  internal row-bounding wrapper — a name the model has never seen and cannot act on. It now
+  gets told to alias the expression instead.
+- The wordmark SVGs clipped their own tagline: the text extended past the 420-unit viewBox,
+  so "ERP PRIMAVERA" rendered as "ERP PRIMA". Widened to 500 units, which also leaves room
+  for the Arial fallback where Segoe UI is absent.
+- The English OpenGraph card is now the default `og-1200x630.png` (it fronts an
+  English-canonical repository) and no longer addresses the reader informally.
+
+### Changed
+
+- Dependency refresh since 2.6.0, previously unrecorded: MiniExcel 1.45.0, NLog 6.1.4,
+  Sentry / Sentry.NLog 6.7.0, Microsoft.Extensions.* and System.Text.Json 10.0.10.
+- `ReportEngine/Lib/` dropped the nine design-time, ASP.NET and WPF assemblies that no
+  reference resolved, and gained a README stating what the remaining eighteen are for.
+  Nothing resolved from that folder before or after: Crystal comes from the GAC.
+
+## [2.7.0] - 2026-08-09
+
+### Added
+
+- New visual identity: the A·i monogram (navy `#1E3A5F` + gold `#D9A441`, the palette the
+  chat UI already uses) replaces the stock "GROW" logo across the product — window icon,
+  ribbon, splash, installer wizard, multi-resolution `.ico` files and docs banner.
+- Brand guide and media kit in `docs/brand/` (SVG masters, PNG exports, usage rules,
+  OpenGraph image). Product and installer assets are regenerated from these masters;
+  `make-branding.ps1` now builds the installer branding from them.
+- README restructured for both technical and non-technical readers: plain-terms intro,
+  navigation table, installer walkthrough with wizard preview, and a "Beyond Primavera"
+  section stating the multi-ERP / ERP-agnostic direction.
+- Roadmap: "Further out" section — pluggable ERP integrations and an MCP client
+  (Streamable HTTP, stateless) as future direction.
+
+### Changed
+
+- Official website is now `https://bolalabs.pt` — updated in the ribbon link, installer
+  metadata (`MyAppURL`/`MyAppContact`) and docs.
+- Docs diagrams and README badges realigned from the old green accent to the brand gold.
+
+## [2.6.2] - 2026-08-05
+
+### Fixed
+
+- Toasts now fade out (the exit transition was missing) and render as neutral cards with a
+  colored status edge, readable in dark mode.
+- Tool errors written for the model ("NÃO repitas", timeout wording) no longer reach user
+  toasts: tools return a separate `user_message` and the action handler shows only that.
+- Sticky table headers actually pin while scrolling result tables: tables switched from
+  `border-collapse: collapse` (Chromium does not stick `th` in collapsed tables) to
+  `separate`, and result tables scroll inside their own container.
+- "Dá-me a lista de pendentes" now routes to `get_pending_items` (KPI cards, ERP-parity
+  filters) instead of a raw `run_query`.
+
+### Changed
+
+- Dark theme: entity/doc-type/status badges and context chips use translucent tints instead
+  of light pastel fills.
+- Context menus, mention dropdown, model picker and command palette share one 90 ms open
+  animation with reduced-motion support; hover states unified on theme tokens.
+- Rows acknowledge a context-menu action immediately (dimmed while the ERP works).
+- pt-PT copy pass: settings pane and toasts fully accented, "provedor" replaced by
+  "fornecedor", technical jargon removed from user-facing errors.
+
+## [2.6.1] - 2026-08-03
+
+### Fixed
+
+- Opening a CCT exploration (pendentes, extrato de conta corrente) no longer hangs for 45 s
+  when the assistant is docked and the chat has keyboard focus: the drill-down now moves
+  focus from the WebView2 to the ERP's MDI client before firing, because the MDI activation
+  handshake waits on the focused Chromium window and never completes
+  (docs/ERP-AUTOMATION-FACTS.md).
+
+## [2.6.0] - 2026-07-29
+
+First tagged release. Everything below was previously tracked under Unreleased.
+
+### Added
+
+- Country-aware tax-number validation: the entity's country decides which rules apply, the
+  Portuguese check digit no longer rejects correct foreign VAT numbers, VIES is queried
+  against the entity's own member state, and the country code itself is validated against the
+  company's `Paises` table with an actionable message.
+- `enrich_entity` accepts a `country` argument; `create_entity`/`update_entity` guidance
+  covers foreign entities and the undifferentiated taxpayer (`999999990`).
+- Golden-set coverage for enrichment (tools 20-21) and foreign entities
+  (`scripts/e2e/golden-set.md` sections 6 and 7), plus a project `ROADMAP.md`.
+- Multi-provider AI (OpenAI, OpenRouter, native Anthropic, any OpenAI-compatible endpoint) with
+  streaming, reasoning models, per-provider persisted settings and DPAPI-protected API keys.
+- Official ERP document PDFs: sales, purchases, settlements and current-account documents print
+  the real Primavera report (Crystal formula context, company header, certification signature,
+  QR code) with automatic viewer opening; data-PDF fallback for series without a configured map.
+- Structured chat renderers: pending items with KPI split by entity kind and clickable filters,
+  entity lists, paginated query results, document cards — plus friendly empty states.
+- Chat UX: command palette (`/`), `@` entity mentions, live context picker of open ERP windows,
+  token pill with draft estimate, inline session rename, session previews, dark/light/system theme.
+- Fully offline chat UI: the page is served from a local WebView2 virtual host and marked,
+  DOMPurify, highlight.js and Mermaid are vendored with pinned versions and SRI hashes.
+- Dependabot configuration for NuGet updates and repository governance
+  (`CODEOWNERS`, pull request template, issue forms).
+- This changelog.
+
+### Changed
+
+- Default `Assistant:MaxToolIterations` raised from 5 to 15: real chains observed in live
+  validation (open, inspect, preview, confirm; search, enrich, create, print) regularly need
+  six to ten rounds, and the old cap surfaced as a hard mid-flow error.
+- `update_entity` now runs the ERP's own `ValidaActualizacao` during preview, so a save the
+  ERP would refuse is refused before the user is asked to confirm it (parity with
+  `create_entity`).
+- Assistant guidance: once the user confirms a preview the write commits immediately (no
+  repeated previews), and series report-map questions resolve via one query over
+  `SeriesVendas` instead of window navigation.
+- The AI turn loop (streaming, tool execution, transcript replay, cancellation) moved from
+  `ChatAIViewModel` into a dedicated `ToolCallOrchestrator` service, unchanged in behavior.
+- Dependency refresh: DocX 5.2.0, MiniExcel 1.44.1, PDFsharp 6.2.4, NLog 6.1.3, Sentry 6.6.0,
+  Microsoft.Extensions 10.0.9, Dapper 2.1.79, Costura.Fody 6.2.0 (which now removes loose
+  copies of embedded assemblies from the output — deploys must mirror the full build folder).
+
+### Security
+
+- Purged a committed strong-name key and legacy branding assets (`ReportEngine/*.snk`,
+  `ReportEngine/*.ico`) from the entire git history (2026-07-18 rewrite; clones made before
+  that date must be re-cloned). Assembly signing remains disabled; treat the old key as
+  compromised. `.gitignore` excludes `*.snk`, `*.pem`, `*.p12`, `*.key`, `*.crt`, `*.cer`.
+- Chat CSP no longer allows any CDN host; all scripts are local with enforced SRI.
+
+### Fixed
+
+- Opening a record that does not exist no longer reports success: the ERP's warning box was
+  being counted as the record window. The warning text is now read, surfaced as the tool's
+  error, and the box is closed automatically — including the successive warnings each failed
+  drill-down route raises while the SDK call winds down, which previously stacked up and
+  swallowed every later click.
+- Synced the latest security and stability fixes that post-dated the Azure DevOps -> GitHub
+  migration (telemetry sanitization, ERP backup/rollback hardening, path-traversal protection,
+  WebView2 message hardening, thread safety, disposal/leak fixes, SQL safety, PDF export).
+- Pending-items parity with the ERP "Consulta de Pendentes" (dynamic account/state filter),
+  stratified truncation so entity-kind filters never show an empty table, and PdfSharp font
+  resolution under the Primavera host.

@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Tool — Especificação da marca</title>
+<meta name="description" content="Referência visual da identidade do AI Tool: símbolo, escalas, paleta, wordmark e regras de uso.">
+<link rel="icon" href="png/mark-32.png" type="image/png">
+<style>
+  :root {
+    --navy: #1E3A5F;
+    --navy-deep: #16304F;
+    --navy-light: #24466E;
+    --gold: #D9A441;
+    --gold-deep: #C28F2E;
+    --ink: #1A2433;
+    --muted: #56637A;
+    --paper: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F6;
+    --line: #DCE3EC;
+    --ok: #15803D;
+    --no: #B91C1C;
+    --plate-label: #7A8798;
+    --link: #C28F2E;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --navy: #8FB3DE;
+      --navy-deep: #0B1420;
+      --navy-light: #2B4468;
+      --ink: #E7EDF5;
+      --muted: #94A3B8;
+      --paper: #0C131E;
+      --surface: #141E2C;
+      --surface-2: #1B2838;
+      --line: #26364C;
+      --ok: #4ADE80;
+      --no: #F87171;
+      --plate-label: #7E8FA6;
+      --link: #D9A441;
+    }
+  }
+  :root[data-theme="dark"] {
+    --navy: #8FB3DE;
+    --navy-deep: #0B1420;
+    --navy-light: #2B4468;
+    --ink: #E7EDF5;
+    --muted: #94A3B8;
+    --paper: #0C131E;
+    --surface: #141E2C;
+    --surface-2: #1B2838;
+    --line: #26364C;
+    --ok: #4ADE80;
+    --no: #F87171;
+    --plate-label: #7E8FA6;
+    --link: #D9A441;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.65 "Segoe UI", -apple-system, system-ui, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ---- hero ---- */
+  .hero {
+    background: linear-gradient(160deg, #24466E, #16304F);
+    color: #fff;
+    padding: 64px 24px 56px;
+    margin-bottom: 56px;
+  }
+  .hero-inner { max-width: 940px; margin: 0 auto; display: flex; align-items: center; gap: 34px; flex-wrap: wrap; }
+  .hero img { width: 112px; height: 112px; flex: none; }
+  .hero h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; margin: 0 0 10px; letter-spacing: -0.015em; }
+  .hero h1 b { color: var(--gold); font-weight: 700; }
+  .hero p { margin: 0; color: #B9C8DC; max-width: 52ch; }
+  .hero .eyebrow {
+    font: 600 11px/1 Consolas, ui-monospace, monospace;
+    letter-spacing: 2.6px; text-transform: uppercase; color: var(--gold);
+    display: block; margin-bottom: 14px;
+  }
+
+  /* ---- plates ---- */
+  .plate { margin: 0 0 44px; }
+  .plate > h2 {
+    font: 600 11.5px/1 Consolas, ui-monospace, monospace;
+    letter-spacing: 2.4px; text-transform: uppercase; color: var(--plate-label);
+    margin: 0 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .plate p { margin: 0 0 16px; color: var(--muted); max-width: 68ch; }
+  .plate p strong { color: var(--ink); font-weight: 600; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .pad { padding: 26px; }
+
+  /* ---- scales ---- */
+  .scales { display: flex; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+  .scale { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+  .scale span { font: 11px Consolas, ui-monospace, monospace; color: var(--muted); }
+  .scale img { display: block; image-rendering: auto; }
+
+  /* ---- ribbon mockups ---- */
+  .rb { display: flex; align-items: center; gap: 16px; padding: 10px 16px; font-size: 12.5px; }
+  .rb.lgt { background: #F3F4F6; border-bottom: 1px solid #DDE0E5; color: #4A5262; }
+  .rb.drk { background: #2B2B2B; color: #C9CDD4; }
+  .rb .ghost { display: flex; gap: 13px; opacity: .5; }
+  .rb .item { display: flex; align-items: center; gap: 7px; font-weight: 600; }
+  .rb.lgt .item { color: #1A2433; }
+  .rb.drk .item { color: #F2F4F7; }
+  .rb i { width: 16px; height: 16px; display: block; border-radius: 3px; background: currentColor; opacity: .55; }
+  .rb img { display: block; }
+
+  /* ---- palette ---- */
+  /* box-shadow desenha as linhas de grelha: células em falta na última fila não pintam fundo */
+  .pal { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1px; }
+  .sw { background: var(--surface); padding: 0; box-shadow: 0 0 0 1px var(--line); }
+  .sw .chip { height: 74px; }
+  .sw .meta { padding: 12px 14px 14px; }
+  .sw .name { font-weight: 600; font-size: 14px; }
+  .sw .hex { font: 12.5px Consolas, ui-monospace, monospace; color: var(--muted); margin-top: 2px; letter-spacing: .3px; }
+  .sw .role { font-size: 12.5px; color: var(--muted); margin-top: 7px; line-height: 1.45; }
+
+  /* ---- lockups ---- */
+  .lock { display: grid; grid-template-columns: 1fr 1fr; }
+  .lock > div { padding: 30px 24px; display: flex; align-items: center; justify-content: center; }
+  .lock .on-light { background: #FFFFFF; }
+  .lock .on-dark { background: #16304F; }
+  .lock img { max-width: 100%; height: auto; }
+
+  /* ---- variants ---- */
+  .vars { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1px; background: var(--line); }
+  .var { background: var(--surface); text-align: center; }
+  .var .stage { display: flex; align-items: center; justify-content: center; height: 108px; }
+  .var .stage.dark { background: #16304F; }
+  .var .stage.light { background: #FFFFFF; }
+  .var .cap { padding: 10px 8px 14px; font: 11.5px Consolas, ui-monospace, monospace; color: var(--muted); word-break: break-all; }
+
+  /* ---- rules ---- */
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .rules ul { margin: 0; padding-left: 0; list-style: none; }
+  .rules li { position: relative; padding-left: 26px; margin: 0 0 10px; font-size: 14.5px; color: var(--muted); }
+  .rules li::before {
+    position: absolute; left: 0; top: 0;
+    font: 700 13px/1.6 "Segoe UI", sans-serif;
+  }
+  .rules .do li::before { content: "\2713"; color: var(--ok); }
+  .rules .dont li::before { content: "\00D7"; color: var(--no); font-size: 16px; }
+  .rules h3 { font-size: 13px; letter-spacing: .4px; margin: 0 0 12px; text-transform: uppercase; }
+  .rules .do h3 { color: var(--ok); }
+  .rules .dont h3 { color: var(--no); }
+
+  .misuse { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
+  .misuse figure { margin: 0; text-align: center; }
+  .misuse .frame {
+    width: 84px; height: 84px; display: flex; align-items: center; justify-content: center;
+    border: 1px dashed var(--line); border-radius: 10px; background: var(--surface-2);
+  }
+  .misuse figcaption { font: 11px Consolas, ui-monospace, monospace; color: var(--no); margin-top: 7px; }
+  .misuse img { width: 52px; height: 52px; }
+  .m-rot img { transform: rotate(18deg); }
+  .m-squash img { transform: scaleX(.62); }
+  .m-tint img { filter: hue-rotate(115deg) saturate(1.5); }
+  .m-shadow img { filter: drop-shadow(3px 4px 3px rgba(0,0,0,.55)); }
+
+  /* ---- table ---- */
+  .tblwrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 460px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  th {
+    font: 600 11px/1.4 Consolas, ui-monospace, monospace;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--plate-label);
+  }
+  td code, p code, li code {
+    font: 12.5px Consolas, ui-monospace, monospace;
+    background: var(--surface-2); padding: 2px 6px; border-radius: 4px; color: var(--ink);
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  .note {
+    border-left: 3px solid var(--gold);
+    background: var(--surface-2);
+    padding: 14px 18px; border-radius: 0 8px 8px 0;
+    font-size: 14.5px; color: var(--muted);
+  }
+  .note strong { color: var(--ink); }
+  footer {
+    margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--line);
+    font-size: 13.5px; color: var(--muted);
+  }
+  a { color: var(--link); }
+  a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  @media (max-width: 620px) {
+    .lock, .rules { grid-template-columns: 1fr; }
+    .hero { padding: 44px 20px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <img src="svg/aitool-mark.svg" alt="Símbolo do AI Tool: monograma A·i">
+    <div>
+      <span class="eyebrow">Especificação da marca</span>
+      <h1><b>AI</b> TOOL</h1>
+      <p>A identidade visual do assistente inteligente para o ERP PRIMAVERA. Esta página mostra
+         os ficheiros que estão realmente no repositório — se algo aqui aparecer partido, o
+         asset está partido.</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="plate">
+    <h2>O símbolo</h2>
+    <p>Um monograma <strong>A·i</strong>: o "A" desenhado como cursor a apontar para cima, com um
+       ponto dourado que é ao mesmo tempo o "i" e o utilizador no centro da conversa. Lê-se como
+       assistente que eleva — não como mais um chatbot.</p>
+    <div class="card pad">
+      <div class="scales">
+        <div class="scale"><img src="svg/aitool-mark.svg" width="128" height="128" alt="Símbolo a 128 px"><span>128</span></div>
+        <div class="scale"><img src="svg/aitool-mark.svg" width="64" height="64" alt="Símbolo a 64 px"><span>64</span></div>
+        <div class="scale"><img src="svg/aitool-mark.svg" width="48" height="48" alt="Símbolo a 48 px"><span>48</span></div>
+        <div class="scale"><img src="svg/aitool-mark-small.svg" width="32" height="32" alt="Variante ótica a 32 px"><span>32 *</span></div>
+        <div class="scale"><img src="svg/aitool-mark-small.svg" width="24" height="24" alt="Variante ótica a 24 px"><span>24 *</span></div>
+        <div class="scale"><img src="svg/aitool-mark-small.svg" width="16" height="16" alt="Variante ótica a 16 px"><span>16 *</span></div>
+      </div>
+    </div>
+    <p style="margin-top:14px"><code>*</code> Abaixo de 48 px usa-se <code>aitool-mark-small.svg</code>:
+       traço mais grosso e ponto maior, para o símbolo não desaparecer quando é rasterizado.</p>
+  </section>
+
+  <section class="plate">
+    <h2>No friso do ERP</h2>
+    <p>O teste que decide tudo: 16 px, ao lado dos ícones nativos do Primavera, nos dois temas.</p>
+    <div class="card">
+      <div class="rb lgt">
+        <span class="ghost"><i></i><i></i><i></i></span>
+        <span class="item"><img src="svg/aitool-mark-small.svg" width="16" height="16" alt=""> Assistente AI</span>
+      </div>
+      <div class="rb drk">
+        <span class="ghost"><i></i><i></i><i></i></span>
+        <span class="item"><img src="svg/aitool-mark-small.svg" width="16" height="16" alt=""> Assistente AI</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="plate">
+    <h2>Paleta</h2>
+    <p>O dourado marca sempre o mesmo papel: <strong>o ponto onde o assistente age</strong>. Nunca
+       se usa como preenchimento de grandes áreas.</p>
+    <div class="card">
+      <div class="pal">
+        <div class="sw">
+          <div class="chip" style="background:#1E3A5F"></div>
+          <div class="meta"><div class="name">Navy</div><div class="hex">#1E3A5F</div>
+            <div class="role">Cor principal; tile flat; texto sobre claro</div></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#16304F"></div>
+          <div class="meta"><div class="name">Navy profundo</div><div class="hex">#16304F</div>
+            <div class="role">Fim do gradiente; fundos escuros</div></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#24466E"></div>
+          <div class="meta"><div class="name">Navy claro</div><div class="hex">#24466E</div>
+            <div class="role">Início do gradiente do tile</div></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#D9A441"></div>
+          <div class="meta"><div class="name">Dourado</div><div class="hex">#D9A441</div>
+            <div class="role">Acento único: o ponto, o "AI", réguas</div></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#C28F2E"></div>
+          <div class="meta"><div class="name">Dourado profundo</div><div class="hex">#C28F2E</div>
+            <div class="role">Hover e estados do dourado</div></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#1A2433"></div>
+          <div class="meta"><div class="name">Tinta</div><div class="hex">#1A2433</div>
+            <div class="role">Texto sobre fundos claros</div></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#F4F6F9;box-shadow:inset 0 0 0 1px #DCE3EC"></div>
+          <div class="meta"><div class="name">Papel</div><div class="hex">#F4F6F9</div>
+            <div class="role">Fundos claros</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plate">
+    <h2>Wordmark</h2>
+    <p>Segoe UI Bold, <code>AI</code> em dourado e <code>TOOL</code> em navy (ou branco sobre
+       escuro), com letter-spacing largo. Usa-se onde há espaço horizontal; em ícone usa-se só o
+       símbolo.</p>
+    <div class="card lock">
+      <div class="on-light"><img src="svg/aitool-wordmark.svg" width="340" alt="Wordmark AI TOOL sobre fundo claro"></div>
+      <div class="on-dark"><img src="svg/aitool-wordmark-dark.svg" width="340" alt="Wordmark AI TOOL sobre fundo escuro"></div>
+    </div>
+  </section>
+
+  <section class="plate">
+    <h2>Universo de apoio</h2>
+    <p>O <strong>núcleo orbital</strong> — centro dourado, arcos e satélites — representa o agente
+       a orquestrar as ferramentas à volta do ERP. Vive em ilustração (site, vídeo, splash,
+       fundos), nunca como substituto do símbolo nem como ícone de aplicação.</p>
+    <div class="card lock">
+      <div class="on-light"><img src="svg/aitool-orbital.svg" width="150" height="150" alt="Ilustração do núcleo orbital"></div>
+      <div class="on-dark"><img src="svg/aitool-orbital-white.svg" width="150" height="150" alt="Ilustração do núcleo orbital sobre escuro"></div>
+    </div>
+  </section>
+
+  <section class="plate">
+    <h2>Variantes</h2>
+    <p>Cada uma existe para um contexto. Escolher pelo fundo, não pelo gosto.</p>
+    <div class="card">
+      <div class="vars">
+        <div class="var">
+          <div class="stage light"><img src="svg/aitool-glyph-navy.svg" width="56" height="56" alt="Glifo navy"></div>
+          <div class="cap">glyph-navy</div>
+        </div>
+        <div class="var">
+          <div class="stage dark"><img src="svg/aitool-glyph-white.svg" width="56" height="56" alt="Glifo branco"></div>
+          <div class="cap">glyph-white</div>
+        </div>
+        <div class="var">
+          <div class="stage light"><img src="svg/aitool-mark-flat.svg" width="56" height="56" alt="Tile flat"></div>
+          <div class="cap">mark-flat</div>
+        </div>
+        <div class="var">
+          <div class="stage light"><img src="svg/aitool-mono-black.svg" width="56" height="56" alt="Monocromático preto"></div>
+          <div class="cap">mono-black</div>
+        </div>
+        <div class="var">
+          <div class="stage dark"><img src="svg/aitool-mono-white.svg" width="56" height="56" alt="Monocromático branco"></div>
+          <div class="cap">mono-white</div>
+        </div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:16px">
+      <strong>Restrição técnica.</strong> Os SVG que entram no produto passam pelo
+      <code>SvgImage</code> do DevExpress 21.2.3, que só lê formas e paths com fills sólidos —
+      sem gradientes, filtros, máscaras ou CSS. É por isso que existe o
+      <code>mark-flat</code>: o master com gradiente é só para marketing.
+    </div>
+  </section>
+
+  <section class="plate">
+    <h2>Regras de uso</h2>
+    <div class="rules">
+      <div class="do">
+        <h3>Fazer</h3>
+        <ul>
+          <li>Deixar zona de proteção de meia largura do tile em todo o redor.</li>
+          <li>Usar a variante <em>small</em> abaixo de 48 px em contextos rasterizados.</li>
+          <li>Usar a versão com tile sobre fotografias ou fundos imprevisíveis.</li>
+          <li>Manter o ponto sempre dourado — exceto nas variantes monocromáticas.</li>
+          <li>Regenerar os derivados a partir destes masters.</li>
+        </ul>
+      </div>
+      <div class="dont">
+        <h3>Não fazer</h3>
+        <ul>
+          <li>Rodar, distorcer, recolorir ou aplicar sombras e efeitos.</li>
+          <li>Pôr o glifo branco sobre fundos claros, ou o navy sobre escuros.</li>
+          <li>Usar o orbital abaixo de 64 px ou como ícone de aplicação.</li>
+          <li>Editar à mão os assets em <code>UI/Resources</code> ou <code>Installer/branding</code>.</li>
+          <li>Usar o dourado como cor de fundo de grandes áreas.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="misuse" aria-label="Exemplos de utilização incorreta">
+      <figure class="m-rot"><div class="frame"><img src="svg/aitool-mark.svg" alt="Símbolo rodado"></div><figcaption>rodado</figcaption></figure>
+      <figure class="m-squash"><div class="frame"><img src="svg/aitool-mark.svg" alt="Símbolo distorcido"></div><figcaption>distorcido</figcaption></figure>
+      <figure class="m-tint"><div class="frame"><img src="svg/aitool-mark.svg" alt="Símbolo recolorido"></div><figcaption>recolorido</figcaption></figure>
+      <figure class="m-shadow"><div class="frame"><img src="svg/aitool-mark.svg" alt="Símbolo com sombra"></div><figcaption>com sombra</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="plate">
+    <h2>Ficheiros</h2>
+    <div class="card tblwrap">
+      <table>
+        <thead><tr><th>Ficheiro</th><th>Usar quando</th></tr></thead>
+        <tbody>
+          <tr><td><code>svg/aitool-mark.svg</code></td><td>Master com gradiente — marketing, site, ≥48 px</td></tr>
+          <tr><td><code>svg/aitool-mark-flat.svg</code></td><td>Produto e DevExpress (sem gradientes)</td></tr>
+          <tr><td><code>svg/aitool-mark-small.svg</code></td><td>Variante ótica 16–32 px</td></tr>
+          <tr><td><code>svg/aitool-glyph-navy.svg</code> / <code>-white.svg</code></td><td>Glifo sem tile, sobre claro / escuro</td></tr>
+          <tr><td><code>svg/aitool-mono-black.svg</code> / <code>-white.svg</code></td><td>Monocromático: impressão, gravação</td></tr>
+          <tr><td><code>svg/aitool-orbital.svg</code> / <code>-white.svg</code></td><td>Ilustração de apoio</td></tr>
+          <tr><td><code>svg/aitool-wordmark.svg</code> / <code>-dark.svg</code></td><td>Lockup símbolo + wordmark</td></tr>
+          <tr><td><code>png/mark-*.png</code></td><td>Exports 16–512 px, fundo transparente</td></tr>
+          <tr><td><code>png/og-1200x630.png</code></td><td>Imagem OpenGraph / social</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Regras completas e notas de licenciamento da marca: <a href="README.md">docs/brand/README.md</a>
+    e <a href="../../TRADEMARKS.md">TRADEMARKS.md</a>. Os assets do produto
+    (<code>UI/Resources</code>) e do instalador (<code>Installer/branding</code>) são derivados
+    destes masters — regeneram-se com <code>Installer/branding/make-branding.ps1</code>, nunca se
+    editam à mão.
+  </footer>
+
+</div>
+</body>
+</html>
