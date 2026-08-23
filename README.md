@@ -558,7 +558,8 @@ tool calls and SQL behind every answer, invoice intake, and table export.
 
 Issues and Discussions in [BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL) are where the
 product gets better — see [CONTRIBUTING.md](CONTRIBUTING.md) for what to include in a report.
-Community standards: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Community standards: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). For anything that should not be
+public — a deployment, a partnership, a security report — write to <bruno@bolalabs.pt>.
 
 ---
 

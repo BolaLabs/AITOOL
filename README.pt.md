@@ -580,7 +580,8 @@ exportação de tabelas.
 
 Os Issues e as Discussions em [BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL) são onde o
 produto melhora — veja [CONTRIBUTING.md](CONTRIBUTING.md) para o que incluir num relato.
-Padrões da comunidade: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Padrões da comunidade: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Para o que não deva ser
+público — uma instalação, uma parceria, um relato de segurança — escreva para <bruno@bolalabs.pt>.
 
 ---
 
