@@ -14,6 +14,28 @@ O AITOOL é uma extensão para o cliente desktop do Primavera v10 (SG100).
   qualquer endpoint compatível com OpenAI (p. ex. um servidor LM Studio local, que não
   precisa de chave).
 
+## Instalações cliente-servidor
+
+O Primavera v10 instala-se tipicamente em cliente-servidor: o ERP vive num servidor e cada
+posto de trabalho chega à pasta partilhada `SG100` (mapas, configuração, extensões) através
+de uma partilha Windows. O AITOOL é uma extensão dentro dessa pasta, por isso:
+
+- **Corra o setup uma vez**, na máquina que tem o `SG100` (o servidor, ou o PC que partilha
+  a pasta), com o cliente Primavera fechado em todo o lado. O setup encontra a instalação,
+  escreve os ficheiros em `<SG100>\Config\EV\Extensions\AITOOL\` e regista o addon no ecrã
+  de Extensibilidade do ERP.
+- **Os postos não precisam de mais nada.** Apanham o assistente no arranque seguinte. O
+  único requisito local é o runtime Microsoft Edge WebView2, que o Windows 10 e 11 já
+  trazem.
+- **As chaves são por utilizador.** Cada pessoa introduz a sua chave de fornecedor nas
+  definições do assistente; fica cifrada com o perfil DPAPI desse utilizador Windows, nesse
+  posto. Uma empresa que queira uma chave partilhada, ou um modelo local num servidor,
+  aponta o endpoint para lá.
+
+As topologias variam (Terminal Server, várias instâncias, uma cópia do `SG100` por
+máquina); se a sua for invulgar, a cópia manual abaixo funciona da mesma forma, pasta a
+pasta.
+
 ## Instalação
 
 O instalador não está assinado digitalmente; o Windows SmartScreen avisa na primeira

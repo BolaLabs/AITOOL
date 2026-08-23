@@ -3,3 +3,9 @@ contact_links:
   - name: Security vulnerability
     url: https://github.com/BolaLabs/AITOOL/security/advisories/new
     about: Please report security issues privately. See SECURITY.md.
+  - name: Questions and ideas
+    url: https://github.com/BolaLabs/AITOOL/discussions
+    about: Discussions is the place for questions, ideas and "would it be possible to".
+  - name: Contact by e-mail
+    url: mailto:bruno@bolalabs.pt
+    about: Commercial, partnership or anything that should not be public. Bugs go in an issue.

@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project uses [Conventional Commits](https://www.conventionalcommits.org/).
 Unreleased work is tracked under **Unreleased** until it is tagged.
 
+## [Unreleased]
+
+### Fixed
+
+- On a monitor scaled above 100% the chat clipped text at its right edge and could not
+  scroll to the last line: the ERP client is DPI-unaware and works in virtual 96-DPI
+  coordinates while Chromium sized the page for the physical DPI. The browser now uses one
+  device scale factor when the host process is DPI-unaware.
+- A UIA walk cancelled by the user stops at its next node instead of running out the rest
+  of its four-second budget on the retired worker; the log says "replaced after
+  cancellation" at Info, keeping the Warning for the timeout case it was written for.
+
 ## [2.8.1] - 2026-08-21
 
 ### Fixed

@@ -13,6 +13,27 @@ AITOOL is an extension for the Primavera v10 (SG100) desktop client.
 - An API key for at least one AI provider: OpenAI, OpenRouter, Anthropic, or any
   OpenAI-compatible endpoint (e.g. a local LM Studio server, which needs no key).
 
+## Client-server installations
+
+Primavera v10 is typically installed client-server: the ERP lives on a server and every
+workstation reaches the shared `SG100` folder (maps, configuration, extensions) through a
+Windows share. AITOOL is an extension inside that folder, so:
+
+- **Run the setup once**, on the machine that holds `SG100` (the server, or the PC that
+  shares the folder), with the Primavera client closed everywhere. The setup finds the
+  installation, writes the files into `<SG100>\Config\EV\Extensions\AITOOL\` and registers
+  the addon in the ERP's Extensibility screen.
+- **Workstations need nothing else.** They pick the assistant up at their next start. The
+  only local requirement is the Microsoft Edge WebView2 runtime, which Windows 10 and 11
+  already carry.
+- **Keys are per user.** Each person enters their provider key in the assistant's
+  settings; it is encrypted with that Windows user's DPAPI profile, on that workstation.
+  A company that wants a shared key, or a local model on a server, points the endpoint
+  there instead.
+
+Topologies vary (Terminal Server, several instances, a copy of `SG100` per machine); if
+yours is unusual, the manual copy below works the same way, folder by folder.
+
 ## Install
 
 The installer is not code-signed; Windows SmartScreen warns on first run. Verify the SHA256

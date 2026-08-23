@@ -36,5 +36,5 @@ is not free to reuse. For a branded or white-label build, see
 
 ## Contact
 
-Open a GitHub Discussion in [BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL/discussions)
-or contact the maintainer through the [BolaLabs](https://github.com/BolaLabs) profile.
+Write to <bruno@bolalabs.pt>, or open a GitHub Discussion in
+[BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL/discussions) when the question can be public.

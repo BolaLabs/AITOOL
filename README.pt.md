@@ -4,11 +4,12 @@
 
 <img src="docs/assets/banner.svg" alt="AITOOL — assistente de IA embutido no ERP Primavera v10" width="920">
 
-**Um assistente de IA que vive dentro do ERP Primavera v10** — responde a partir dos dados
-do seu negócio, abre e preenche janelas do ERP e cria clientes e documentos de venda através
-dos objetos de negócio do próprio ERP. Corre na sua máquina, contra o fornecedor de IA que
-escolher (incluindo um local), e cada escrita é um processo em dois passos — preview e só
-depois gravação — que fica num registo de auditoria na sua própria base de dados.
+**Um assistente dentro do PRIMAVERA v10 que corre inteiramente em máquinas que controla** —
+sem conta no fabricante, sem licença por posto, sem créditos contados — com o modelo que
+escolher, incluindo um local. Responde a partir dos dados do seu negócio, abre qualquer ecrã
+do ERP que descreva por palavras suas, preenche janelas e cria clientes e documentos de venda
+através dos objetos de negócio do próprio ERP: primeiro um preview validado pelo ERP, gravação
+só depois de concordar, e cada escrita num registo de auditoria na sua própria base de dados.
 
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 [![DevExpress](https://img.shields.io/badge/DevExpress-21.2.3-FF7200)](https://www.devexpress.com/)
@@ -27,8 +28,9 @@ depois gravação — que fica num registo de auditoria na sua própria base de 
 | --- | --- |
 | Perceber o que isto é, sem a engenharia | [Em termos simples](#em-termos-simples) |
 | Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 21 tools](#as-21-tools) |
+| Chegar a um ecrã que não encontro nos menus | [Encontre qualquer ecrã por palavras suas](#encontre-qualquer-ecrã-por-palavras-suas) |
 | Decidir se é seguro pô-lo perto do meu ERP | [Segurança e confiança](#segurança-e-confiança) · [docs/SECURITY-AND-PRIVACY.pt.md](docs/SECURITY-AND-PRIVACY.pt.md) |
-| Instalá-lo | [Instalação (utilizadores finais)](#instalação-utilizadores-finais) |
+| Instalá-lo, num PC ou numa rede inteira | [Instale uma vez, todos os postos o recebem](#instale-uma-vez-todos-os-postos-o-recebem) · [Instalação (utilizadores finais)](#instalação-utilizadores-finais) |
 | Compará-lo com o Cegid Pulse | [Comparação com o Cegid Pulse](#comparação-com-o-cegid-pulse) |
 | Compilá-lo a partir do código fonte | [Compilar (developers)](#compilar-developers) |
 | Saber para onde isto vai | [Para lá do Primavera](#para-lá-do-primavera) · [ROADMAP.md](ROADMAP.md) |
@@ -44,15 +46,21 @@ preparar uma proposta e ele preenche-a, mostra-lhe os totais para rever e só gr
 dizer que sim. Cada alteração que faz passa pelas mesmas validações que o ERP lhe aplica a
 si, e fica num registo de auditoria na sua própria base de dados.
 
-Três coisas o distinguem de colar os seus dados num chatbot:
+Quatro coisas o distinguem de colar os seus dados num chatbot:
 
-- **Corre dentro do seu ERP, na sua máquina.** Nada é instalado numa cloud que não controla,
-  e com um modelo de IA local nada sai sequer do edifício.
-- **Escolhe (e paga) a IA diretamente.** OpenAI, Anthropic, OpenRouter ou um modelo local
-  gratuito — a preços do fornecedor, sem subscrição nem licença por posto por cima.
-- **Mostra a escrita antes de a fazer.** Criar ou alterar registos passa por um preview
-  validado pelo próprio ERP, depois uma segunda chamada confirmada — e cada gravação fica
-  no registo de auditoria.
+- **Corre onde decidir.** Dentro do seu ERP, nas suas próprias máquinas. Não há nenhum
+  servidor da Bola Labs no caminho, nenhuma conta a criar, e com um modelo de IA local nada
+  sai sequer do edifício.
+- **Escolhe (e paga) a IA diretamente.** OpenAI, Anthropic, OpenRouter, qualquer endpoint
+  compatível com OpenAI, ou um modelo local através do LM Studio — a preços do fornecedor,
+  sem subscrição, sem licença por posto e sem créditos contados por cima.
+- **Qualquer ecrã, a pedir.** "Abre o extrato de conta do fornecedor", "abre o
+  explorador de vendas": encontra a função no catálogo do ribbon e abre-a, seja qual for
+  o módulo onde vive. Ninguém precisa de se lembrar onde está um ecrã.
+- **Mostra a escrita antes de a fazer.** Criar ou alterar registos está desenhado em dois
+  passos: um preview validado pelo próprio ERP, depois uma segunda chamada confirmada que o
+  assistente está instruído a fazer só depois de dizer que sim — e cada gravação, recusa e
+  falha fica num registo de auditoria que pode ler a partir do chat.
 
 O produto é gratuito, para empresas e parceiros. Instale-o a partir do assistente de instalação
 ([como funciona](#instalação-utilizadores-finais)), configure uma chave de IA e está a
@@ -85,50 +93,65 @@ Capturas na DEMOV10, a empresa de demonstração da Cegid, com a build 2.8.0.
 
 O AITOOL é uma extensão WinForms (.NET Framework 4.8) que embute um assistente de chat no
 cliente Primavera v10 (SG100) via WebView2. O assistente fala com o modelo à sua escolha —
-OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI, como um
-LM Studio local — e atua sobre o ERP através de 21 tools descobertas automaticamente:
+OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI, LM Studio
+incluído — e atua sobre o ERP através de 21 tools descobertas automaticamente:
 
-- **Responde com dados vivos do ERP**: clientes, fornecedores, artigos, documentos, stock,
-  saldos de conta corrente com antiguidade, análise de vendas, pendentes — via tools
-  dedicadas ou SQL só de leitura com guarda. Resultados tabulares aparecem como tabelas
-  interativas com KPIs, não como despejos de markdown.
-- **Conduz o cliente do ERP**: abre qualquer função do ERP navegando o ribbon, abre registos
-  nos seus editores nativos, lista e preenche campos e grelhas de linhas de documento em
-  janelas abertas — incluindo os editores clássicos da era VB6, via UI Automation.
-- **Cria registos reais**: fichas de cliente/fornecedor e documentos de venda (propostas,
-  encomendas, faturas) através do modelo de objetos BSO do Primavera, para que todas as
-  validações do ERP corram. As escritas são em dois passos por design: a primeira chamada
-  devolve um preview validado pelo ERP com totais reais e não grava nada; gravar é uma
-  chamada separada que o assistente está instruído a fazer só depois de o utilizador
-  concordar no chat.
-- **Botões de commit exigem uma flag explícita**: a automação de janelas pode escrever em
+- **Lê dados reais do ERP.** Pendentes com a consulta do próprio ERP, análise de vendas por
+  período, cliente e artigo, contagens de vendas e compras por ano via SQL guardado, saldos de conta corrente com antiguidade, stock por armazém, pesquisa de
+  documentos, pesquisa de entidades por nome, código, NIF ou localidade — mais uma tool de
+  SQL só de leitura, guardada a `SELECT`/`WITH` e limitada a 500 linhas. As respostas
+  tabulares aparecem como tabelas vivas com cartões KPI, e cada linha tem um menu de
+  contexto: abrir no ERP, gerar o PDF, abrir o registo, mostrar os seus pendentes.
+- **Conduz o cliente do ERP.** Abre qualquer função do ERP pelo nome a partir do catálogo
+  do ribbon, em todos os contextos de navegação que a instalação tiver — Vendas,
+  Contabilidade, Tesouraria, Recursos Humanos, o que estiver licenciado. Abre registos
+  (fichas de cliente, fornecedor e artigo, documentos, extratos de conta) nos seus editores
+  nativos. Numa janela aberta lista os campos, preenche campos e células de grelha, clica
+  em botões e separadores, lê diálogos modais e fecha janelas — tanto em janelas .NET como
+  nos editores VB6 clássicos, através de UI Automation. Quando o botão do ribbon está
+  visível o cursor desliza até ele, para que veja o que está a ser clicado.
+- **Escreve com preview.** Cria fichas de cliente e fornecedor e documentos de venda
+  (propostas, encomendas, faturas) e atualiza fichas existentes, sempre através dos objetos
+  de negócio do Primavera, para que todas as validações do ERP corram e a numeração
+  continue a ser do ERP. A primeira chamada é validada pelo ERP (`ValidaActualizacao`) e
+  devolve um preview com totais reais sem gravar; a gravação é uma segunda chamada,
+  confirmada, que o assistente está instruído a fazer só depois de concordar no chat.
+  Depois de uma gravação, um aviso diz-lhe que janelas abertas do ERP ficaram
+  desatualizadas. Cada gravação, recusa e falha fica escrita na `AI_AuditLog` na sua
+  própria base de dados; `/auditoria` no chat lê-a de volta.
+- **Botões de commit exigem uma flag explícita.** A automação de janelas pode escrever em
   campos e premir botões, mas um botão que grava ou destrói dados (gravar, guardar, anular,
   apagar, eliminar, remover, confirmar) é recusado a menos que a chamada traga uma flag de
-  autorização explícita, que o assistente está instruído a definir só depois de o utilizador
-  pedir essa ação. A verificação corre sobre o botão que o ERP resolveu, não sobre a legenda
-  pedida. Dentro de um diálogo modal a regra inverte-se: só passam recusas (Cancelar, Não) e
-  diálogos de um só botão, pelo que responder "Sim" a "Gravar alterações?" exige a mesma
-  autorização. Cada commit através do modelo de objetos, e cada escrita de campo, escrita
-  em grelha, clique de botão, fecho de janela ou fecho de todas através da automação, fica registado
-  em `AI_AuditLog` na sua própria base de dados com o utilizador, a empresa, a tool, os
-  argumentos e o resultado — sucessos e recusas por igual. A navegação no ribbon não é
-  auditada, e se o próprio insert de auditoria falhar a escrita no ERP mantém-se (a falha é
-  registada localmente). Veja [SECURITY.md](SECURITY.md) para o que essa fronteira é e não
-  é.
-- **Descobre em vez de adivinhar**: tipos de documento, séries (com validade) e preços de
+  autorização explícita, que o assistente está instruído a definir só depois de o
+  utilizador pedir essa ação. A verificação corre sobre o botão que o ERP resolveu, não
+  sobre a legenda pedida. Dentro de um diálogo modal a regra inverte-se: só passam recusas
+  (Cancelar, Não) e diálogos de um só botão, pelo que responder "Sim" a "Gravar
+  alterações?" exige a mesma autorização. Cada escrita de campo, escrita em grelha, clique
+  de botão e fecho de janela através da automação fica registado na `AI_AuditLog` com o
+  utilizador, a empresa, a tool, os argumentos e o resultado. A navegação no ribbon não é
+  auditada, e se o próprio insert de auditoria falhar a escrita no ERP mantém-se (a falha
+  é registada localmente). Veja [SECURITY.md](SECURITY.md) para o que essa fronteira é e
+  não é.
+- **Documentos.** O PDF oficial de um documento, produzido pelo relatório Crystal com que a
+  série está configurada — ATCUD e código QR são do próprio ERP — abre-se sozinho num
+  cartão com visualizador. Quando a série não tem relatório configurado recebe um aviso
+  âmbar e uma folha de dados simples, nunca um documento oficial a fingir.
+- **Enriquecimento de entidades.** Dê-lhe um NIF e o assistente preenche a ficha a partir
+  de registos públicos (VIES, NIF.pt), valida o NIF por país e mostra um diff campo a campo
+  antes de qualquer escrita.
+- **Pesquisa web.** Cinco fornecedores — Brave, Exa, Serper, Tavily ou um SearXNG
+  self-hosted — com a sua própria chave, para leads e dados de empresas; os resultados são
+  explicitamente marcados como conteúdo não confiável.
+- **Descobre em vez de adivinhar.** Tipos de documento, séries (com validade) e preços de
   artigo vêm da configuração do ERP através de tools de consulta dedicadas.
-- **Imprime o PDF oficial** de um documento via o motor de relatórios do Primavera, entregue
-  como um cartão que abre o visualizador e pode gravar uma cópia.
-- **Pesquisa a web** (Tavily, Brave, Serper, Exa ou um SearXNG self-hosted — traga a sua
-  própria chave) para leads e dados de empresas, com resultados explicitamente marcados como
-  conteúdo não confiável.
-- **Um chat que se comporta como um produto**: streaming com indicadores de fase, blocos de
-  raciocínio colapsáveis, Markdown + Mermaid + syntax highlighting renderizados totalmente
-  offline (bibliotecas vendored, com versões fixas e verificação SRI), histórico de sessões
-  em SQL Server com pesquisa e mudança de nome, botões de sugestão de seguimento, slash
-  commands, temas claro/escuro/sistema, atalhos de teclado (`Ctrl+N` novo chat, `Ctrl+B`
-  sessões, `Ctrl+,` definições), janela destacável e exportação para Markdown, HTML ou texto
-  simples.
+- **Um chat que se comporta como um produto.** Streaming com indicadores de fase e um
+  cancelar que para o turno em menos de um segundo; blocos de raciocínio colapsáveis;
+  Markdown, Mermaid e syntax highlighting renderizados totalmente offline (bibliotecas
+  vendored, com versões fixas e verificação SRI); chips de sugestão de seguimento;
+  histórico de conversas no seu SQL Server com pesquisa e mudança de nome; slash commands;
+  temas claro/escuro/sistema; atalhos de teclado (`Ctrl+N` novo chat, `Ctrl+B` sessões,
+  `Ctrl+,` definições); janela destacável; exportação para Markdown, HTML ou texto simples.
+  O assistente declara que é um sistema de IA, como exige o artigo 50.º do AI Act.
 
 ### As 21 tools
 
@@ -164,6 +187,54 @@ proposta"*: `web_search` encontra a empresa → `search_entities` verifica se j�
 `create_entity` (preview → confirmar → gravar) → `get_sales_document_types` + `get_sales_series`
 escolhem o tipo de proposta real e uma série válida → `create_sales_document` (preview com
 totais calculados pelo ERP → confirmar → gravar) → `print_document` para o PDF oficial.
+
+---
+
+## Encontre qualquer ecrã por palavras suas
+
+O Primavera v10 tem centenas de funções espalhadas por módulos, contextos de navegação e
+menus aninhados, e a maioria das pessoas usa uma dúzia delas. As outras são as que se
+procuram uma vez por trimestre e nunca se fixam. O AITOOL lê o catálogo do ribbon do
+próprio ERP no arranque — todas as funções, em todos os contextos de navegação que a
+instalação tem licenciados — para que possa pedir um ecrã como pediria a um colega: *"abre
+a ficha do cliente 0031 e os pendentes dele"*, *"abre o explorador de vendas"*, *"leva-me ao extrato
+de conta deste fornecedor"*. O assistente encontra a função, muda de contexto se for preciso,
+abre-a, e quando o botão do ribbon está visível o cursor desliza até ele para que aprenda
+onde estava. Quando não tem a certeza, lista os candidatos em vez de adivinhar.
+
+O mesmo mecanismo conduz o que vem a seguir: com a janela aberta, o assistente lista os
+campos, preenche-os, passa pelos separadores, lê o diálogo que o ERP devolve e fecha a
+janela — tanto nos ecrãs .NET modernos como nos editores VB6 clássicos.
+
+Isto é também um ângulo de acessibilidade, dito com cuidado. Tudo o que o ERP expõe por
+menus pode ser pedido por texto, o que ajuda quem não sabe onde vive um ecrã, quem tem
+dificuldade em percorrer ribbons aninhados e quem trabalha melhor a escrever do que a
+apontar. Não torna o Primavera uma aplicação totalmente acessível, e a entrada por voz está
+no roadmap, não no produto.
+
+---
+
+## Instale uma vez, todos os postos o recebem
+
+O Primavera v10 instala-se tipicamente em cliente-servidor: o ERP vive num servidor e cada
+posto de trabalho chega à pasta partilhada `SG100` (mapas, configuração, extensões) através
+de uma partilha Windows. O AITOOL é uma extensão nessa pasta, por isso o setup corre **uma
+vez**, na máquina que tem o `SG100`, e cada posto apanha o assistente no arranque seguinte.
+Não há nada a instalar por posto: um posto de trabalho precisa apenas do runtime Microsoft
+Edge WebView2, que o Windows 10 e 11 já trazem.
+
+O setup é um assistente Windows normal que faz o trabalho do lado do ERP sozinho: encontra
+a instalação do Primavera, deteta ERPs multi-instância, regista o addon no ecrã de
+Extensibilidade do ERP (comum, ou por empresa) e remove esse registo na desinstalação. Os
+departamentos de IT têm um modo silencioso. Não conhecemos outro addon Primavera que venha
+com um instalador que se regista a si próprio; os detalhes estão em
+[Instalação (utilizadores finais)](#instalação-utilizadores-finais), e as notas de rede em
+[INSTALL.pt.md](INSTALL.pt.md).
+
+Cada utilizador abre depois o assistente a partir do ribbon e introduz a sua própria chave
+de fornecedor, guardada cifrada por utilizador Windows (DPAPI) e enviada apenas a esse
+fornecedor. Uma empresa que queira partilhar uma chave, ou correr um modelo local num
+servidor, aponta o endpoint para lá.
 
 ---
 
@@ -326,6 +397,10 @@ Para departamentos de IT, o deployment silencioso é suportado:
 `/VERYSILENT /INSTANCES=ALL /SQLSERVER=SRV /REGISTER=COMMON`, ou
 `/VERYSILENT /DIR="<SG100>\Config\EV\Extensions\AITOOL"`. Os passos de cópia manual estão em
 [INSTALL.pt.md](INSTALL.pt.md).
+
+Numa instalação cliente-servidor, corra-o uma vez na máquina que tem o `SG100`; os postos
+não precisam de nada além do runtime WebView2 (veja
+[Instale uma vez, todos os postos o recebem](#instale-uma-vez-todos-os-postos-o-recebem)).
 
 Depois arranque o Primavera, abra o assistente a partir do ribbon e defina o fornecedor, o
 modelo e a chave de API no modal de definições. A chave fica guardada cifrada (DPAPI) no
@@ -491,8 +566,10 @@ exportação de tabelas.
   fornecedor. Com um endpoint local (LM Studio), nada sai da máquina.
 - As chaves de API ficam guardadas **cifradas na sua máquina** (Windows DPAPI, por
   utilizador) e são enviadas apenas para o fornecedor configurado — nunca para a Bola Labs.
-- As escritas no ERP acontecem apenas através dos seus objetos de negócio, apenas após
-  confirmação no chat; não há escritas diretas nas tabelas core do ERP.
+- As escritas no ERP acontecem apenas através dos seus objetos de negócio, desenhadas como
+  preview e depois gravação confirmada, com cada resultado na `AI_AuditLog`; não há escritas
+  diretas nas tabelas core do ERP. Nenhum conteúdo de chat é alguma vez enviado à Bola Labs
+  como telemetria.
 - O histórico de chat fica no seu SQL Server. Os logs são locais; em RELEASE, eventos de
   nível erro podem ir para o Sentry com chaves, connection strings e caminhos de utilizador
   redigidos — veja [SECURITY.md](SECURITY.md).

@@ -19,8 +19,8 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
 
 1. **DO NOT** create a public GitHub issue for security vulnerabilities
 2. Open a private advisory at
-   `https://github.com/BolaLabs/AITOOL/security/advisories/new`, or email the maintainer
-   (address at the end of this file)
+   `https://github.com/BolaLabs/AITOOL/security/advisories/new`, or email
+   <bruno@bolalabs.pt>
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce

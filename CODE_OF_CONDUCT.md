@@ -6,7 +6,7 @@ This project follows the Contributor Covenant Code of Conduct.
 - Translations: <https://www.contributor-covenant.org/translations/>
 - FAQ: <https://www.contributor-covenant.org/faq/>
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by creating an issue or contacting the maintainers.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to <bruno@bolalabs.pt>, or by opening an issue when the matter can be public.
 
 Expected behavior:
 

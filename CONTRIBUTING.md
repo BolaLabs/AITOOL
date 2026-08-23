@@ -189,4 +189,5 @@ Please read our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
 
 ## Questions?
 
-If you have questions, feel free to open a GitHub Discussion or Issue.
+Open a [GitHub Discussion](https://github.com/BolaLabs/AITOOL/discussions) or Issue, or write to
+<bruno@bolalabs.pt> for anything that should not be public.

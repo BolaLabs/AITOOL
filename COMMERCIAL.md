@@ -39,5 +39,5 @@ own licences; no agreement with us can waive them.
 
 ## Contact
 
-Open a GitHub Discussion in [BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL/discussions)
-or contact the maintainer through the [BolaLabs](https://github.com/BolaLabs) profile.
+Write to <bruno@bolalabs.pt>, or open a GitHub Discussion in
+[BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL/discussions) when the question can be public.
