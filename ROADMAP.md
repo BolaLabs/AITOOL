@@ -27,7 +27,9 @@ below that are still open are stated as limits in the README rather than hidden.
   position is stated in DISTRIBUTION.md. With the source repository private, no Cegid
   binary leaves the building; the conversation is needed only before any source release.
 
-Closed on this list: the README screenshots (2026-08-21), the capabilities-and-limits statement ("What it will not do" in
+Closed on this list: print from the PDF card (2026-08-24: Imprimir opens the viewer with
+Chromium's print dialog; Ctrl+P in the viewer does the same), the README screenshots
+(2026-08-21), the capabilities-and-limits statement ("What it will not do" in
 the README), the minimum-model floor (~8B at q4, in the README's cost section), the
 Cegid Pulse comparison, and the Article 50 disclosure to the user — stated on the
 welcome screen and standing under the message box for the whole session, because a
@@ -37,8 +39,6 @@ returning conversation never shows a welcome screen.
 
 The gap between what the engine does and what the user can reach.
 
-- **Print from the PDF card.** The official document opens in the viewer;
-  a print button with a printer dialog belongs next to it.
 - **Export any result table to Excel or CSV.** Today tables offer copy to
   clipboard; the export services already exist and will be wired to a button
   on every table card.

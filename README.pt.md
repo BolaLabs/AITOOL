@@ -134,7 +134,7 @@ incluído — e atua sobre o ERP através de 21 tools descobertas automaticament
   não é.
 - **Documentos.** O PDF oficial de um documento, produzido pelo relatório Crystal com que a
   série está configurada — ATCUD e código QR são do próprio ERP — abre-se sozinho num
-  cartão com visualizador. Quando a série não tem relatório configurado recebe um aviso
+  cartão com visualizador, e Imprimir no cartão abre o diálogo de impressão. Quando a série não tem relatório configurado recebe um aviso
   âmbar e uma folha de dados simples, nunca um documento oficial a fingir.
 - **Enriquecimento de entidades.** Dê-lhe um NIF e o assistente preenche a ficha a partir
   de registos públicos (VIES, NIF.pt), valida o NIF por país e mostra um diff campo a campo
@@ -169,7 +169,7 @@ incluído — e atua sobre o ERP através de 21 tools descobertas automaticament
 | `open_record` | Abre um registo (ficha, documento, extrato de conta) no seu editor nativo do ERP |
 | `open_erp_function` | Abre qualquer função do ERP pelo nome, navegando o ribbon; lista o inventário em caso de dúvida |
 | `interact_erp_window` | Lista janelas e campos, preenche campos e células de grelha, clica botões — janelas .NET e nativas (VB6) |
-| `print_document` | Gera o PDF do relatório oficial de um documento, aberto num cartão com visualizador |
+| `print_document` | Gera o PDF do relatório oficial de um documento; o cartão vê, imprime, abre e guarda |
 | `get_sales_document_types` | Lista os tipos de documento de venda configurados nesta instalação do ERP, cada um com a natureza que o ERP lhe atribui (orçamento, encomenda, guia, fatura) |
 | `get_sales_series` | Lista as séries de um tipo de documento, com a série por omissão e a validade à data de hoje |
 | `get_article_price` | Preço/desconto sugerido pelas regras de preços do ERP (listas de preços, regras por cliente, escalões de quantidade) |

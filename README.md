@@ -131,7 +131,7 @@ and acts on the ERP through 21 auto-discovered tools:
   what that boundary is and is not.
 - **Documents.** The official PDF of a document, produced by the Crystal report the series
   is configured with — ATCUD and QR code are the ERP's own — opens by itself in a viewer
-  card. When the series has no report configured you get an amber warning and a plain
+  card, and Imprimir on the card opens the print dialog. When the series has no report configured you get an amber warning and a plain
   data sheet instead, never a fake official document.
 - **Entity enrichment.** Give it a tax id and the assistant fills the record from public
   registries (VIES, NIF.pt), validates the tax id by country, and shows a field-by-field
@@ -165,7 +165,7 @@ and acts on the ERP through 21 auto-discovered tools:
 | `open_record` | Opens a record (file, document, account statement) in its native ERP editor |
 | `open_erp_function` | Opens any ERP function by name, navigating the ribbon; lists the inventory when unsure |
 | `interact_erp_window` | Lists windows and fields, fills fields and grid cells, clicks buttons — .NET and native (VB6) windows |
-| `print_document` | Generates the official report PDF of a document, opened in a viewer card |
+| `print_document` | Generates the official report PDF of a document; the card views, prints, opens and saves it |
 | `get_sales_document_types` | Lists the sales document types configured in this ERP installation, each with the nature the ERP assigns it (quote, order, delivery note, invoice) |
 | `get_sales_series` | Lists the series of a document type, with default and today's validity |
 | `get_article_price` | Suggested price/discount from ERP price rules (price lists, customer rules, quantity tiers) |

@@ -8,6 +8,14 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+### Added
+
+- Imprimir on the PDF card: the viewer opens with Chromium's print dialog over the official
+  document; Ctrl+P inside the viewer does the same. The one-sentence-to-paper flow closes.
+- The AI_* schema upgrades itself: a table created by an older AI_Schema.sql, or trimmed by
+  an administrator, gains the columns the current build writes (idempotent, both in the
+  runtime bootstrap and in the script).
+
 ### Fixed
 
 - On a monitor scaled above 100% the chat clipped text at its right edge and could not
