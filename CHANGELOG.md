@@ -8,6 +8,14 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.8.3] - 2026-08-28
+
+### Fixed
+
+- The print dialog opened from the PDF card (and Ctrl+P in the viewer) previewed a blank
+  page: it printed the page hosting the PDF plugin. The viewer now asks Chromium's PDF
+  viewer to print the document, and the preview shows the invoice.
+
 ## [2.8.2] - 2026-08-27
 
 ### Added
