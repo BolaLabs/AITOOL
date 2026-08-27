@@ -1,4 +1,4 @@
-[English](README.md) | **Português**
+﻿[English](README.md) | **Português**
 
 <div align="center">
 
@@ -457,10 +457,10 @@ pwsh -File Installer\build-installer.ps1
 Ambos correm o mesmo script: compila a solução em Release para uma pasta de staging local
 (sem nunca tocar no ERP), lê a versão do `AITOOL.dll` compilado e compila o script Inno
 Setup para `Installer\dist\AITOOL-Setup-<version>.exe`, imprimindo o seu SHA256.
-Parâmetros: `-Configuration`, `-IncludePdb`, `-OutputDir`. Uma tag `v*` dispara o mesmo
-build num runner self-hosted e prepara um rascunho de GitHub Release
-(`.github/workflows/installer.yml`). Detalhes, seleção de instâncias, branding e notas de
-assinatura de código: [Installer/README.md](Installer/README.md).
+Parâmetros: `-Configuration`, `-IncludePdb`, `-OutputDir`. As releases fazem-se localmente
+com `scripts\Publish-Release.ps1`, que compila o setup, valida-o e publica a GitHub
+Release. Detalhes, seleção de instâncias, branding e notas de assinatura de código:
+[Installer/README.md](Installer/README.md).
 
 ---
 

@@ -1,4 +1,4 @@
-# Instalador AITOOL (Inno Setup)
+﻿# Instalador AITOOL (Inno Setup)
 
 Instalador Windows do AITOOL para o ERP Primavera v10, com branding Bola Labs,
 seleção de instâncias do ERP e suporte a instalação silenciosa.
@@ -175,21 +175,14 @@ Regras da marca e masters: `docs/brand/README.md`.
 Site: `https://bolalabs.pt` (contacto `bruno@bolalabs.pt`). É este o URL
 usado no instalador (`MyAppURL`/`MyAppContact` no `.iss`).
 
-## CI/CD
+## Publicação
 
-`.github/workflows/installer.yml` gera o setup no GitHub:
-
-- tag `v*` → build + GitHub Release draft com o `.exe` e o `.sha256`; a tag é
-  validada contra a versão da `AITOOL.dll` (v1.2.3 aceita 1.2.3[.n]).
-- `workflow_dispatch` → build manual com artefacto (opção de incluir .pdb).
-
-O job corre num runner **self-hosted** Windows: as referências DevExpress
-21.2.3 resolvem do GAC/instalação local e não existem em runners hosted nem em
-feeds públicas. Preparação do runner (uma vez): Build Tools com ".NET desktop
-build tools", DevExpress WinForms 21.2.3, Inno Setup 6.3+ e PowerShell 7.
-Migrar para runners hosted implicaria mover as referências DevExpress para a
-feed NuGet licenciada da DevExpress (com a chave da feed em secret) — fica
-como opção futura.
+A release é local: `pwsh -File scripts\Publish-Release.ps1` (a partir da raiz, com a
+`AssemblyInfo.cs` e o CHANGELOG já na versão nova) cria a tag, compila o setup com
+`build-installer.ps1`, escreve o `.sha256`, recusa um setup com `appsettings` dentro,
+corre o espelho público e publica a GitHub Release nos dois repositórios. Não há job de
+CI para o instalador: as referências DevExpress 21.2.3 e o Inno Setup não existem em
+runners hosted; migrar implicaria a feed NuGet licenciada da DevExpress (chave em secret).
 
 ## Assinatura de código (distribuição pública)
 
