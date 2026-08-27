@@ -8,6 +8,8 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.8.2] - 2026-08-27
+
 ### Added
 
 - Imprimir on the PDF card: the viewer opens with Chromium's print dialog over the official
@@ -18,6 +20,10 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ### Fixed
 
+- The PDF viewer failed to open ("Erro ao abrir o visualizador de PDF", 0x8007139F) after the
+  device-scale fix below: it created a second WebView2 environment on the chat's user data
+  folder with different browser arguments. Every WebView2 in the addon now shares one
+  environment.
 - On a monitor scaled above 100% the chat clipped text at its right edge and could not
   scroll to the last line: the ERP client is DPI-unaware and works in virtual 96-DPI
   coordinates while Chromium sized the page for the physical DPI. The browser now uses one
