@@ -74,11 +74,13 @@ The product is free to use, for companies and partners alike. Install it from th
 <td><img src="docs/assets/screenshot-pendentes-kpi.png" alt="Pending items: KPI cards, filters and the live table, docked beside the ERP" width="300"></td>
 <td><img src="docs/assets/screenshot-preview-confirmacao.png" alt="A change to a client record previewed and waiting for the user's confirmation" width="300"></td>
 <td><img src="docs/assets/screenshot-auditoria.png" alt="The /auditoria view over AI_AuditLog in the chat" width="300"></td>
+<td><img src="docs/assets/screenshot-sessao-custos.png" alt="The session panel: context, requests, tokens, estimated cost and the Compactar button" width="300"></td>
 </tr>
 <tr>
 <td><sub>"Dá-me a lista de pendentes desde 2015" — the ERP's own pending-items query, as cards and a live table.</sub></td>
 <td><sub>A write is previewed by the ERP first and saved only after "sim".</sub></td>
 <td><sub>Every save, refusal and failure lands in <code>AI_AuditLog</code>, in your database.</sub></td>
+<td><sub>Context, tokens and cost per request; one click compacts a long conversation.</sub></td>
 </tr>
 </table>
 
@@ -307,8 +309,14 @@ What you do pay is your AI provider, directly, at their price. A rough shape rat
 promise: a typical question that runs two or three tools carries the system prompt plus the
 tool schemas, so expect a few thousand input tokens per turn and a few hundred output.
 Cheaper models handle the day-to-day lookups; keep the strong ones for the multi-step
-document flows. The per-session token counter is on the roadmap, so today the honest advice
-is to watch the first week on your provider's own dashboard.
+document flows. The counter at the bottom of the chat opens the session panel: context
+window in use, messages in and out of context, requests, tokens sent and received since the
+ERP opened, the estimated cost (OpenRouter publishes its prices per model and the addon reads
+them; OpenAI and Anthropic models use a built-in table), the last requests one by one, and
+what the next request will weigh.
+`/compactar` (or the panel's button) has the model summarise the older messages and drops
+them from the request; they stay on screen and in the history. Still, watch the first week
+on your provider's own dashboard.
 
 Zero marginal cost is available: point it at a local OpenAI-compatible endpoint (LM Studio,
 or your company's own inference server) and nothing is billed and nothing leaves the machine.

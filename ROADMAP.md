@@ -55,10 +55,16 @@ What a customer hits in the first week of real use.
 - Friendly first-run and error surfaces with clear recovery steps, and honest
   error mapping: provider 5xx, context-length-exceeded and "this model has no
   tool support" currently all surface as "check your internet".
-- Per-session token and cost counter that is actually correct: usage is not
-  requested on the streaming path, cache tokens are dropped, the pricing table
-  dates from December 2024 and carries no Anthropic rows, and the totals are
-  process-wide statics labelled as session figures.
+- Token and cost figures that are fully correct. The session panel (2026-08-29)
+  prices every request with the model that answered it, reads OpenRouter's
+  published prices from its models endpoint and falls back to a built-in table
+  for OpenAI and Anthropic. Still open: cache tokens are dropped; the table has
+  no Claude 5 rows (OpenRouter covers them); totals cover the ERP process, not one
+  chat window; and OpenRouter's models endpoint carries more that could close
+  this for good — per-model context and modalities already read, plus its
+  generation endpoint with the exact billed cost of each request.
+- Automatic compaction: `/compactar` exists and the chat nudges at 80% of the
+  context; running it unattended before the limit is hit is the next step.
 - A retention policy for `AI_ChatMessages` and `AI_AuditLog`. Today nothing
   expires and there is no purge — a GDPR question for a Portuguese market.
 - Approvals routing: a second-approver gate for writes above a threshold.

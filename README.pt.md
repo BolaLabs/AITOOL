@@ -75,11 +75,13 @@ funcionar em minutos.
 <td><img src="docs/assets/screenshot-pendentes-kpi.png" alt="Pendentes: cartões KPI, filtros e tabela viva, ancorados ao lado do ERP" width="300"></td>
 <td><img src="docs/assets/screenshot-preview-confirmacao.png" alt="Alteração a uma ficha de cliente em pré-visualização, à espera da confirmação do utilizador" width="300"></td>
 <td><img src="docs/assets/screenshot-auditoria.png" alt="A vista /auditoria sobre a AI_AuditLog no chat" width="300"></td>
+<td><img src="docs/assets/screenshot-sessao-custos.png" alt="O painel de sessão: contexto, pedidos, tokens, custo estimado e o botão Compactar" width="300"></td>
 </tr>
 <tr>
 <td><sub>"Dá-me a lista de pendentes desde 2015" — a consulta de pendentes do próprio ERP, em cartões e tabela viva.</sub></td>
 <td><sub>Uma escrita é pré-visualizada pelo ERP e só gravada depois do "sim".</sub></td>
 <td><sub>Cada gravação, recusa e falha fica na <code>AI_AuditLog</code>, na sua base de dados.</sub></td>
+<td><sub>Contexto, tokens e custo por pedido; um clique compacta uma conversa longa.</sub></td>
 </tr>
 </table>
 
@@ -314,9 +316,13 @@ O que paga é o seu fornecedor de IA, diretamente, ao preço dele. Uma ordem de 
 uma promessa: uma pergunta típica que corre duas ou três tools carrega o system prompt mais
 os schemas das tools, portanto conte com alguns milhares de tokens de entrada por turno e
 algumas centenas de saída. Os modelos mais baratos resolvem as consultas do dia a dia;
-guarde os fortes para os fluxos de documentos com vários passos. O contador de tokens por
-sessão está no roadmap, por isso hoje o conselho honesto é vigiar a primeira semana no
-dashboard do próprio fornecedor.
+guarde os fortes para os fluxos de documentos com vários passos. O contador no fundo do chat
+abre o painel de sessão: contexto ocupado, mensagens dentro e fora do contexto, pedidos,
+tokens enviados e recebidos desde que o ERP abriu, o custo estimado (o OpenRouter publica os
+preços por modelo e o addon lê-os; os modelos OpenAI e Anthropic usam uma tabela interna),
+os últimos pedidos um a um e o peso do próximo pedido. `/compactar` (ou o botão do painel) pede ao modelo um resumo das
+mensagens antigas e tira-as do pedido; ficam visíveis e no histórico. Ainda assim, vigie a
+primeira semana no dashboard do próprio fornecedor.
 
 Custo marginal zero é possível: aponte-o para um endpoint local compatível com OpenAI
 (LM Studio, ou o servidor de inferência da sua empresa) e nada é faturado e nada sai da

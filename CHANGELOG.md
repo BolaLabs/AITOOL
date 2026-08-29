@@ -8,6 +8,44 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.9.0] - 2026-08-29
+
+### Added
+
+- Session panel behind the token counter: context window in use, messages in and out of
+  context, and since the ERP opened the number of requests, tokens sent and received, the
+  estimated cost, a per-model breakdown when more than one model answered, and the last
+  requests one by one. Costs are priced per request with the model that answered it, so
+  switching models keeps the total honest. A toast suggests compacting at 80% of the context.
+- Prices: OpenRouter's published per-model prices are read from its models endpoint (fetched
+  once in the background when the chat opens, and whenever the model list loads), the static
+  table gains the Anthropic models and matches ids with a provider prefix such as
+  `openai/gpt-5-mini`, which until now showed "no price".
+- `/compactar` (and the panel's button): the model summarises the older messages into one
+  note and they leave the request; nothing is deleted from the screen or the history. The
+  last two exchanges always stay verbatim.
+
+### Fixed
+
+- The context window kept the "first message must be the user's" rule even when nothing was
+  being truncated, which silently dropped a message that opened the conversation with the
+  assistant (the compaction summary). The rule now only moves a window that is already
+  cutting; for Anthropic, a neutral user turn is placed in front instead.
+
+### Changed
+
+- The message box is one card: the text on top, a rail underneath with the options button,
+  the AI notice or the shortcut hint, the token counter and a round send button that turns
+  into the stop button while a reply streams.
+- Every user-facing string is written in accented Portuguese: toasts, the `/ajuda` and
+  `/auditoria` output, table headers, settings labels and the tool descriptions and results
+  the model relays. Error toasts no longer carry the raw exception text; the detail stays
+  in the log.
+- Icon-only buttons (conversations, settings, show/hide key, toast close) carry accessible
+  names, and the key toggle reports its state.
+- Front-end diagnostics go through the debug gate instead of the browser console, so a
+  customer opening DevTools sees nothing but their own page.
+
 ## [2.8.3] - 2026-08-28
 
 ### Fixed
