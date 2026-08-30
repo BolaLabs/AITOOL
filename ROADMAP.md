@@ -75,6 +75,13 @@ What a customer hits in the first week of real use.
   `BolaLabs/AITOOL-skills` collection reviewed by pull request and "install from the
   collection" inside Settings → Skills; per-skill saved parameters (default seller,
   origin) and per-company skills.
+- CRM opportunities beyond create: default sales cycle should be the company's (the
+  window uses CV_SOFT on DEMOV10; the tool takes the first cycle by code), campaign and
+  project as optional arguments, an `advance_opportunity` tool on
+  `CriaActividadeFaseCicloVenda`, an `open_record` route for opportunities (the ribbon
+  function opens a blank record; loading by code needs its own path), and the first
+  contact/activity in the prospecting skill. `list_fields` on that window: 36 fields,
+  enrichment 20 s, walks of 7-8 s against the 4 s budget (2026-08-30).
 - Automatic compaction: `/compactar` exists and the chat nudges at 80% of the
   context; running it unattended before the limit is hit is the next step.
 - A retention policy for `AI_ChatMessages` and `AI_AuditLog`. Today nothing
