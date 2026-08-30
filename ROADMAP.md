@@ -63,6 +63,12 @@ What a customer hits in the first week of real use.
   chat window; and OpenRouter's models endpoint carries more that could close
   this for good — per-model context and modalities already read, plus its
   generation endpoint with the exact billed cost of each request.
+- `interact_erp_window` `list_fields` on a client record: the enrichment walk ran 12-15 s
+  against a 4 s budget and the worker was replaced after a timeout (2026-08-30, no
+  cancellation involved). The budget is not holding on that path; measure the
+  enrichment step and cap it.
+- "Tentar novamente" on an older failed turn regenerates the latest turn, not the one
+  whose card was clicked (2026-08-30). Retry should carry the turn it belongs to.
 - Automatic compaction: `/compactar` exists and the chat nudges at 80% of the
   context; running it unattended before the limit is hit is the next step.
 - A retention policy for `AI_ChatMessages` and `AI_AuditLog`. Today nothing

@@ -8,6 +8,27 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.10.0] - 2026-08-30
+
+### Changed
+
+- Query results read like a report: column names become words ("TOTALPENDENTE" is "Total
+  pendente", the SQL alias stays in the tooltip), ISO dates print as dd/mm/yyyy, negatives are
+  red, headers stay put while scrolling, the footer states rows and columns and whether the
+  result was capped, and a one-number answer is shown as a figure with its label instead of
+  a one-cell grid. The filter box appears from six rows.
+- Each tool step shows how long it took and how many rows came back.
+- The compaction summary is a "Memória da conversa" card: how many messages it replaced,
+  when, one line on why it exists, and the summary itself, collapsible.
+- The model chip in the header shows the live context use ("2% · 400K").
+
+### Fixed
+
+- A question whose turn timed out, was cancelled or failed stayed in the request, so the next
+  message was answered together with the old one (the model would open the record the
+  earlier, abandoned question asked for). It now leaves the context; "Tentar novamente" brings
+  it back. Nothing is removed from the screen or the history.
+
 ## [2.9.0] - 2026-08-29
 
 ### Added
