@@ -69,6 +69,12 @@ What a customer hits in the first week of real use.
   enrichment step and cap it.
 - "Tentar novamente" on an older failed turn regenerates the latest turn, not the one
   whose card was clicked (2026-08-30). Retry should carry the turn it belongs to.
+- Skills 2.12: an `http_request` tool with an allow-list of domains and DPAPI-stored
+  credentials, which is what opens external APIs to skills — the first one planned is
+  `easypay-cobrancas` (MB references, MB WAY, payment lookups), sandbox first; a public
+  `BolaLabs/AITOOL-skills` collection reviewed by pull request and "install from the
+  collection" inside Settings → Skills; per-skill saved parameters (default seller,
+  origin) and per-company skills.
 - Automatic compaction: `/compactar` exists and the chat nudges at 80% of the
   context; running it unattended before the limit is hit is the next step.
 - A retention policy for `AI_ChatMessages` and `AI_AuditLog`. Today nothing
@@ -86,7 +92,7 @@ Measured gaps, not preferences.
   pays dozens of catalog round trips through the DSO; on a server with slow compiles it
   took 60-125 s where the SQL itself took under a second.
 - **Prompt caching that works.** Every request carries a fixed ~11k-token prefix
-  (16 KB system prompt + ~20 KB of schemas for 21 tools) re-sent on every tool
+  (16 KB system prompt + ~20 KB of schemas for 24 tools) re-sent on every tool
   continuation. Only 1 of Anthropic's 4 cache breakpoints is used, and because
   the order is tools → system → messages, changing the open ERP window
   invalidates the cached tool schemas. Published measurements: 41-80% cost,

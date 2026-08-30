@@ -8,6 +8,23 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.11.0] - 2026-08-30
+
+### Added
+
+- Skills: a folder with a `SKILL.md` teaches the assistant a workflow — a description it
+  reads to know when the skill applies, and the steps to follow with the tools it already
+  has. Shared folder (`%ProgramData%\AITOOL\Skills`, filled by the installer) and per-user
+  folder; Settings → Skills lists and switches them; `/skills` in the chat; `use_skill` tool.
+  A skill never dispenses with the two-step confirmation of a save. See docs/SKILLS.md.
+- `prospecao-de-leads`, the first shipped skill: web search for target companies, existing-
+  customer check, customer record and CRM sales opportunity in two steps each, and an e-mail
+  draft for review.
+- `create_opportunity`: creates a CRM sales opportunity for an existing customer through the
+  BSO, preview first, audited on save.
+- `draft_email`: prepares an e-mail (to, subject, body) as a card with "Abrir no e-mail" and
+  "Copiar"; nothing is sent.
+
 ## [2.10.0] - 2026-08-30
 
 ### Changed

@@ -27,7 +27,7 @@ every write in an audit trail in your own database.
 | I want to... | Go to |
 | --- | --- |
 | Understand what this is, without the engineering | [In plain terms](#in-plain-terms) |
-| See what the assistant can actually do | [What it does](#what-it-does) · [The 21 tools](#the-21-tools) |
+| See what the assistant can actually do | [What it does](#what-it-does) · [The 24 tools](#the-21-tools) |
 | Reach a screen I cannot find in the menus | [Find any screen in plain language](#find-any-screen-in-plain-language) |
 | Decide whether it is safe to put near my ERP | [Security and trust](#security-and-trust) · [docs/SECURITY-AND-PRIVACY.md](docs/SECURITY-AND-PRIVACY.md) |
 | Install it, on one PC or on a whole network | [Install once, every workstation gets it](#install-once-every-workstation-gets-it) · [Install (end users)](#install-end-users) |
@@ -151,7 +151,7 @@ and acts on the ERP through 21 auto-discovered tools:
   `Ctrl+B` sessions, `Ctrl+,` settings); pop-out window; export to Markdown, HTML or plain
   text. The assistant states that it is an AI system, as AI Act Article 50 requires.
 
-### The 21 tools
+### The 24 tools
 
 | Tool | What it does |
 | --- | --- |
@@ -174,6 +174,9 @@ and acts on the ERP through 21 auto-discovered tools:
 | `create_entity` | Creates a customer/supplier file via BSO — preview first, then a second confirmed call saves |
 | `create_sales_document` | Creates a sales document via BSO — preview with real totals, then confirm to save |
 | `update_entity` | Updates fields of an existing customer/supplier file — preview first, then a second confirmed call saves |
+| `create_opportunity` | Creates a CRM sales opportunity for an existing customer — preview first, then a second confirmed call saves |
+| `draft_email` | Prepares an e-mail draft (to, subject, body) shown as a card; the user opens it in their own mail client, nothing is sent |
+| `use_skill` | Loads the instructions of a skill — a workflow written in Markdown by whoever uses the ERP; see [docs/SKILLS.md](docs/SKILLS.md) |
 | `enrich_entity` | Fills a file from public registries by tax id (VIES, NIF.pt), showing a field-by-field diff before anything is written |
 | `web_search` | Public web search (Brave, Tavily, Exa, Serper or a self-hosted SearXNG); read-only, results flagged as untrusted content |
 
@@ -187,6 +190,20 @@ pick the real proposal type and a valid series → `create_sales_document` (prev
 totals → confirm → save) → `print_document` for the official PDF.
 
 ---
+
+## Teach it your own workflows
+
+A skill is a folder with one `SKILL.md`: a description the assistant reads to know when the
+skill applies, and the steps to follow — which tools, in what order, what to confirm. No
+code, no plugin to install: anyone who can write a procedure for a colleague can write one.
+Skills live in a shared folder every workstation reads and in each user's own folder;
+Settings → Skills lists them and switches them off; `/skills` shows them in the chat.
+
+The shipped `prospecao-de-leads` skill runs the whole prospecting flow: a web search for
+target companies, a check whether the company already exists, the customer record (preview,
+then your "sim"), a CRM sales opportunity (preview, then your "sim") and an e-mail draft that
+opens in your mail client for review. Nothing is saved or sent without you. The format and
+the rules are in [docs/SKILLS.md](docs/SKILLS.md).
 
 ## Find any screen in plain language
 
@@ -477,7 +494,7 @@ files only, with the web-search keys as the one exception. Full reference:
 | `Assistant:Temperature` | 0-2; gated off for reasoning models | `0.7` |
 | `Assistant:MaxToolIterations` | Tool-call rounds per turn (1-15) | `15` |
 | `Assistant:StreamingEnabled` | Server-sent streaming | on |
-| Per-tool toggles | Enable/disable each of the 21 tools (`Assistant:DisabledTools`) | all on |
+| Per-tool toggles | Enable/disable each of the 24 tools (`Assistant:DisabledTools`) | all on |
 | `ErpTools:Enabled` | Kill switch for the entire tool layer | on |
 | Web search | Providers (`tavily`, `brave`, `serper`, `exa`, self-hosted `searxng`) + keys in the encrypted store; fan-out or fallback mode | `tavily` |
 | Custom system prompt | Extra instructions appended to the built-in prompt | empty |
@@ -525,7 +542,7 @@ as a pluggable layer. A related step on the same road is speaking
 [MCP](https://modelcontextprotocol.io) (Model Context Protocol): the current MCP spec's
 Streamable HTTP transport supports stateless servers, which fits this addon's in-process,
 per-turn model — an MCP client in AITOOL would let the assistant consume third-party tool
-servers beyond the built-in 21 tools. See [ROADMAP.md](ROADMAP.md) for where that sits
+servers beyond the built-in 24 tools. See [ROADMAP.md](ROADMAP.md) for where that sits
 relative to everything else.
 
 ---

@@ -27,7 +27,7 @@ só depois de concordar, e cada escrita num registo de auditoria na sua própria
 | Quero... | Ir para |
 | --- | --- |
 | Perceber o que isto é, sem a engenharia | [Em termos simples](#em-termos-simples) |
-| Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 21 tools](#as-21-tools) |
+| Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 24 tools](#as-21-tools) |
 | Chegar a um ecrã que não encontro nos menus | [Encontre qualquer ecrã por palavras suas](#encontre-qualquer-ecrã-por-palavras-suas) |
 | Decidir se é seguro pô-lo perto do meu ERP | [Segurança e confiança](#segurança-e-confiança) · [docs/SECURITY-AND-PRIVACY.pt.md](docs/SECURITY-AND-PRIVACY.pt.md) |
 | Instalá-lo, num PC ou numa rede inteira | [Instale uma vez, todos os postos o recebem](#instale-uma-vez-todos-os-postos-o-recebem) · [Instalação (utilizadores finais)](#instalação-utilizadores-finais) |
@@ -96,7 +96,7 @@ Capturas na DEMOV10, a empresa de demonstração da Cegid, com a build 2.8.0.
 O AITOOL é uma extensão WinForms (.NET Framework 4.8) que embute um assistente de chat no
 cliente Primavera v10 (SG100) via WebView2. O assistente fala com o modelo à sua escolha —
 OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI, LM Studio
-incluído — e atua sobre o ERP através de 21 tools descobertas automaticamente:
+incluído — e atua sobre o ERP através de 24 tools descobertas automaticamente:
 
 - **Lê dados reais do ERP.** Pendentes com a consulta do próprio ERP, análise de vendas por
   período, cliente e artigo, contagens de vendas e compras por ano via SQL guardado, saldos de conta corrente com antiguidade, stock por armazém, pesquisa de
@@ -155,7 +155,7 @@ incluído — e atua sobre o ERP através de 21 tools descobertas automaticament
   `Ctrl+,` definições); janela destacável; exportação para Markdown, HTML ou texto simples.
   O assistente declara que é um sistema de IA, como exige o artigo 50.º do AI Act.
 
-### As 21 tools
+### As 24 tools
 
 | Tool | O que faz |
 | --- | --- |
@@ -178,6 +178,9 @@ incluído — e atua sobre o ERP através de 21 tools descobertas automaticament
 | `create_entity` | Cria uma ficha de cliente/fornecedor via BSO — preview primeiro, grava numa segunda chamada confirmada |
 | `create_sales_document` | Cria um documento de venda via BSO — preview com totais reais, depois confirmar para gravar |
 | `update_entity` | Atualiza campos de uma ficha de cliente/fornecedor existente — preview primeiro, grava numa segunda chamada confirmada |
+| `create_opportunity` | Cria uma oportunidade de venda no CRM para um cliente existente — preview primeiro, grava numa segunda chamada confirmada |
+| `draft_email` | Prepara um rascunho de e-mail (para, assunto, texto) num cartão; o utilizador abre-o no seu programa de correio, nada é enviado |
+| `use_skill` | Carrega as instruções de uma skill — um fluxo de trabalho escrito em Markdown por quem usa o ERP; ver [docs/SKILLS.pt.md](docs/SKILLS.pt.md) |
 | `enrich_entity` | Preenche uma ficha a partir de registos públicos pelo NIF (VIES, NIF.pt), mostrando um diff campo a campo antes de qualquer escrita |
 | `web_search` | Pesquisa na web pública (Brave, Tavily, Exa, Serper ou um SearXNG self-hosted); só de leitura, resultados marcados como conteúdo não confiável |
 
@@ -191,6 +194,20 @@ escolhem o tipo de proposta real e uma série válida → `create_sales_document
 totais calculados pelo ERP → confirmar → gravar) → `print_document` para o PDF oficial.
 
 ---
+
+## Ensine-lhe os seus próprios fluxos
+
+Uma skill é uma pasta com um `SKILL.md`: uma descrição que o assistente lê para saber quando
+a skill se aplica, e os passos a seguir — que ferramentas, por que ordem, o que confirmar.
+Sem código, sem plugin para instalar: quem sabe escrever um procedimento para um colega sabe
+escrever uma. As skills vivem numa pasta partilhada que todos os postos leem e na pasta de
+cada utilizador; Definições → Skills lista-as e desliga-as; `/skills` mostra-as no chat.
+
+A skill incluída `prospecao-de-leads` corre o fluxo de prospeção inteiro: pesquisa web de
+empresas-alvo, verificação se a empresa já existe, ficha de cliente (pré-visualização e o
+seu "sim"), oportunidade de venda no CRM (pré-visualização e o seu "sim") e um rascunho de
+e-mail que abre no seu programa de correio para revisão. Nada é gravado nem enviado sem si.
+O formato e as regras estão em [docs/SKILLS.pt.md](docs/SKILLS.pt.md).
 
 ## Encontre qualquer ecrã por palavras suas
 
@@ -492,7 +509,7 @@ Referência completa:
 | `Assistant:Temperature` | 0-2; desativada para modelos de raciocínio | `0.7` |
 | `Assistant:MaxToolIterations` | Rondas de tool calls por turno (1-15) | `15` |
 | `Assistant:StreamingEnabled` | Streaming server-sent | on |
-| Toggles por tool | Ativa/desativa cada uma das 21 tools (`Assistant:DisabledTools`) | todas ativas |
+| Toggles por tool | Ativa/desativa cada uma das 24 tools (`Assistant:DisabledTools`) | todas ativas |
 | `ErpTools:Enabled` | Kill switch para a camada de tools inteira | on |
 | Pesquisa web | Fornecedores (`tavily`, `brave`, `serper`, `exa`, `searxng` self-hosted) + chaves no cofre cifrado; modo fan-out ou fallback | `tavily` |
 | System prompt personalizado | Instruções extra acrescentadas ao prompt incorporado | vazio |
@@ -542,7 +559,7 @@ com a integração do ERP como camada plugável. Um passo relacionado no mesmo c
 [MCP](https://modelcontextprotocol.io) (Model Context Protocol): o transporte Streamable
 HTTP da spec MCP atual suporta servidores stateless, o que encaixa no modelo in-process e
 por turno deste addon — um cliente MCP no AITOOL deixaria o assistente consumir servidores
-de tools de terceiros para lá das 21 tools incorporadas. Veja [ROADMAP.md](ROADMAP.md) para
+de tools de terceiros para lá das 24 tools incorporadas. Veja [ROADMAP.md](ROADMAP.md) para
 onde isso se situa em relação ao resto.
 
 ---
