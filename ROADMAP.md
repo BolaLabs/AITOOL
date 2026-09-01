@@ -69,6 +69,12 @@ What a customer hits in the first week of real use.
   enrichment step and cap it.
 - "Tentar novamente" on an older failed turn regenerates the latest turn, not the one
   whose card was clicked (2026-08-30). Retry should carry the turn it belongs to.
+- Silent streams while a model thinks: two 100 s stalls on "Abre a ficha do cliente SOFRIO"
+  (2026-09-01, gpt-5-mini via OpenRouter, reasoning "Desl.") came from the model reasoning
+  at its default medium effort with nothing streamed. 2.11.1 sends `minimal` for "Desl."
+  on gpt-5; the general fix is to ask OpenRouter to stream the reasoning (so the UI shows
+  "A pensar" with a clock instead of silence) and to raise the no-token timeout only when
+  reasoning is on.
 - Skills 2.12: an `http_request` tool with an allow-list of domains and DPAPI-stored
   credentials, which is what opens external APIs to skills — the first one planned is
   `easypay-cobrancas` (MB references, MB WAY, payment lookups), sandbox first; a public

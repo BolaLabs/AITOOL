@@ -27,12 +27,12 @@ só depois de concordar, e cada escrita num registo de auditoria na sua própria
 | Quero... | Ir para |
 | --- | --- |
 | Perceber o que isto é, sem a engenharia | [Em termos simples](#em-termos-simples) |
-| Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 24 tools](#as-21-tools) |
+| Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 24 tools](#as-24-tools) |
 | Chegar a um ecrã que não encontro nos menus | [Encontre qualquer ecrã por palavras suas](#encontre-qualquer-ecrã-por-palavras-suas) |
 | Decidir se é seguro pô-lo perto do meu ERP | [Segurança e confiança](#segurança-e-confiança) · [docs/SECURITY-AND-PRIVACY.pt.md](docs/SECURITY-AND-PRIVACY.pt.md) |
 | Instalá-lo, num PC ou numa rede inteira | [Instale uma vez, todos os postos o recebem](#instale-uma-vez-todos-os-postos-o-recebem) · [Instalação (utilizadores finais)](#instalação-utilizadores-finais) |
 | Compará-lo com o Cegid Pulse | [Comparação com o Cegid Pulse](#comparação-com-o-cegid-pulse) |
-| Compilá-lo a partir do código fonte | [Compilar (developers)](#compilar-developers) |
+| Compilá-lo a partir do código fonte | [Compilar (licenciados do código)](#compilar-licenciados-do-código) |
 | Saber para onde isto vai | [Para lá do Primavera](#para-lá-do-primavera) · [ROADMAP.md](ROADMAP.md) |
 
 ---
@@ -52,7 +52,7 @@ Quatro coisas o distinguem de colar os seus dados num chatbot:
   servidor da Bola Labs no caminho, nenhuma conta a criar, e com um modelo de IA local nada
   sai sequer do edifício.
 - **Escolhe (e paga) a IA diretamente.** OpenAI, Anthropic, OpenRouter, qualquer endpoint
-  compatível com OpenAI, ou um modelo local através do LM Studio — a preços do fornecedor,
+  compatível com OpenAI, ou um modelo local num servidor compatível como o LM Studio — a preços do fornecedor,
   sem subscrição, sem licença por posto e sem créditos contados por cima.
 - **Qualquer ecrã, a pedir.** "Abre o extrato de conta do fornecedor", "abre o
   explorador de vendas": encontra a função no catálogo do ribbon e abre-a, seja qual for
@@ -87,7 +87,7 @@ funcionar em minutos.
 
 <img src="docs/assets/screenshot-ficha-ao-lado.jpg" alt="O assistente ancorado à direita do cliente Primavera, com a ficha de cliente que abriu ao lado" width="920">
 
-Capturas na DEMOV10, a empresa de demonstração da Cegid, com a build 2.8.0.
+Capturas na DEMOV10, a empresa de demonstração da Cegid (ecrã 2.8.0, painel de sessão 2.9.0).
 
 ---
 
@@ -95,8 +95,8 @@ Capturas na DEMOV10, a empresa de demonstração da Cegid, com a build 2.8.0.
 
 O AITOOL é uma extensão WinForms (.NET Framework 4.8) que embute um assistente de chat no
 cliente Primavera v10 (SG100) via WebView2. O assistente fala com o modelo à sua escolha —
-OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI, LM Studio
-incluído — e atua sobre o ERP através de 24 tools descobertas automaticamente:
+OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI (o LM
+Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas automaticamente:
 
 - **Lê dados reais do ERP.** Pendentes com a consulta do próprio ERP, análise de vendas por
   período, cliente e artigo, contagens de vendas e compras por ano via SQL guardado, saldos de conta corrente com antiguidade, stock por armazém, pesquisa de
@@ -292,7 +292,7 @@ problema de funcionalidades. As salvaguardas, pela ordem em que importam:
 
 | Salvaguarda | Como funciona |
 | --- | --- |
-| **Protocolo de escrita em dois passos** | `create_entity` e `create_sales_document` exigem `confirm=false` primeiro: o ERP valida o rascunho e devolve um preview (com totais reais nos documentos) sem gravar. Gravar exige uma segunda chamada com `confirm=true`, que o assistente está instruído a fazer só depois de o utilizador concordar explicitamente no chat. As gravações são single-flight — uma segunda gravação concorrente é recusada. **Isto é uma fronteira de instrução ao modelo, não um portão de UI**: hoje nenhum caminho de código bloqueia um commit num gesto do utilizador, pelo que um modelo que ignore a instrução pode fazer commit num só passo. Uma confirmação de UI obrigatória está no roadmap; entretanto, o registo de auditoria e os interruptores por tool são o que limita o risco. |
+| **Protocolo de escrita em dois passos** | `create_entity`, `update_entity`, `create_sales_document` e `create_opportunity` exigem `confirm=false` primeiro: o ERP valida o rascunho e devolve um preview (com totais reais nos documentos) sem gravar. Gravar exige uma segunda chamada com `confirm=true`, que o assistente está instruído a fazer só depois de o utilizador concordar explicitamente no chat. As gravações são single-flight — uma segunda gravação concorrente é recusada. **Isto é uma fronteira de instrução ao modelo, não um portão de UI**: hoje nenhum caminho de código bloqueia um commit num gesto do utilizador, pelo que um modelo que ignore a instrução pode fazer commit num só passo. Uma confirmação de UI obrigatória está no roadmap; entretanto, o registo de auditoria e os interruptores por tool são o que limita o risco. |
 | **As escritas passam pelos objetos de negócio do ERP** | Os registos são criados via o modelo de objetos BSO do Primavera, pelo que todas as validações do ERP correm e os números de documento são atribuídos pelo ERP. Não há escritas diretas nas tabelas core do ERP. O `run_query` é só de leitura por guarda aplicacional, não por permissão de base de dados — corre na ligação do próprio ERP, pelo que empresas que queiram uma segunda barreira devem apontar o addon para um login SQL só de leitura. |
 | **SQL com guarda** | O `run_query` aceita apenas `SELECT`/`WITH`: uma blocklist rejeita palavras-chave de escrita/DDL/sistema (`INSERT`, `DROP`, `EXEC`, `xp_*`, `OPENROWSET`, …) depois de remover comentários, parêntesis retos e homóglifos Unicode para impedir contornos; o empilhamento de statements (`;`) é recusado; o número de linhas é limitado do lado do servidor. |
 | **Conteúdo não confiável é sinalizado** | O system prompt fixa uma regra: texto devolvido por tools (páginas web, resultados SQL, campos do ERP) é dado para analisar, nunca instruções para seguir. Os resultados do `web_search` levam adicionalmente `untrusted_content: true` mais um aviso inline, e formulações de injeção conhecidas são sinalizadas para a telemetria. |
@@ -353,8 +353,9 @@ Limites deliberados, não lacunas à espera de serem preenchidas:
 - **Sem workflows autónomos.** As cadeias de tools têm limite por turno; não corre sem
   supervisão.
 - **Sem lançamentos contabilísticos, sem eliminações, sem documentos de compra, sem criação
-  de artigos.** Documentos de venda e fichas de cliente/fornecedor são a superfície de
-  escrita.
+  de artigos.** Documentos de venda, fichas de cliente/fornecedor e oportunidades de venda
+  do CRM são a superfície de escrita. O `draft_email` prepara uma mensagem para revisão e
+  nunca a envia.
 - **Sem entrada de faturas ou documentos.** Não lê uma fatura em PDF e lança-a. Está no
   roadmap, e condicionado pelas regras portuguesas: documentos fiscais são emitidos por
   software certificado pela AT, nunca por um assistente.
@@ -429,7 +430,7 @@ Depois arranque o Primavera, abra o assistente a partir do ribbon e defina o for
 modelo e a chave de API no modal de definições. A chave fica guardada cifrada (DPAPI) no
 perfil desse utilizador. Primeira resposta útil: menos de cinco minutos desde o download.
 
-### Compilar (developers)
+### Compilar (licenciados do código)
 
 Compilar precisa de um ambiente Primavera SG100 licenciado para um deploy completo, mas
 compila em qualquer lado: todas as referências Primavera resolvem a partir da pasta vendored
@@ -586,7 +587,8 @@ exportação de tabelas.
 - As mensagens de chat **e os dados do ERP que o assistente obtém por si** (clientes,
   vendas, stock, saldos) são enviados para o **fornecedor de IA que configurar** (OpenAI /
   OpenRouter / Anthropic / o seu endpoint). Reveja a política de uso de dados desse
-  fornecedor. Com um endpoint local (LM Studio), nada sai da máquina.
+  fornecedor. Com um endpoint local (servidores compatíveis como o LM Studio), nada sai da
+  máquina.
 - As chaves de API ficam guardadas **cifradas na sua máquina** (Windows DPAPI, por
   utilizador) e são enviadas apenas para o fornecedor configurado — nunca para a Bola Labs.
 - As escritas no ERP acontecem apenas através dos seus objetos de negócio, desenhadas como

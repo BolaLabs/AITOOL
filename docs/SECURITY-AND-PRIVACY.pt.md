@@ -42,7 +42,8 @@ próprio fornecedor oferecer.
   nos respetivos editores, listar e preencher campos e células de grelha em janelas
   abertas — incluindo os editores clássicos VB6, via UI Automation.
 - **Escrever**: criar e atualizar fichas de cliente/fornecedor, criar documentos de
-  venda.
+  venda, criar oportunidades de venda no CRM. Os rascunhos de e-mail são entregues ao
+  cliente de correio predefinido para revisão e nunca enviados pelo addon.
 - **Gerar** o PDF do mapa oficial Crystal de um documento e abri-lo.
 - **Pesquisar na web**, com os resultados marcados como conteúdo não confiável.
 
@@ -164,7 +165,7 @@ bloqueasse as tabelas deixava a escrita passar e ficavam dois avisos num ficheir
 ### O que o trilho de auditoria cobre
 
 **Coberto**: commits através do modelo de objetos (criar/atualizar entidade, criar
-documento de venda), commits recusados, falhas, e as cinco ações de janela que alteram
+documento de venda, criar oportunidade de venda), commits recusados, falhas, e as cinco ações de janela que alteram
 estado (escrita em campo, escrita em grelha, clique em botão, fecho de janela, fecho de
 todas as janelas, e as respetivas recusas).
 

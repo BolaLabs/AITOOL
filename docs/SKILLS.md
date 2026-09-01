@@ -12,10 +12,14 @@ Portuguese version: [SKILLS.pt.md](SKILLS.pt.md).
 
 | Folder | Who | Notes |
 |---|---|---|
+| `<ERP>\Config\EV\Extensions\AITOOL\Skills\<name>\SKILL.md` | The addon itself | The skills that ship with each version (`incluida` in `/skills`); replaced on every update, so do not edit here |
 | `%ProgramData%\AITOOL\Skills\<name>\SKILL.md` | Everyone on this machine (and, in client-server setups, every workstation that shares it) | The installer places the shipped skills here and never overwrites your edits |
 | `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<name>\SKILL.md` | You | Open it from Settings → Skills → "Abrir a minha pasta de skills" |
 
-A skill in your folder with the same name as a shared one replaces it. Settings → Skills
+A shared skill with the same name as a shipped one replaces it, and a skill in your folder
+replaces both. A folder or `name` starting with `_` is a template: listed, never offered to
+the assistant. Skills you switch off are remembered in
+`%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json`. Settings → Skills
 lists every skill found, where it came from, and lets you switch each one off. `/skills` in
 the chat lists them; `/skills recarregar` reads the folders again (a new conversation picks
 them up).
@@ -46,15 +50,15 @@ author: BolaLabs
 
 Header keys:
 
-- `name` (required): short, no spaces; it is how the assistant calls the skill.
+- `name`: short, no spaces; it is how the assistant calls the skill. Missing, the folder name is used.
 - `description` (required): one sentence; the assistant reads it to decide whether the skill applies.
 - `triggers`: words that usually appear in the request, comma-separated.
 - `tools`: the tools the skill may use, comma-separated; empty means every enabled tool. The
   list restricts, it never adds: a tool switched off in Settings stays off.
 - `version`, `author`: free text, shown in Settings.
 
-The body is free Markdown. Keep it under 12 000 characters; a longer file is listed with a
-problem and never used. Write it the way you would brief a new colleague: what to ask first,
+The body is free Markdown. Keep the instructions under 12 000 characters (the header does not
+count); a longer body is listed with a problem and never used. Write it the way you would brief a new colleague: what to ask first,
 which tool answers each step, what to do with the result, where to stop and ask.
 
 ## What a skill cannot do

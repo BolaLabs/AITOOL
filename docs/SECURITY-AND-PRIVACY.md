@@ -40,7 +40,9 @@ bulk export. There is no data-residency control beyond the provider's own.
 - **Drive the ERP client**: open functions by navigating the ribbon, open records in their
   editors, list and fill fields and grid cells in open windows — including the classic VB6
   editors, via UI Automation.
-- **Write**: create and update customer/supplier files, create sales documents.
+- **Write**: create and update customer/supplier files, create sales documents, create CRM
+  sales opportunities. E-mail drafts are handed to the default mail client for review and
+  never sent by the addon.
 - **Generate** the official Crystal report PDF of a document and open it.
 - **Search the web**, with results marked as untrusted content.
 
@@ -148,7 +150,8 @@ left two warnings in a local file as the only trace.
 
 ### What the audit trail covers
 
-**Covered**: commits through the object model (create/update entity, create sales document),
+**Covered**: commits through the object model (create/update entity, create sales document,
+create sales opportunity),
 refused commits, failures, and the five mutating window actions (field write, grid write,
 button click, window close, close-all-windows, and their refusals).
 

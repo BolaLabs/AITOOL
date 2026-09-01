@@ -12,10 +12,14 @@ Versão inglesa: [SKILLS.md](SKILLS.md).
 
 | Pasta | Quem | Notas |
 |---|---|---|
+| `<ERP>\Config\EV\Extensions\AITOOL\Skills\<nome>\SKILL.md` | O próprio addon | As skills que vêm com cada versão (`incluida` no `/skills`); substituídas em cada atualização, por isso não edite aqui |
 | `%ProgramData%\AITOOL\Skills\<nome>\SKILL.md` | Toda a gente nesta máquina (e, em cliente-servidor, cada posto que a partilhe) | O instalador coloca aqui as skills incluídas e nunca sobrepõe as suas edições |
 | `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<nome>\SKILL.md` | Só você | Abra-a em Definições → Skills → "Abrir a minha pasta de skills" |
 
-Uma skill na sua pasta com o mesmo nome de uma partilhada substitui-a. Definições → Skills
+Uma skill partilhada com o mesmo nome de uma incluída substitui-a, e uma skill na sua pasta
+substitui ambas. Uma pasta ou `name` a começar por `_` é um modelo: aparece na lista, nunca
+é oferecida ao assistente. As skills que desligar ficam registadas em
+`%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json`. Definições → Skills
 lista todas as skills encontradas, a origem, e deixa desligar cada uma. `/skills` no chat
 lista-as; `/skills recarregar` relê as pastas (uma conversa nova passa a usá-las).
 
@@ -45,7 +49,7 @@ author: BolaLabs
 
 Chaves do cabeçalho:
 
-- `name` (obrigatório): curto, sem espaços; é assim que o assistente chama a skill.
+- `name`: curto, sem espaços; é assim que o assistente chama a skill. Se faltar, usa-se o nome da pasta.
 - `description` (obrigatório): uma frase; o assistente lê-a para decidir se a skill se aplica.
 - `triggers`: palavras que costumam aparecer no pedido, separadas por vírgulas.
 - `tools`: ferramentas que a skill pode usar, separadas por vírgulas; vazio = todas as
@@ -53,8 +57,8 @@ Chaves do cabeçalho:
   continua desligada.
 - `version`, `author`: texto livre, mostrado nas Definições.
 
-O corpo é Markdown livre. Mantenha-o abaixo de 12 000 caracteres; um ficheiro maior é
-listado com um problema e nunca é usado. Escreva-o como escreveria para um colega novo: o que
+O corpo é Markdown livre. Mantenha as instruções abaixo de 12 000 caracteres (o cabeçalho
+não conta); um corpo maior é listado com um problema e nunca é usado. Escreva-o como escreveria para um colega novo: o que
 perguntar primeiro, que ferramenta responde a cada passo, o que fazer com o resultado, onde
 parar e perguntar.
 

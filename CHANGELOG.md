@@ -8,6 +8,49 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.11.1] - 2026-09-01
+
+### Fixed
+
+- A confirmed `create_opportunity` is never retried automatically: it now sits with the other
+  ERP writes in the retry policy, so an ERP timeout on save cannot produce two opportunities.
+- Web-search source cards and the VIES enrichment card survive the streaming re-render;
+  they were dropped by the first text that followed the tool.
+- Query results: years, document numbers, codes and any integer under 10 000 print without a
+  thousands separator ("2024", not "2.024").
+- Opening Settings no longer places the caret in the API key with the value selected; a stray
+  keystroke could replace a working key.
+- Escape closed Settings twice, re-sending the provider selection.
+- Automation step cards stayed where they were streamed instead of jumping above the text.
+- The thinking block kept "A pensar…" when reasoning interleaved with tool calls.
+- Links pasted in a user message are readable on the navy bubble.
+- Memory cards no longer offer "Regenerar".
+- Skills tab: a timeout message instead of an endless "A carregar…".
+- Web-search cards only follow http(s) links and no longer fetch favicons from a third party.
+- Session pill and panel write costs the same way; HTML escaping covers quotes in attributes.
+- Reasoning "Desl." on a gpt-5 model now sends `reasoning_effort: minimal`. Sending nothing
+  left the model at its default medium effort, and OpenRouter streams nothing while it
+  thinks, which over the full 24-tool request showed up as a 100 s silent stall.
+- The memory card ends with a line telling the model to answer from the recalled facts
+  before querying the ERP again.
+- A model call that has produced nothing after 30 s is sent again once, with a toast; the
+  same request answered in two seconds on retry every time the stall was seen.
+- Escape closes Settings whatever has focus inside it.
+- Text on the user bubble is white in the dark theme too.
+
+### Changed
+
+- Amber is a fill colour; where the accent carries text (estimated cost, "Rascunho" badge)
+  it uses a darker ink shade that meets contrast.
+- Keyboard focus reveals message actions and draws a ring on chips, toggles and sessions.
+- Slash-command palette: one icon per command.
+- Accents in the remaining Settings and session labels (Raciocínio, Visão, Compatível, Este
+  mês, Sem título, Módulo, Série, N.º Doc); "A ligar" instead of "A conectar".
+- `/ajuda` lists what the assistant can do today, writes and skills included.
+- Docs: 24 tools everywhere, the write surface names CRM opportunities and the e-mail draft,
+  SKILLS.md documents the three folders, the template rule and the disabled list, README
+  anchors fixed.
+
 ## [2.11.0] - 2026-08-30
 
 ### Added

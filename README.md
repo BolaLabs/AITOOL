@@ -27,12 +27,12 @@ every write in an audit trail in your own database.
 | I want to... | Go to |
 | --- | --- |
 | Understand what this is, without the engineering | [In plain terms](#in-plain-terms) |
-| See what the assistant can actually do | [What it does](#what-it-does) · [The 24 tools](#the-21-tools) |
+| See what the assistant can actually do | [What it does](#what-it-does) · [The 24 tools](#the-24-tools) |
 | Reach a screen I cannot find in the menus | [Find any screen in plain language](#find-any-screen-in-plain-language) |
 | Decide whether it is safe to put near my ERP | [Security and trust](#security-and-trust) · [docs/SECURITY-AND-PRIVACY.md](docs/SECURITY-AND-PRIVACY.md) |
 | Install it, on one PC or on a whole network | [Install once, every workstation gets it](#install-once-every-workstation-gets-it) · [Install (end users)](#install-end-users) |
 | Compare it with Cegid Pulse | [How this compares to Cegid Pulse](#how-this-compares-to-cegid-pulse) |
-| Build it from source | [Build (developers)](#build-developers) |
+| Build it from source | [Build (source licensees)](#build-source-licensees) |
 | Know where this is going | [Beyond Primavera](#beyond-primavera) · [ROADMAP.md](ROADMAP.md) |
 
 ---
@@ -52,7 +52,7 @@ Four things make it different from pasting your data into a chatbot:
   Labs server in the path, no account to create, and with a local AI model nothing leaves
   the building at all.
 - **You choose (and pay) the AI directly.** OpenAI, Anthropic, OpenRouter, any
-  OpenAI-compatible endpoint, or a local model through LM Studio — at provider prices, with
+  OpenAI-compatible endpoint, or a local model on a compatible server such as LM Studio — at provider prices, with
   no subscription, no per-seat licence and no metered credits on top.
 - **Any screen, by asking.** "Open the supplier account statement", "open the sales
   explorer": it finds the function in the ribbon catalogue and opens it, whichever
@@ -86,7 +86,7 @@ The product is free to use, for companies and partners alike. Install it from th
 
 <img src="docs/assets/screenshot-ficha-ao-lado.jpg" alt="The assistant docked at the right of the Primavera client, with the client record it opened beside it" width="920">
 
-Captured on DEMOV10, the Cegid demo company, with the 2.8.0 build.
+Captured on DEMOV10, the Cegid demo company (screen 2.8.0, session panel 2.9.0).
 
 ---
 
@@ -94,8 +94,8 @@ Captured on DEMOV10, the Cegid demo company, with the 2.8.0 build.
 
 AITOOL is a WinForms extension (.NET Framework 4.8) that embeds a chat assistant into the
 Primavera v10 (SG100) client via WebView2. The assistant talks to the model of your choice —
-OpenAI, OpenRouter, native Anthropic, or any OpenAI-compatible endpoint, LM Studio included —
-and acts on the ERP through 21 auto-discovered tools:
+OpenAI, OpenRouter, native Anthropic, or any OpenAI-compatible endpoint (LM Studio is one) —
+and acts on the ERP through 24 auto-discovered tools:
 
 - **Reads real ERP data.** Pending items with the ERP's own query, sales analysis by
   period, client and article, sales and purchase counts per year through guarded SQL, current-account balances with aging, stock per warehouse, document search,
@@ -287,7 +287,7 @@ The guardrails, in the order they matter:
 
 | Guardrail | How it works |
 | --- | --- |
-| **Two-step write protocol** | `create_entity` and `create_sales_document` require `confirm=false` first: the ERP validates the draft and returns a preview (with real totals for documents) without saving. Saving requires a second call with `confirm=true`, which the assistant is instructed to make only after the user explicitly agrees in the chat. Saves are single-flight — a second concurrent save is refused. **This is a model-instruction boundary, not a UI gate**: no code path blocks a commit on a user gesture today, so a model that ignores the instruction can commit in one step. A hard UI confirmation is on the roadmap; the audit trail and the per-tool off switches are what bound the risk meanwhile. |
+| **Two-step write protocol** | `create_entity`, `update_entity`, `create_sales_document` and `create_opportunity` require `confirm=false` first: the ERP validates the draft and returns a preview (with real totals for documents) without saving. Saving requires a second call with `confirm=true`, which the assistant is instructed to make only after the user explicitly agrees in the chat. Saves are single-flight — a second concurrent save is refused. **This is a model-instruction boundary, not a UI gate**: no code path blocks a commit on a user gesture today, so a model that ignores the instruction can commit in one step. A hard UI confirmation is on the roadmap; the audit trail and the per-tool off switches are what bound the risk meanwhile. |
 | **Writes go through the ERP's business objects** | Records are created via the Primavera BSO object model, so every ERP validation runs and document numbers are assigned by the ERP. There are no direct writes to ERP core tables. `run_query` is read-only by application guard, not by database permission — it runs on the ERP's own connection, so companies wanting a second barrier should point the addon at a read-only SQL login. |
 | **Guarded SQL** | `run_query` accepts only `SELECT`/`WITH`: a blocklist rejects write/DDL/system keywords (`INSERT`, `DROP`, `EXEC`, `xp_*`, `OPENROWSET`, …) after stripping comments, brackets and Unicode homoglyphs to prevent bypasses; statement stacking (`;`) is refused; row counts are bounded server-side. |
 | **Untrusted content is spotlighted** | The system prompt pins a rule: text returned by tools (web pages, SQL results, ERP fields) is data to analyze, never instructions to follow. `web_search` results additionally carry `untrusted_content: true` plus an inline warning, and known injection phrasings are flagged to telemetry. |
@@ -346,7 +346,8 @@ Deliberate limits, not gaps waiting to be filled:
 
 - **No autonomous workflows.** Tool chains are capped per turn; it does not run unattended.
 - **No accounting postings, no deletions, no purchase documents, no article creation.**
-  Sales documents and customer/supplier files are the write surface.
+  Sales documents, customer/supplier files and CRM sales opportunities are the write
+  surface. `draft_email` prepares a message for review and never sends it.
 - **No invoice or document intake.** It does not read a PDF invoice and post it. On the
   roadmap, and constrained by Portuguese rules: fiscal documents are issued by AT-certified
   software, never by an assistant.
@@ -568,7 +569,7 @@ tool calls and SQL behind every answer, invoice intake, and table export.
 - Chat messages **and the ERP data the assistant retrieves for you** (customers, sales,
   stock, balances) are sent to the **AI provider you configure** (OpenAI / OpenRouter /
   Anthropic / your endpoint). Review that provider's data-usage policy. With a local endpoint
-  (LM Studio), nothing leaves the machine.
+  (compatible servers such as LM Studio), nothing leaves the machine.
 - API keys are stored **encrypted on your machine** (Windows DPAPI, per user) and sent only
   to the configured provider — never to Bola Labs.
 - Writes to the ERP happen only through its business objects, designed as preview then

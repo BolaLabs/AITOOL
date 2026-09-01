@@ -66,7 +66,8 @@ This project follows these security practices:
 ### ERP access
 
 - **Writes exist and are deliberate.** The assistant can create customer and supplier
-  records and sales documents, update records, and drive ERP windows. It cannot create
+  records, sales documents and CRM sales opportunities, update records, and drive ERP
+  windows. E-mail drafts open in the default mail client and are never sent by the addon. It cannot create
   purchase documents or articles, post accounting entries, delete anything, or write
   directly to ERP tables — writes go through the Primavera BSO object model
   (`ErpCreationService`), so the ERP's own validation runs and document numbers are
