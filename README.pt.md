@@ -335,9 +335,13 @@ os schemas das tools, portanto conte com alguns milhares de tokens de entrada po
 algumas centenas de saída. Os modelos mais baratos resolvem as consultas do dia a dia;
 guarde os fortes para os fluxos de documentos com vários passos. O contador no fundo do chat
 abre o painel de sessão: contexto ocupado, mensagens dentro e fora do contexto, pedidos,
-tokens enviados e recebidos desde que o ERP abriu, o custo estimado (o OpenRouter publica os
-preços por modelo e o addon lê-os; os modelos OpenAI e Anthropic usam uma tabela interna),
-os últimos pedidos um a um e o peso do próximo pedido. `/compactar` (ou o botão do painel) pede ao modelo um resumo das
+tokens enviados e recebidos desde que o ERP abriu, o custo (o OpenRouter devolve o valor
+faturado de cada pedido e o painel mostra-o como tal; nos outros casos o addon avalia os
+tokens com a lista de preços do fornecedor ou uma tabela interna para OpenAI e Anthropic),
+os últimos pedidos um a um e o peso do próximo pedido. O tamanho do contexto é o que o
+fornecedor publica para o modelo. Quando o modelo raciocina, um chip ao lado da caixa de
+escrita muda o esforço (Ctrl+Shift+E): "Desl." responde mais depressa, "Alto" pensa mais
+em pedidos com vários passos. `/compactar` (ou o botão do painel) pede ao modelo um resumo das
 mensagens antigas e tira-as do pedido; ficam visíveis e no histórico. Ainda assim, vigie a
 primeira semana no dashboard do próprio fornecedor.
 
@@ -504,7 +508,7 @@ Referência completa:
 | `Provider:Active` | Fornecedor ativo: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | detetado do base URL |
 | `Provider:<id>:Model` | Id do modelo por fornecedor (seletor pesquisável com badges de capacidades) | preset |
 | `Provider:<id>:BaseUrl` | Endpoint, editável para fornecedores compatíveis com OpenAI | preset |
-| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max`, onde o modelo o suporta | `Off` |
+| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max`, onde o modelo o suporta; `Off` num gpt-5 é enviado como `minimal`. Também se muda no chip ao lado da caixa de escrita | `Off` |
 | Chaves de API | Definidas na aplicação; cifradas com DPAPI por utilizador. Fallbacks de ambiente: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | — |
 | `Assistant:MaxTokens` | Máximo de tokens por resposta (256-128000) | `4096` |
 | `Assistant:Temperature` | 0-2; desativada para modelos de raciocínio | `0.7` |

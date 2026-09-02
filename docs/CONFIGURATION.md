@@ -44,7 +44,7 @@ Real appsettings files must be plain JSON without comments: a malformed file is 
 - `Provider:{id}:ApiKey` (string): key for that provider. Prefer the in-app encrypted store or the env variable (`OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY`, `LMSTUDIO_API_KEY`). For the `openai` id, the key is read from the legacy `OpenAI:ApiKey` instead.
 - `Provider:{id}:BaseUrl` (string): optional; defaults to the provider preset.
 - `Provider:{id}:Model` (string): model id, free text. OpenRouter uses the `vendor/model` format (e.g. `openai/gpt-5-mini`); falls back to `OpenAI:Model` when empty.
-- `Provider:{id}:ReasoningEffort` (string): `Off` | `Low` | `Medium` | `High` | `Max` (where the provider supports it).
+- `Provider:{id}:ReasoningEffort` (string): `Off` | `Low` | `Medium` | `High` | `Max` (where the provider supports it). On gpt-5 models `Off` is sent as `reasoning_effort: minimal`, because the model otherwise reasons at its default effort; the chip beside the message box and the header popover change the same value.
 
 ### Provider presets (built-in defaults)
 

@@ -8,6 +8,26 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.12.0] - 2026-09-02
+
+### Added
+
+- Reasoning effort one click from the message: a chip beside the token counter (visible when
+  the model reasons) opens Desl./Baixo/Médio/Alto/Máx.; Ctrl+Shift+E opens it from the
+  keyboard. It is the same setting the header popover and Settings carry.
+- Billed costs: OpenRouter reports the amount it charged for each request and the session
+  panel shows it without the "~" ("Custo faturado"); other providers keep the priced estimate.
+  Cached input tokens are recorded per request.
+
+### Fixed
+
+- The header and the session panel disagreed on the context size (the header read the
+  provider's catalogue, the panel the built-in table: "1.1M" against "400K"). Both now use the
+  catalogue, and the panel refreshes when the list arrives or the model changes.
+- Tool rounds showed "0 received" in the last requests: streams now ask OpenAI and OpenRouter
+  for the final usage chunk, and the local estimate counts the tool-call arguments when a
+  provider sends no usage.
+
 ## [2.11.1] - 2026-09-01
 
 ### Fixed

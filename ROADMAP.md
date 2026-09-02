@@ -58,24 +58,29 @@ What a customer hits in the first week of real use.
 - Token and cost figures that are fully correct. The session panel (2026-08-29)
   prices every request with the model that answered it, reads OpenRouter's
   published prices from its models endpoint and falls back to a built-in table
-  for OpenAI and Anthropic. Still open: cache tokens are dropped; the table has
-  no Claude 5 rows (OpenRouter covers them); totals cover the ERP process, not one
-  chat window; and OpenRouter's models endpoint carries more that could close
-  this for good — per-model context and modalities already read, plus its
-  generation endpoint with the exact billed cost of each request.
+  for OpenAI and Anthropic. Since 2.12.0 streams carry the provider's real usage
+  and OpenRouter's billed amount replaces the estimate ("Custo faturado"), cached
+  input tokens are kept per request, and the context size comes from the
+  provider's catalogue. Still open: cached tokens are recorded but not shown; the
+  table has no Claude 5 rows (OpenRouter covers them); totals cover the ERP
+  process, not one chat window.
 - `interact_erp_window` `list_fields` on a client record: the enrichment walk ran 12-15 s
   against a 4 s budget and the worker was replaced after a timeout (2026-08-30, no
   cancellation involved). The budget is not holding on that path; measure the
   enrichment step and cap it.
 - "Tentar novamente" on an older failed turn regenerates the latest turn, not the one
   whose card was clicked (2026-08-30). Retry should carry the turn it belongs to.
+- "Fecha as janelas todas" is answered with `list_windows` plus one `close_window` per
+  window (three model round-trips, ~10 s) instead of the single `close_all_windows`
+  action (2026-09-02). Steer the tool description, or accept the route and give the
+  single-window close the same Info log line as the bulk one.
 - Silent streams while a model thinks: two 100 s stalls on "Abre a ficha do cliente SOFRIO"
   (2026-09-01, gpt-5-mini via OpenRouter, reasoning "Desl.") came from the model reasoning
   at its default medium effort with nothing streamed. 2.11.1 sends `minimal` for "Desl."
   on gpt-5; the general fix is to ask OpenRouter to stream the reasoning (so the UI shows
   "A pensar" with a clock instead of silence) and to raise the no-token timeout only when
   reasoning is on.
-- Skills 2.12: an `http_request` tool with an allow-list of domains and DPAPI-stored
+- Skills, next: an `http_request` tool with an allow-list of domains and DPAPI-stored
   credentials, which is what opens external APIs to skills — the first one planned is
   `easypay-cobrancas` (MB references, MB WAY, payment lookups), sandbox first; a public
   `BolaLabs/AITOOL-skills` collection reviewed by pull request and "install from the

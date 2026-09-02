@@ -328,9 +328,12 @@ tool schemas, so expect a few thousand input tokens per turn and a few hundred o
 Cheaper models handle the day-to-day lookups; keep the strong ones for the multi-step
 document flows. The counter at the bottom of the chat opens the session panel: context
 window in use, messages in and out of context, requests, tokens sent and received since the
-ERP opened, the estimated cost (OpenRouter publishes its prices per model and the addon reads
-them; OpenAI and Anthropic models use a built-in table), the last requests one by one, and
-what the next request will weigh.
+ERP opened, the cost (OpenRouter reports the billed amount of each request and the panel
+shows it as such; otherwise the addon prices the tokens with the provider's published list
+or a built-in table for OpenAI and Anthropic), the last requests one by one, and what the
+next request will weigh. The context size is the one the provider publishes for the model.
+When the model reasons, a chip beside the message box switches the effort (Ctrl+Shift+E):
+"Desl." answers fastest, "Alto" thinks longer on multi-step requests.
 `/compactar` (or the panel's button) has the model summarise the older messages and drops
 them from the request; they stay on screen and in the history. Still, watch the first week
 on your provider's own dashboard.
@@ -489,7 +492,7 @@ files only, with the web-search keys as the one exception. Full reference:
 | `Provider:Active` | Active provider: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | detected from base URL |
 | `Provider:<id>:Model` | Model id per provider (searchable picker with capability badges) | preset |
 | `Provider:<id>:BaseUrl` | Endpoint, editable for OpenAI-compatible providers | preset |
-| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max`, where the model supports it | `Off` |
+| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max`, where the model supports it; `Off` on gpt-5 is sent as `minimal`. Also changed from the chip beside the message box | `Off` |
 | API keys | Set in-app; DPAPI-encrypted per user. Env fallbacks: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | — |
 | `Assistant:MaxTokens` | Max tokens per response (256-128000) | `4096` |
 | `Assistant:Temperature` | 0-2; gated off for reasoning models | `0.7` |
