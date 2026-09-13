@@ -88,6 +88,11 @@ The product is free to use, for companies and partners alike. Install it from th
 
 Captured on DEMOV10, the Cegid demo company (screen 2.8.0, session panel 2.9.0).
 
+**Watch it work.** A two-and-a-half-minute film of the published version on DEMOV10 — the installer,
+a screen opened by name, real data, the official PDF, a write with a brake, the audit table, a skill
+running a whole process — plays on the product page: [bolalabs.pt/en/aitool](https://bolalabs.pt/en/aitool/).
+Nothing in it is a mock-up.
+
 ---
 
 ## What it does

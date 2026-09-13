@@ -89,6 +89,11 @@ funcionar em minutos.
 
 Capturas na DEMOV10, a empresa de demonstração da Cegid (ecrã 2.8.0, painel de sessão 2.9.0).
 
+**Veja-o a trabalhar.** Um filme de dois minutos e meio da versão publicada na DEMOV10 — o instalador,
+um ecrã aberto pelo nome, dados reais, o PDF oficial, a gravação com travão, a tabela de auditoria, uma
+skill a correr um processo inteiro — está na página do produto: [bolalabs.pt/pt/aitool](https://bolalabs.pt/pt/aitool/).
+Nada nele é uma maquete.
+
 ---
 
 ## O que faz
