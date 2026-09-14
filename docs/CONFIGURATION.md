@@ -33,7 +33,7 @@ Real appsettings files must be plain JSON without comments: a malformed file is 
     "openrouter": {
       "ApiKey": "",
       "BaseUrl": "https://openrouter.ai",
-      "Model": "openai/gpt-5-mini",
+      "Model": "openai/gpt-5.6-sol",
       "ReasoningEffort": "Off"
     }
   }
@@ -43,8 +43,8 @@ Real appsettings files must be plain JSON without comments: a malformed file is 
 - `Provider:Active` (string): active provider id. Four presets exist — `openai`, `openrouter`, `anthropic`, `lmstudio`. Any other id is accepted and treated as an OpenAI-compatible endpoint, reading its key from the `AI_` environment prefix. When absent, the provider is detected from the configured base URL. Env override: `AITOOL_AI_PROVIDER`.
 - `Provider:{id}:ApiKey` (string): key for that provider. Prefer the in-app encrypted store or the env variable (`OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY`, `LMSTUDIO_API_KEY`). For the `openai` id, the key is read from the legacy `OpenAI:ApiKey` instead.
 - `Provider:{id}:BaseUrl` (string): optional; defaults to the provider preset.
-- `Provider:{id}:Model` (string): model id, free text. OpenRouter uses the `vendor/model` format (e.g. `openai/gpt-5-mini`); falls back to `OpenAI:Model` when empty.
-- `Provider:{id}:ReasoningEffort` (string): `Off` | `Low` | `Medium` | `High` | `Max` (where the provider supports it). On gpt-5 models `Off` is sent as `reasoning_effort: minimal`, because the model otherwise reasons at its default effort; the chip beside the message box and the header popover change the same value.
+- `Provider:{id}:Model` (string): model id, free text. OpenRouter uses the `vendor/model` format; falls back to `OpenAI:Model` when empty. A fresh install starts on `openai/gpt-5.6-sol` (OpenRouter) or `gpt-5.6-sol` (OpenAI direct) — 1M of context. A model the provider's catalogue does not describe is assumed to hold 128k.
+- `Provider:{id}:ReasoningEffort` (string): `Off` | `Low` | `Medium` | `High` | `Max`, shown as Desligado / Rápido / Equilibrado / Profundo / Máximo (where the provider supports it). What each level sends on the wire is read from the provider's catalogue for the selected model: `Off` becomes `none` or `minimal` where the model accepts one of them, because a reasoning model left at its default thinks before it streams anything; `Max` becomes `max`, or `xhigh` on the generation that took that, or `high`. The choice is stored per provider *and model* (`{id}|{model}` at runtime), so changing model and back restores it. The chip beside the message box, the header popover and Settings change the same value.
 
 ### Provider presets (built-in defaults)
 
@@ -86,8 +86,24 @@ event payloads are sanitized by `TelemetryInitializer`.
 
 ## Sections managed by the app
 
-- `Assistant:*` — chat/runtime settings (max tokens, temperature, streaming, theme, export options, disabled tools). Written by the settings UI; do not pre-create it in templates. The web-search keys are the exception and do accept environment overrides: `Assistant:WebSearch:Mode` (`AITOOL_WEBSEARCH_MODE`), `Assistant:WebSearch:Providers` (`AITOOL_WEBSEARCH_PROVIDERS`), and the singular `Assistant:WebSearch:Provider` (`AITOOL_WEBSEARCH_PROVIDER`), which the code reads as a legacy fallback.
+- `Assistant:*` — chat/runtime settings (max tokens, temperature, streaming, theme, export options, disabled tools). Written by the settings UI; do not pre-create it in templates. Most of it is read from the files only; the web-search and enrichment keys below are the exceptions and accept environment overrides.
 - `ErpTools:Enabled` (bool, default `true`): kill switch for ERP tool calling. Set it to `false` to run the assistant as a plain chat with no ERP access. Env: `AITOOL_ERP_TOOLS_ENABLED`.
+
+## Environment variables the code reads
+
+| Family | Variables | Setting overridden | Default |
+| --- | --- | --- | --- |
+| Provider | `{OPENAI,OPENROUTER,ANTHROPIC,LMSTUDIO}_API_KEY` (`AI_API_KEY` for a custom id), `{PREFIX}_BASE_URL`, `{PREFIX}_MODEL`, `{PREFIX}_REASONING_EFFORT`, `AITOOL_AI_PROVIDER` | `Provider:{id}:ApiKey` / `BaseUrl` / `Model` / `ReasoningEffort`, `Provider:Active` | preset |
+| HTTP | `OPENAI_TIMEOUT`, `OPENAI_STREAMING` | `OpenAI:TimeoutSeconds`, `OpenAI:StreamingEnabled` | `100`, `true` |
+| Web search | `AITOOL_WEBSEARCH_MODE`, `AITOOL_WEBSEARCH_PROVIDERS` (legacy singular `AITOOL_WEBSEARCH_PROVIDER`), `AITOOL_WEBSEARCH_TIMEOUT` (ms), `AITOOL_WEBSEARCH_NATIVE_MAXUSES` | `Assistant:WebSearch:Mode` / `Providers` / `TimeoutMs` / `Native:MaxUses` | `fanout`, `tavily`, `15000`, `5` |
+| Web search endpoints | `AITOOL_WEBSEARCH_{BRAVE,EXA,SERPER,TAVILY}_ENDPOINT` | `Assistant:WebSearch:{Brave,Exa,Serper,Tavily}Endpoint` | the provider's public API URL |
+| SearXNG | `AITOOL_WEBSEARCH_SEARXNG_BASEURL`, `AITOOL_WEBSEARCH_SEARXNG_ALLOWINSECURE` | `Assistant:WebSearch:Searxng:BaseUrl` / `AllowInsecure` | unset, `false` |
+| Enrichment (`enrich_entity`) | `AITOOL_ENRICHMENT_VIES_ENABLED`, `AITOOL_ENRICHMENT_NIFPT_ENABLED`, `AITOOL_ENRICHMENT_TIMEOUT` (ms), `AITOOL_ENRICHMENT_CACHE_TTL_MINUTES`, `AITOOL_ENRICHMENT_CODE_RULE`, `AITOOL_ENRICHMENT_STRICT_ERP_CHECK` | `Assistant:Enrichment:Vies:Enabled` / `NifPt:Enabled` / `TimeoutMs` / `CacheTtlMinutes` / `CodeRule` / `StrictErpCheck` | `true`, `true`, `4000`, `1440`, `hybrid`, `false` |
+| SQL | `AITOOL_SQL_ENCRYPT`, `AITOOL_SQL_TRUST_SERVER_CERT`, `AITOOL_SQL_TIMEOUT` | `Sql:*` (see above) | as above |
+| Sentry | `SENTRY_DSN`, `SENTRY_ENVIRONMENT`, `SENTRY_DEBUG_MODE` | `Sentry:*` (see above) | unset |
+| Tools, environment | `AITOOL_ERP_TOOLS_ENABLED`, `AITOOL_ENVIRONMENT` | `ErpTools:Enabled`, the environment name | `true`, by build |
+
+Web-search API keys themselves are read from the encrypted store or `Assistant:WebSearch:*` in the files, not from the environment.
 
 ## Developer setup
 

@@ -43,7 +43,7 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
 ## Telemetry and logging
 
 - Centralized via Shared.Config.TelemetryService (NLog 6.x)
-- DEBUG: Trace..Fatal to local rolling file; RELEASE: Warn..Fatal to file, Error..Fatal to Sentry (Sentry.NLog)
+- DEBUG: Trace..Fatal to local rolling file; RELEASE: Info..Fatal to file, Error..Fatal to Sentry (Sentry.NLog)
 - BeforeSend/BeforeBreadcrumb hooks sanitize secrets and reduce noise
 - Use TelemetryService.LogDebug/Info/Warning/Error/Fatal and AddBreadcrumb
 
@@ -55,8 +55,12 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
   - `commit=true` calls `Actualiza` on the BSO, so the ERP assigns numbers and enforces its rules
   - Commits are single-flight; a second concurrent commit is refused
   - Every commit, refusal and failure is written to `AI_AuditLog` by `ErpToolsService`
-- The `confirm` flag arrives in the tool arguments and is therefore a model-instruction
-  boundary, not a UI gate. See SECURITY.md.
+- The commit is gated in `ErpToolsService`: the preview pass makes `WriteConfirmationStore`
+  issue a single-use token (15 minutes, bound to a hash of tool + arguments), the card built
+  by `WriteConfirmationCard` carries it, and the user's click returns it as
+  `_confirm_token`. `TryConsume` must match before `commit=true` runs; a `confirm=true` call
+  without it is refused and audited as `Recusou (sem confirmação no cartão)`. The model never
+  sees the token. See SECURITY.md.
 
 ## Performance rules
 
@@ -122,7 +126,7 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
 ## Telemetria e logging
 
 - Centralizado via Shared.Config.TelemetryService (NLog 6.x)
-- DEBUG: Trace..Fatal para ficheiro local rotativo; RELEASE: Warn..Fatal para ficheiro, Error..Fatal para Sentry (Sentry.NLog)
+- DEBUG: Trace..Fatal para ficheiro local rotativo; RELEASE: Info..Fatal para ficheiro, Error..Fatal para Sentry (Sentry.NLog)
 - Hooks BeforeSend/BeforeBreadcrumb sanitizam segredos e reduzem ruído
 - Usar TelemetryService.LogDebug/Info/Warning/Error/Fatal e AddBreadcrumb
 
@@ -134,8 +138,12 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
   - `commit=true` chama `Actualiza` no BSO, para o ERP atribuir números e aplicar as suas regras
   - As gravações são single-flight; uma segunda gravação concorrente é recusada
   - Cada gravação, recusa e falha é registada em `AI_AuditLog` pelo `ErpToolsService`
-- A flag `confirm` vem nos argumentos da tool, por isso é uma fronteira de instrução ao
-  modelo, não um portão de UI. Ver SECURITY.md.
+- O commit tem portão no `ErpToolsService`: a passagem de pré-visualização faz o
+  `WriteConfirmationStore` emitir uma autorização de uso único (15 minutos, ligada a um hash
+  de tool + argumentos), o cartão construído pelo `WriteConfirmationCard` transporta-a, e o
+  clique do utilizador devolve-a como `_confirm_token`. O `TryConsume` tem de coincidir antes
+  de o `commit=true` correr; uma chamada com `confirm=true` sem ela é recusada e auditada como
+  `Recusou (sem confirmação no cartão)`. O modelo nunca vê a autorização. Ver SECURITY.md.
 
 ## Regras de performance
 

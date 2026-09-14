@@ -1,13 +1,17 @@
 # Trademark Policy
 
-The AITOOL name, the BolaLabs name, and any associated logos (including the
+The AITOOL name, the Bola Labs name, and any associated logos (including the
 A·i monogram — see `docs/brand/README.md` for the visual identity and its usage
-rules) are trademarks of Bruno Marques / BolaLabs.
+rules) are trademarks of Bruno Marques / Bola Labs.
 
 The [AITOOL Community License](LICENSE) covers the use of the Software. It does
 not grant any rights to these names or logos — trademark rights are separate
 from the licence, and the licence only allows the names to identify the
 unmodified Software.
+
+PRIMAVERA and Cegid are trademarks of Cegid. AITOOL is an independent product:
+it is not affiliated with, sponsored by or endorsed by Cegid, and the names are
+used here only to identify the ERP the addon runs in.
 
 ## You may, without asking
 
@@ -24,7 +28,7 @@ unmodified Software.
   unmodified installer.
 - Sell a product or service branded AITOOL, or named so similarly that users
   could confuse it with this product.
-- Use the AITOOL or BolaLabs names or logos in a way that implies endorsement,
+- Use the AITOOL or Bola Labs names or logos in a way that implies endorsement,
   affiliation, or official status — including on your own website or marketing
   beyond the factual statements above.
 - Alter the logos, colours or monogram; the brand kit in `docs/brand/` defines

@@ -38,8 +38,34 @@ pasta.
 
 ## Instalação
 
-O instalador não está assinado digitalmente; o Windows SmartScreen avisa na primeira
-execução. Verifique o SHA256 publicado com a release antes de continuar.
+Descarregue o `AITOOL-Setup-<versão>.exe` da página da release e corra-o na máquina que tem
+o `SG100`, com o cliente Primavera fechado. O instalador ainda não está assinado
+digitalmente, por isso o Windows SmartScreen avisa na primeira execução: clique em **Mais
+informações → Executar mesmo assim**. O SHA256 publicado com a release é a forma de
+verificar o download antes disso.
+
+O assistente de instalação faz sozinho o trabalho do lado do ERP:
+
+1. **Encontra a instalação Primavera** — `PERCURSOSGE100`/`PERCURSOSGV100`, depois o
+   registo, depois uma instalação anterior do AITOOL, e só pergunta se tudo isso falhar.
+   Recusa-se a continuar com o cliente do ERP aberto.
+2. **Deteta ERPs multi-instância** (árvores `Config_<INSTANCE>`, p. ex. `Config_ALEX`) e
+   deixa instalar numa ou em várias de uma vez, com uma consulta opcional à PRIINSTANCIAS
+   no SQL Server.
+3. **Escreve os ficheiros** em `<SG100>\Config\EV\Extensions\AITOOL\` para cada instância
+   selecionada e **regista o AITOOL no ecrã de Extensibilidade do ERP**, como extensão
+   comum ou para empresas específicas.
+4. **Verifica o Microsoft Edge WebView2 Runtime** e instala-o se faltar.
+
+Para departamentos de IT: `/VERYSILENT /INSTANCES=ALL /SQLSERVER=SRV /REGISTER=COMMON`, ou
+`/VERYSILENT /DIR="<SG100>\Config\EV\Extensions\AITOOL"`.
+
+Depois inicie o cliente Primavera. O AITOOL aparece no friso (ribbon).
+
+### Cópia manual, em alternativa
+
+Útil quando o instalador não pode correr — uma topologia invulgar, ou uma política contra
+instaladores.
 
 1. Fechar o cliente Primavera.
 2. Copiar os ficheiros do AITOOL para a pasta de extensões da instalação Primavera:
@@ -52,9 +78,10 @@ execução. Verifique o SHA256 publicado com a release antes de continuar.
    **Múltiplas instâncias do ERP:** cada instância Primavera além da `DEFAULT` tem a sua
    própria árvore de pastas com sufixo (`Config_<INSTANCE>`, p. ex. `Config_ALEX`).
    Repetir a cópia para `<SG100>\Config_<INSTANCE>\EV\Extensions\AITOOL\` em cada
-   instância que deva ter o assistente — ou usar o instalador, que deteta as instâncias e
-   instala em todas as selecionadas de uma vez.
-3. Iniciar o cliente Primavera. O AITOOL aparece no friso (ribbon).
+   instância que deva ter o assistente.
+3. Registar a extensão à mão no ecrã de Extensibilidade do ERP — o passo que o instalador
+   faria por si.
+4. Iniciar o cliente Primavera. O AITOOL aparece no friso (ribbon).
 
 ## Primeira execução — configurar um fornecedor
 
@@ -66,6 +93,11 @@ execução. Verifique o SHA256 publicado com a release antes de continuar.
    [SECURITY.md](SECURITY.md).
 4. Começar a conversar. As definições (fornecedor, modelo, chave) persistem entre
    reinícios.
+
+Na primeira execução o addon cria três tabelas `AI_*` na base de dados do ERP, para o
+histórico de conversas e o trilho de auditoria. O que guardam, e o script pronto para
+instalações onde o addon não pode fazer `CREATE TABLE`, estão em
+[docs/SECURITY-AND-PRIVACY.pt.md, secção 6](docs/SECURITY-AND-PRIVACY.pt.md#6-o-que-fica-guardado-na-sua-base-de-dados).
 
 ## Onde obter uma chave
 
@@ -80,5 +112,15 @@ e reiniciar. As definições de fornecedor e a chave encriptada são preservadas
 
 ## Desinstalar
 
-Fechar o cliente e apagar a pasta `…\Extensions\AITOOL\`. Para remover também a chave
-guardada, apagar `%LocalAppData%\Cegid\Extensions\AITOOL\secrets.dat`.
+Feche o cliente Primavera e desinstale o AITOOL pelas **Aplicações** do Windows
+(Definições → Aplicações → Aplicações instaladas). São removidos os ficheiros de todas as
+pastas registadas na instalação, a linha do AITOOL sai da configuração de Extensibilidade do
+ERP e a chave `HKLM\SOFTWARE\Bola Labs\AITOOL`, com a lista `InstallDirs`, é apagada.
+
+Duas pastas ficam de propósito: `%LocalAppData%\Cegid\Extensions\AITOOL` (as suas
+definições, o `secrets.dat` cifrado e os logs) e `%ProgramData%\AITOOL` (as skills
+partilhadas). Apague-as à mão se não quiser deixar nada. As tabelas `AI_*` também ficam na
+base de dados do ERP; são suas para eliminar.
+
+Depois de uma cópia manual, remova antes a pasta `…\Extensions\AITOOL\` e a linha de
+Extensibilidade à mão.

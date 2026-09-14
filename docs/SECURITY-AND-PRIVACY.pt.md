@@ -42,8 +42,9 @@ próprio fornecedor oferecer.
   nos respetivos editores, listar e preencher campos e células de grelha em janelas
   abertas — incluindo os editores clássicos VB6, via UI Automation.
 - **Escrever**: criar e atualizar fichas de cliente/fornecedor, criar documentos de
-  venda, criar oportunidades de venda no CRM. Os rascunhos de e-mail são entregues ao
-  cliente de correio predefinido para revisão e nunca enviados pelo addon.
+  venda, criar oportunidades de venda no CRM — cada uma delas dependente do cartão de
+  confirmação descrito na secção 4. Os rascunhos de e-mail são entregues ao cliente de
+  correio predefinido para revisão e nunca enviados pelo addon.
 - **Gerar** o PDF do mapa oficial Crystal de um documento e abri-lo.
 - **Pesquisar na web**, com os resultados marcados como conteúdo não confiável.
 
@@ -60,9 +61,10 @@ parêntesis retos removidos dos identificadores, homóglifos Unicode normalizado
 empilhamento de instruções e rejeita nomes cross-database e `db..object`. O comportamento da
 blocklist é fixado por `scripts/checks/Test-SqlGuard.ps1`; o limite de 500 linhas é aplicado no
 `RunQueryTool` (como reescrita `TOP` quando a query pode ser envolvida, senão parando o leitor
-ao fim de 500 linhas) e não é coberto por nenhum script. Os botões de commit e de
-destruição na automação de janelas (gravar, guardar, anular, apagar, eliminar, remover,
-confirmar) são recusados a menos que a chamada traga a flag de autorização — avaliada sobre o
+ao fim de 500 linhas) e não é coberto por nenhum script. Toda a escrita no ERP depende de uma
+autorização que a aplicação emite ao desenhar o cartão de confirmação, detalhada mais abaixo.
+Os botões de commit e de destruição na automação de janelas (gravar, guardar, anular, apagar,
+eliminar, remover, confirmar) passam pelo mesmo portão — avaliado sobre o
 botão que o ERP resolveu, e não sobre a legenda pedida, porque a resolução é por substring.
 Dentro de um diálogo modal só passam recusas e diálogos de um só botão. Uma interação de janela de
 cada vez; os commits são single-flight. Os endpoints de pesquisa web são HTTPS com
@@ -71,31 +73,42 @@ e ações de formulário à origem da própria página, e todas as bibliotecas s
 SRI. Dois limites que vale a pena dizer com todas as letras: script e estilo inline são
 permitidos, porque a superfície é um único ficheiro, pelo que a CSP restringe de onde vem o
 código e não o que markup inline injetado poderia fazer — é para isso que existe o DOMPurify;
-e imagens e ligações de saída são permitidas em HTTPS, pelo que markdown renderizado no chat
-pode referenciar uma imagem remota.
+e imagens e ligações de saída ficam confinadas à origem da própria página, pelo que markdown
+renderizado no chat não consegue carregar uma imagem remota nem chegar a um host externo.
 
-**Imposto pelo prompt, não pelo código.** O contrato de escrita em dois passos, e a regra
-de que o output das tools é dados e nunca instruções. Um modelo pode ignorar uma regra do
-prompt. É por isso que o trilho de auditoria e os interruptores de corte (kill switch)
-existem, e por isso a secção seguinte merece ser lida.
+**Imposto pelo prompt, não pelo código.** A regra de que o output das tools é dados e nunca
+instruções, e a instrução para perguntar antes de uma ação irreversível. Um modelo pode
+ignorar uma regra do prompt. É por isso que o trilho de auditoria e os interruptores de corte
+(kill switch) existem.
 
 **Imposto pela configuração.** Tools individuais podem ser desativadas
 (`Assistant:DisabledTools`), ou toda a camada de tools do ERP (`ErpTools:Enabled=false`),
-deixando um chat simples sem acesso ao ERP.
+deixando um chat simples sem acesso ao ERP. Uma tool desligada é recusada na execução, e não
+apenas omitida da lista enviada ao modelo.
 
-### A fronteira de confirmação, com precisão
+### O portão de escrita, com precisão
 
-As tools de escrita recebem uma flag `confirm`. Com ela a false, o ERP valida o rascunho
-e devolve um preview sem gravar; com ela a true, o registo é gravado. **A flag é definida
-pelo assistente**, seguindo uma instrução do system prompt para a definir apenas depois
-de o utilizador concordar no chat. Não existe atualmente nenhum caminho no código que
-bloqueie um commit à espera de um gesto do utilizador, pelo que um modelo que ignore a
-instrução pode fazer commit num único passo.
+As tools de escrita recebem uma flag `confirm`. Com ela a false, o ERP valida o rascunho e
+devolve um preview sem gravar. **É a aplicação, e não o modelo, que transforma esse preview
+num cartão de confirmação** — os campos, os avisos e, nos documentos, os totais que o próprio
+ERP calculou, lidos do JSON do ERP e não do que o modelo escreveu. Ao construir o cartão, a
+aplicação emite uma autorização: de uso único, válida 15 minutos, e ligada a um hash da
+ferramenta e dos argumentos exatos que foram pré-visualizados.
 
-Todos os commits — e todos os commits recusados — ficam registados em `AI_AuditLog`. Uma
-confirmação forte na UI é o primeiro item do roadmap. Se esse risco residual for
-inaceitável para uma dada empresa, desative as tools de escrita, ou a camada de tools por
-inteiro.
+A gravação exige essa autorização. Ela chega à ferramenta apenas pelo clique do utilizador no
+cartão, e nunca faz parte do que o modelo vê ou consegue escrever. Por isso `confirm=true`
+sozinho já não grava nada: a chamada é recusada, o cartão pendente volta a ser destacado, e a
+recusa fica em `AI_AuditLog` como `Recusou (sem confirmação no cartão)`. Escrever "sim" no
+chat também não grava — o botão do cartão é o único caminho. Alterar o rascunho invalida o
+cartão, porque os argumentos deixam de coincidir com o hash a que a autorização estava ligada.
+
+O mesmo portão cobre os botões de gravação e de destruição premidos por `interact_erp_window`.
+
+**O que este portão não é.** É um controlo de aplicação dentro do addon, não uma fronteira de
+base de dados. Limita o que um modelo — ou uma injeção de prompt bem-sucedida — consegue fazer
+o ERP gravar. Não faz nada quanto a quem chega à base de dados do ERP com a mesma ligação que
+o addon usa. Se mesmo a superfície de escrita com portão for inaceitável para uma dada
+empresa, desative as tools de escrita, ou a camada de tools por inteiro.
 
 ### Não impõe as permissões por utilizador do Primavera
 
@@ -156,7 +169,7 @@ daí o addon não precisa de nenhum direito de DDL: `SELECT, INSERT, UPDATE, DEL
 atualizado nem apagado.
 
 **Uma gravação é recusada quando o registo de auditoria está inacessível.** Criar ou alterar
-um registo no ERP com a flag de confirmação verifica primeiro que consegue escrever no
+um registo no ERP a partir do cartão de confirmação verifica primeiro que consegue escrever no
 registo, e pára com uma mensagem acionável se não conseguir. As pré-visualizações e as
 leituras continuam, porque não alteram nada no ERP. Antes disto, uma base de dados que
 bloqueasse as tabelas deixava a escrita passar e ficavam dois avisos num ficheiro local como
@@ -175,8 +188,25 @@ todas as janelas, e as respetivas recusas).
 **Modo de falha**: se o próprio insert de auditoria falhar, a escrita no ERP mantém-se e
 a falha é registada apenas localmente.
 
-**Consulta**: `/auditoria` no chat mostra as entradas recentes; a tabela é sua para
-consultar.
+**Consulta**: `/auditoria [N]` no chat mostra as entradas recentes do próprio utilizador; a
+tabela é sua para consultar. As tabelas `AI_*` são recusadas pelo `run_query`, pelo que o
+assistente não consegue ler os seus próprios registos através do SQL escrito pelo modelo — só
+por `/auditoria`.
+
+### Quem vê os registos de quem
+
+As sessões de chat e as entradas de auditoria são do utilizador ERP que as criou: um
+utilizador comum vê as suas conversas e as suas ações, e mais nada. Um administrador, super
+administrador ou técnico do ERP é tratado como supervisor — um badge no cabeçalho,
+`/auditoria todos [N]`, e um interruptor "Todos os utilizadores" na lista de conversas. Uma
+conversa de outra pessoa abre só de leitura: nada do que o supervisor escreve entra nela, e
+renomear e apagar são recusados.
+
+O perfil é lido do ERP (`AdmEngine`, `clsUtilizador`) na abertura da empresa, e o âmbito é
+aplicado em C# antes de a consulta correr. **É um controlo de aplicação, não uma permissão de
+base de dados**: as linhas vivem na base de dados de empresa e quem lá chegar com um cliente
+SQL lê-as todas, seja qual for o perfil que tenha no ERP. O e-mail registado do utilizador é
+lido mas nunca colocado no system prompt.
 
 ## 7. Logs locais
 
@@ -195,17 +225,15 @@ dados e nunca como instruções; marcação `untrusted_content` nos resultados w
 aviso inline; e telemetria sobre formulações de injeção conhecidas.
 
 Risco residual, dito com clareza: uma injeção bem-sucedida podia causar uma chamada de
-tool que o utilizador não pretendia. Está limitada pelo conjunto de tools, pelo guard de
-SQL, pelo portão dos botões de commit e pelo trilho de auditoria — **não** por um diálogo
-de confirmação. Ver a secção 4.
+tool que o utilizador não pretendia. O que a limita é o conjunto de tools, o guard de SQL, o
+portão de escrita — uma instrução injetada não consegue obter a autorização do cartão, logo
+não consegue fazer o ERP gravar seja o que for — e o trilho de auditoria. Ver a secção 4.
 
 ## 9. Rede
 
 Saída, por TLS 443, para os destinos que ativar de entre estes: o host da API do seu
 fornecedor de IA, o seu fornecedor de pesquisa web, `ec.europa.eu` (VIES) e `nif.pt` se o
-`enrich_entity` for usado, `www.google.com/s2/favicons` para os ícones dos cartões de fonte da
-pesquisa web (os hostnames das fontes são enviados à Google), e o seu host Sentry se
-configurar um DSN. Nada mais. Não há
+`enrich_entity` for usado, e o seu host Sentry se configurar um DSN. Nada mais. Não há
 listener de entrada.
 
 A UI de chat é servida a partir de um host virtual do WebView2 (`https://aitool.local`)
@@ -215,7 +243,8 @@ que nunca toca na rede.
 
 - [ ] Escolher o fornecedor de IA — ou um modelo local — e rever a respetiva política de
       uso de dados
-- [ ] Decidir se as tools de escrita ficam sequer ativas
+- [ ] Decidir se as tools de escrita ficam sequer ativas (toda a escrita depende de um
+      cartão de confirmação que alguém tem de carregar)
 - [ ] Decidir se o `run_query` fica ativo, e se o addon deve apontar para um login SQL só
       de leitura
 - [ ] Aceitar que três tabelas são criadas na base de dados de empresa, sem política de

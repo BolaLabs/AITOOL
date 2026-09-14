@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AITOOL social preview 1280x640</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #1E3A5F; }
+  .card {
+    position: relative;
+    width: 1280px;
+    height: 640px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 72px 96px;
+    background: linear-gradient(135deg, #24466E 0%, #1E3A5F 55%, #16304F 100%);
+    color: #FFFFFF;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+  .lockup { display: flex; align-items: center; gap: 22px; }
+  .lockup svg { width: 76px; height: 76px; display: block; }
+  .wordmark { font-weight: 700; font-size: 34px; letter-spacing: 6px; }
+  .wordmark .ai { color: #D9A441; }
+  .headline {
+    margin: 84px 0 0;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1.08;
+    letter-spacing: -0.5px;
+    max-width: 1000px;
+  }
+  .headline .ai { color: #D9A441; }
+  .subline {
+    margin: 30px 0 0;
+    font-size: 30px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.86);
+    max-width: 1088px;
+  }
+  .rule {
+    position: absolute;
+    left: 96px;
+    right: 96px;
+    bottom: 118px;
+    height: 3px;
+    background: #D9A441;
+  }
+  .footer {
+    position: absolute;
+    left: 96px;
+    right: 96px;
+    bottom: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 22px;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .footer .site { color: #D9A441; font-weight: 700; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="lockup">
+    <svg viewBox="0 0 64 64" role="img" aria-label="AITOOL">
+      <rect width="64" height="64" rx="12" fill="#16304F"/>
+      <path d="M17 47 L32 17 L47 47" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="32" cy="46.5" r="5.2" fill="#D9A441"/>
+    </svg>
+    <div class="wordmark"><span class="ai">AI</span>TOOL</div>
+  </div>
+  <h1 class="headline"><span class="ai">AI assistant</span> inside PRIMAVERA v10</h1>
+  <p class="subline">Runs on your machines. Your model, including a local one. No per-seat licence.</p>
+  <div class="rule"></div>
+  <div class="footer">
+    <span>Reads your data &nbsp;·&nbsp; Opens any screen &nbsp;·&nbsp; Writes with a preview, audited</span>
+    <span class="site">bolalabs.pt</span>
+  </div>
+</div>
+</body>
+</html>

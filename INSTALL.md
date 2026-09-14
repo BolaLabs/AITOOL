@@ -36,8 +36,32 @@ yours is unusual, the manual copy below works the same way, folder by folder.
 
 ## Install
 
-The installer is not code-signed; Windows SmartScreen warns on first run. Verify the SHA256
-published with the release before continuing.
+Download `AITOOL-Setup-<version>.exe` from the release page and run it on the machine that
+holds `SG100`, with the Primavera client closed. The setup is not code-signed yet, so
+Windows SmartScreen warns on first run: click **More info → Run anyway**. The SHA256
+published with the release is how you check the download first.
+
+The wizard does the ERP-side work by itself:
+
+1. **Finds the Primavera installation** — `PERCURSOSGE100`/`PERCURSOSGV100`, then the
+   registry, then a previous AITOOL install, and it asks only if all of that fails. It
+   refuses to continue while the ERP client is open.
+2. **Detects multi-instance ERPs** (`Config_<INSTANCE>` folder trees, e.g. `Config_ALEX`)
+   and lets you install into one or several at once, with an optional PRIINSTANCIAS lookup
+   on SQL Server.
+3. **Writes the files** into `<SG100>\Config\EV\Extensions\AITOOL\` for each selected
+   instance and **registers AITOOL in the ERP's Extensibility screen**, as a common
+   extension or for specific companies.
+4. **Checks the Microsoft Edge WebView2 Runtime** and installs it if it is missing.
+
+For IT departments: `/VERYSILENT /INSTANCES=ALL /SQLSERVER=SRV /REGISTER=COMMON`, or
+`/VERYSILENT /DIR="<SG100>\Config\EV\Extensions\AITOOL"`.
+
+Then start the Primavera client. AITOOL appears in the ribbon.
+
+### Manual copy, as an alternative
+
+Useful when the setup cannot run — an unusual topology, or a policy against installers.
 
 1. Close the Primavera client.
 2. Copy the AITOOL files into the extensions folder of your Primavera installation:
@@ -50,9 +74,10 @@ published with the release before continuing.
    **Multiple ERP instances:** each Primavera instance beyond `DEFAULT` has its own
    suffixed folder tree (`Config_<INSTANCE>`, e.g. `Config_ALEX`). Repeat the copy into
    `<SG100>\Config_<INSTANCE>\EV\Extensions\AITOOL\` for every instance that should get
-   the assistant — or use the installer, which detects the instances and installs into
-   all selected ones at once.
-3. Start the Primavera client. AITOOL appears in the ribbon.
+   the assistant.
+3. Register the extension by hand in the ERP's Extensibility screen — the step the setup
+   otherwise does for you.
+4. Start the Primavera client. AITOOL appears in the ribbon.
 
 ## First run — configure a provider
 
@@ -62,6 +87,11 @@ published with the release before continuing.
    stored encrypted on your machine (Windows DPAPI) and is never written in plain text or
    sent anywhere except the provider you chose. See [SECURITY.md](SECURITY.md).
 4. Start chatting. Settings (provider, model, key) persist across restarts.
+
+On the first run the addon creates three `AI_*` tables in the ERP database for chat history
+and the audit trail. What they hold, and the pre-built script for sites where the addon may
+not `CREATE TABLE`, are in
+[docs/SECURITY-AND-PRIVACY.md, section 6](docs/SECURITY-AND-PRIVACY.md#6-what-is-stored-in-your-database).
 
 ## Where to get a key
 
@@ -76,5 +106,15 @@ and restart. Your provider settings and encrypted key are preserved.
 
 ## Uninstall
 
-Close the client and delete the `…\Extensions\AITOOL\` folder. To also remove your saved
-key, delete `%LocalAppData%\Cegid\Extensions\AITOOL\secrets.dat`.
+Close the Primavera client and uninstall AITOOL from Windows **Apps** (Settings → Apps →
+Installed apps). It removes the files from every folder it recorded at install time, takes
+the AITOOL line out of the ERP's Extensibility configuration, and deletes its
+`HKLM\SOFTWARE\Bola Labs\AITOOL` key with the `InstallDirs` list.
+
+Two folders are left in place on purpose:
+`%LocalAppData%\Cegid\Extensions\AITOOL` (your settings, the encrypted `secrets.dat` and the
+logs) and `%ProgramData%\AITOOL` (the shared skills). Delete them by hand if you want
+nothing left. The `AI_*` tables stay in the ERP database as well; they are yours to drop.
+
+After a manual copy, remove the `…\Extensions\AITOOL\` folder and the Extensibility line by
+hand instead.

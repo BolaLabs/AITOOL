@@ -43,7 +43,7 @@ This project follows these security practices:
 - API keys entered in the app are encrypted at rest with **Windows DPAPI**
   (`ProtectedData`, `CurrentUser` scope) and written to
   `%LocalAppData%\Cegid\Extensions\AITOOL\secrets.dat`. They are **never** written to
-  `appsettings` in plain text, never logged, and never sent to BolaLabs — only to the AI
+  `appsettings` in plain text, never logged, and never sent to Bola Labs — only to the AI
   provider you configured.
 - DPAPI ciphertext is per-user and per-machine: it cannot be decrypted by another user or
   on another machine. A corrupt/foreign secrets file degrades gracefully to "no saved key".
@@ -59,7 +59,7 @@ This project follows these security practices:
   balances and SQL result rows — are sent to the provider **you** configure, over TLS. It is
   what the assistant retrieved to answer that question, not a bulk export. Review the
   provider's data-usage policy.
-- Nothing is sent to BolaLabs at any point. There is no licence check, no update check and
+- Nothing is sent to Bola Labs at any point. There is no licence check, no update check and
   no telemetry endpoint of ours.
 - Pointing the addon at a local OpenAI-compatible endpoint keeps all of it on the machine.
 
@@ -73,19 +73,27 @@ This project follows these security practices:
   (`ErpCreationService`), so the ERP's own validation runs and document numbers are
   ERP-assigned. Commits are single-flight.
 - **How confirmation actually works.** Write tools take a `confirm` flag. With it false the
-  ERP validates the draft and returns a preview without saving; with it true the record is
-  committed. The flag is set by the assistant, following a system-prompt instruction to set
-  it only after the user agrees in the chat. Today there is no code path that blocks a
-  commit on a user gesture: this is a model-instruction boundary, not a UI gate, and a model
-  that ignores the instruction can commit in one step. A hard UI confirmation is on the
-  roadmap. Every commit — and every refused commit — is recorded in `AI_AuditLog`.
+  ERP validates the draft and returns a preview without saving. The application renders that
+  preview as a confirmation card and, while doing so, issues a single-use token: valid for 15
+  minutes, bound to the exact arguments previewed, and never shown to the model. The commit
+  runs only when that token comes back with the call, which happens on the user's click on
+  the card. A `confirm=true` call without it is refused, and the refusal is recorded in
+  `AI_AuditLog` — as is every commit. What this gate is not: a database boundary. It bounds
+  what the model can trigger, not what someone holding the SQL connection can do.
+- **Who sees what.** Conversations and audit entries are scoped to the ERP user who created
+  them. ERP administrators, super administrators and technicians additionally get a
+  "Supervisor" badge, `/auditoria todos` and a "Todos os utilizadores" switch on the
+  conversation list; another user's conversation opens read-only and only its owner can
+  rename or delete it. That scoping is an application control decided in C# from the ERP
+  profile, not a database permission.
 - **Kill switches.** Individual tools can be disabled (`Assistant:DisabledTools`), or the
-  whole ERP tool layer (`ErpTools:Enabled=false`) for plain chat with no ERP access.
+  whole ERP tool layer (`ErpTools:Enabled=false`) for plain chat with no ERP access. A
+  disabled tool is refused at execution, not only left out of the list sent to the model.
 - **SQL is read-only by application guard, not by database permission.** `run_query` accepts
   only `SELECT`/`WITH`, strips comments and brackets before matching, rejects statement
-  stacking, and caps rows at 500 — but it runs on the ERP's own connection, which is a
-  privileged login. Companies wanting a second barrier should point the addon at a read-only
-  SQL login.
+  stacking, refuses the `AI_*` tables and caps rows at 500 — but it runs on the ERP's own
+  connection, which is a privileged login. Companies wanting a second barrier should point
+  the addon at a read-only SQL login.
 - All other database access uses parameterized queries.
 
 ### What is stored in your database
@@ -104,8 +112,9 @@ ERP fields, SQL results and web pages are text an attacker can influence, and al
 reach the model. Mitigations: a spotlighting rule in the system prompt that treats tool
 output as data and never as instructions, `untrusted_content` marking on web results, and
 telemetry on injection markers. Residual risk: a successful injection could cause a tool
-call the user did not intend, bounded by the tool set, the SQL guard, the commit-button gate
-and the audit trail — not by a confirmation dialog. See the confirmation note above.
+call the user did not intend. What bounds it is the tool set, the SQL guard, the
+confirmation card — which no injected text can click — and the audit trail. See the
+confirmation note above.
 
 ### Telemetry & Logging
 
@@ -158,5 +167,5 @@ This project uses the following third-party components:
 For security-related inquiries:
 
 - **Email**: `bruno@bolalabs.pt`
-- **Maintainer**: Bruno Marques - BolaLabs
+- **Maintainer**: Bruno Marques - Bola Labs
 - **Non-sensitive matters**: Open a GitHub issue

@@ -10,12 +10,6 @@ Non-negotiable, in this order. (Status on 2026-08-21: the product launches as a 
 binary under the Community License from a public documentation repository; the items
 below that are still open are stated as limits in the README rather than hidden.)
 
-- **A real confirmation gate on writes.** Today the `confirm` flag arrives in the
-  model's own tool arguments and nothing in C# or JS blocks a commit on a user
-  gesture — it is a prompt boundary, documented as such in SECURITY.md. The fix
-  is a one-shot preview token: the `confirm=false` pass returns a GUID bound to a
-  hash of the draft, and the `confirm=true` pass requires a matching, unexpired
-  token. That closes stale previews and double-confirms with the same change.
 - **"How it worked this out."** Expose the tool calls, the SQL and the source
   records behind every number, in the answer. IDC (Jul 2026) found 71% of finance
   leaders would veto a 99%-accurate system that cannot show its reasoning; Sage
@@ -27,7 +21,11 @@ below that are still open are stated as limits in the README rather than hidden.
   position is stated in DISTRIBUTION.md. With the source repository private, no Cegid
   binary leaves the building; the conversation is needed only before any source release.
 
-Closed on this list: print from the PDF card (2026-08-24: Imprimir opens the viewer with
+Closed on this list: the confirmation gate on writes (2.12.1: the preview is rendered by the
+application as a card and issues a single-use token, 15 minutes, bound to a hash of tool and
+arguments; the commit requires it, the model never sees it, and a `confirm=true` without it is
+refused and audited — stale previews and double-confirms close with the same mechanism),
+print from the PDF card (2026-08-24: Imprimir opens the viewer with
 Chromium's print dialog; Ctrl+P in the viewer does the same), the README screenshots
 (2026-08-21), the capabilities-and-limits statement ("What it will not do" in
 the README), the minimum-model floor (~8B at q4, in the README's cost section), the
@@ -39,9 +37,12 @@ returning conversation never shows a welcome screen.
 
 The gap between what the engine does and what the user can reach.
 
-- **Export any result table to Excel or CSV.** Today tables offer copy to
-  clipboard; the export services already exist and will be wired to a button
-  on every table card.
+- **Export any result table to Excel.** Today tables offer copy to clipboard. 2.13: MiniExcel
+  (Apache-2.0) behind a button on every table card — the Xceed-based exporters were removed in
+  2.12.1 with their non-commercial dependency, so this starts from the library choice rather
+  than from the old code.
+- **E-mail attachments.** 2.13: `draft_email` hands the mail client a message with no
+  attachment, so the official PDF of a document cannot ride along with the draft.
 - **Charts and saved views from an answer.** Natural-language charting is table
   stakes across the category; promoting an answer to a persistent widget is not.
 
@@ -70,6 +71,14 @@ What a customer hits in the first week of real use.
   enrichment step and cap it.
 - "Tentar novamente" on an older failed turn regenerates the latest turn, not the one
   whose card was clicked (2026-08-30). Retry should carry the turn it belongs to.
+- Small models at low effort (gpt-5-mini, `minimal`) sometimes ask a clarifying question
+  where the request was clear ("Quantos clientes temos?"), or narrate a call they never make.
+  2.12.1 nudges the narrated case once; the clarifying case is prompt work, and the default
+  model (`gpt-5.6-sol`) does not show it (2026-09-14).
+- A typed "sim" under a pending card is refused in prose by the model, so nothing reaches
+  `AI_AuditLog` for it; the audit row only appears when the model calls `confirm=true`
+  (2026-09-14). If the refusal itself must be auditable, the orchestrator has to log it
+  when a pending card exists and the user's message is an affirmative.
 - "Fecha as janelas todas" is answered with `list_windows` plus one `close_window` per
   window (three model round-trips, ~10 s) instead of the single `close_all_windows`
   action (2026-09-02). Steer the tool description, or accept the route and give the
@@ -115,14 +124,15 @@ Measured gaps, not preferences.
   the order is tools → system → messages, changing the open ERP window
   invalidates the cached tool schemas. Published measurements: 41-80% cost,
   13-31% TTFT.
-- **Fewer tools in the prefix.** 21 is at OpenAI's recommended ceiling and above
+- **Fewer tools in the prefix.** 24 is above OpenAI's recommended ceiling and above
   Anthropic's tool-search threshold. Either consolidate related tools behind an
   `action` parameter, or defer the rare ones. Do it once, not incrementally —
   it changes the observable tool names the golden set asserts on.
-- **Model capability discovery instead of name-prefix guessing.** Anthropic's
-  models endpoint returns effort levels and thinking types; OpenRouter returns
-  `supported_parameters`. Both are already parsed and both results are thrown
-  away before the request is built.
+- **Model capability discovery instead of name-prefix guessing.** Half done in 2.12.1: the
+  reasoning effort sent to an OpenAI-compatible provider is chosen from the catalogue's
+  supported values for that model (`none`, `minimal`, `xhigh`, `max`), and the context size
+  comes from the catalogue too. Still guessed by name prefix: whether a model reasons at all,
+  and the Anthropic adapter's thinking types.
 - **Keep the partial answer when the idle watchdog fires.** The budget is now
   inactivity rather than total call time, and the two keys with different units
   are one. What is still lost on a cut is persistence: the text stays on screen

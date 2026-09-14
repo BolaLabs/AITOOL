@@ -71,7 +71,7 @@ outside a running Primavera. Verification is three steps instead:
 - The static guards in `scripts/checks/`. Four reflect over a compiled assembly to assert the
   SQL guard shape and the audit matrix — two of them take a mandatory `-BuildOutput`. Three
   run on the source tree instead, covering the `Lib/` closure, the EN/PT mirrors and version
-  coherence. Invocations are in [scripts/checks/README.md](scripts/checks/README.md).
+  coherence. Invocations are in the README of that folder, in the source repository.
 - The scenarios in `scripts/e2e/golden-set.md` against a live ERP, for anything touching
   tools, ERP automation, streaming or cancellation.
 
@@ -85,12 +85,13 @@ outside a running Primavera. Verification is three steps instead:
 
 #### Documentation languages
 
-English is canonical. Three documents ship with a Portuguese mirror — `README.pt.md`,
-`INSTALL.pt.md` and `docs/SECURITY-AND-PRIVACY.pt.md`; everything else is English-only.
+English is canonical. Four documents ship with a Portuguese mirror — `README.pt.md`,
+`INSTALL.pt.md`, `docs/SECURITY-AND-PRIVACY.pt.md` and `docs/SKILLS.pt.md` — and the licence
+has one in `LICENSE.pt`; everything else is English-only.
 Day-to-day PRs only need to touch the English file; the mirrors are brought back in sync
 at release time, and `scripts/checks/Test-DocsSync.ps1` (run automatically by
 `Installer/build-installer.ps1`) fails the release build while a mirror lags its
-original. If your PR edits one of the three mirrored files and you can update the
+original. If your PR edits one of the four mirrored files and you can update the
 translation in the same PR, do — otherwise the release step catches it.
 
 ---
@@ -159,7 +160,8 @@ correr. A verificação tem três passos:
 - Build limpo com 0 erros.
 - Os guards estáticos em `scripts/checks/`. Quatro refletem sobre uma assembly compilada (dois
   exigem `-BuildOutput`); três correm sobre a árvore de código (closure de `Lib/`, espelhos
-  EN/PT, coerência de versões). Invocações em [scripts/checks/README.md](scripts/checks/README.md).
+  EN/PT, coerência de versões). As invocações estão no README dessa pasta, no repositório do
+  código.
 - Os cenários de `scripts/e2e/golden-set.md` contra um ERP real, para tudo o que toque em
   tools, automação do ERP, streaming ou cancelamento.
 
@@ -173,12 +175,13 @@ correr. A verificação tem três passos:
 
 #### Idiomas da documentação
 
-O inglês é canónico. Três documentos têm espelho em português — `README.pt.md`,
-`INSTALL.pt.md` e `docs/SECURITY-AND-PRIVACY.pt.md`; o resto é só em inglês. No
+O inglês é canónico. Quatro documentos têm espelho em português — `README.pt.md`,
+`INSTALL.pt.md`, `docs/SECURITY-AND-PRIVACY.pt.md` e `docs/SKILLS.pt.md` — e a licença
+tem o seu em `LICENSE.pt`; o resto é só em inglês. No
 dia a dia basta tocar no ficheiro inglês; os espelhos sincronizam-se na release,
 e o `scripts/checks/Test-DocsSync.ps1` (corrido automaticamente pelo
 `Installer/build-installer.ps1`) chumba o build da release enquanto um espelho
-estiver atrasado. Se o PR mexe num dos três ficheiros espelhados e der para
+estiver atrasado. Se o PR mexe num dos quatro ficheiros espelhados e der para
 atualizar a tradução no mesmo PR, melhor — senão, a release apanha.
 
 ---

@@ -98,8 +98,8 @@ the `Reference` entries in `AITOOL.csproj` updated deliberately rather than sile
 
 Two assemblies in the closure have no counterpart in the reference installation and
 keep their vendored copies. DevExpress 21.2.3 must be installed on the build machine.
-So must the Crystal Reports runtime — [ReportEngine/Lib](../ReportEngine/Lib/README.md)
-holds reference copies of that closure, but nothing resolves from there.
+So must the Crystal Reports runtime — `ReportEngine/Lib/` (with its own README) holds
+reference copies of that closure, but nothing resolves from there.
 
 ## Licensing and disclaimer
 

@@ -41,8 +41,8 @@ bulk export. There is no data-residency control beyond the provider's own.
   editors, list and fill fields and grid cells in open windows — including the classic VB6
   editors, via UI Automation.
 - **Write**: create and update customer/supplier files, create sales documents, create CRM
-  sales opportunities. E-mail drafts are handed to the default mail client for review and
-  never sent by the addon.
+  sales opportunities — each one gated on the confirmation card described in section 4.
+  E-mail drafts are handed to the default mail client for review and never sent by the addon.
 - **Generate** the official Crystal report PDF of a document and open it.
 - **Search the web**, with results marked as untrusted content.
 
@@ -58,9 +58,10 @@ to its executable skeleton (comments and string literals removed, brackets unwra
 homoglyphs normalized), rejects statement stacking, rejects cross-database and `db..object`
 names. The blocklist behaviour is pinned by `scripts/checks/Test-SqlGuard.ps1`; the 500-row
 cap is applied in `RunQueryTool` (as a `TOP` rewrite when the query can be wrapped, otherwise by
-stopping the reader after 500 rows) and is not covered by a guard script. Commit and
-destroy buttons in the window automation (gravar, guardar, anular, apagar, eliminar, remover,
-confirmar) are refused unless the call carries the authorisation flag — judged on the button
+stopping the reader after 500 rows) and is not covered by a guard script. Every ERP write is
+gated on a token the application issues while it draws the confirmation card, described in
+detail below. Commit and destroy buttons in the window automation (gravar, guardar, anular,
+apagar, eliminar, remover, confirmar) go through the same gate — judged on the button
 the ERP resolved, not on the caption requested, because the resolver matches by substring.
 Inside a modal dialog only refusals and single-button acknowledgements pass without it. One window interaction at a time;
 commits are single-flight. Web-search endpoints are HTTPS with redirects disabled. The chat
@@ -68,28 +69,41 @@ page's CSP confines script, style, framing and form-action sources to the page's
 and every library is vendored with SRI. Two limits are worth stating plainly: inline script
 and style are allowed, because the surface is a single file, so the CSP restricts where code
 comes from and not what injected inline markup could do — that is what DOMPurify is for; and
-images and outbound connections are allowed over HTTPS, so markdown rendered in the chat can
-still reference a remote image.
+images and outbound connections are confined to the page's own origin, so markdown rendered
+in the chat cannot load a remote image or reach an external host.
 
-**Enforced by the prompt, not by code.** The two-step write contract, and the rule that tool
-output is data and never instructions. A model can ignore a prompt rule. This is why the
-audit trail and the off switches exist, and why the next section is worth reading.
+**Enforced by the prompt, not by code.** The rule that tool output is data and never
+instructions, and the instruction to ask before an irreversible action. A model can ignore a
+prompt rule. This is why the audit trail and the off switches exist.
 
 **Enforced by configuration.** Individual tools can be disabled
 (`Assistant:DisabledTools`), or the whole ERP tool layer (`ErpTools:Enabled=false`), leaving
-a plain chat with no ERP access.
+a plain chat with no ERP access. A disabled tool is refused at execution, not only left out
+of the list sent to the model.
 
-### The confirmation boundary, precisely
+### The write gate, precisely
 
 Write tools take a `confirm` flag. With it false the ERP validates the draft and returns a
-preview without saving; with it true the record is committed. **The flag is set by the
-assistant**, following a system-prompt instruction to set it only after the user agrees in
-the chat. There is currently no code path that blocks a commit on a user gesture, so a model
-that ignores the instruction can commit in one step.
+preview without saving. **The application, not the model, turns that preview into a
+confirmation card** — the fields, the warnings, and for a document the totals the ERP itself
+computed, read out of the ERP's own JSON rather than from anything the model wrote. While
+building the card the application issues an authorisation token: single-use, valid for 15
+minutes, and bound to a hash of the exact tool and arguments previewed.
 
-Every commit — and every refused commit — lands in `AI_AuditLog`. A hard UI confirmation is
-the first item on the roadmap. If that residual risk is unacceptable for a given company,
-disable the write tools, or the tool layer entirely.
+The commit path requires that token. It reaches the tool only through the user's click on the
+card, and it is never part of what the model sees or can write. So `confirm=true` on its own
+no longer saves anything: the call is refused, the pending card is highlighted again, and the
+refusal is written to `AI_AuditLog` as `Recusou (sem confirmação no cartão)`. Typing "sim" in
+the chat does not save either — the button on the card is the only route. Editing the draft
+invalidates the card, because the arguments no longer match the hash the token was bound to.
+
+The same gate covers commit and destroy buttons pressed through `interact_erp_window`.
+
+**What this gate is not.** It is an application control inside the addon, not a database
+boundary. It bounds what a model — or a successful prompt injection — can cause the ERP to
+save. It does nothing about anyone who can reach the ERP database with the same connection
+the addon uses. If even the gated write surface is unacceptable for a given company, disable
+the write tools, or the tool layer entirely.
 
 ### It does not enforce Primavera's per-user permissions
 
@@ -143,7 +157,7 @@ addon needs no DDL rights at all: `SELECT, INSERT, UPDATE, DELETE` on `AI_ChatSe
 `AI_ChatMessages`, and `SELECT, INSERT` on `AI_AuditLog`, which is never updated or deleted.
 
 **A commit is refused when the audit trail cannot be reached.** Creating or changing a record
-in the ERP with the confirmation flag set checks first that the log can be written, and stops
+in the ERP from the confirmation card checks first that the log can be written, and stops
 with an actionable message if it cannot. Previews and reads carry on, because they change
 nothing in the ERP. Before this, a database that blocked the tables let the write through and
 left two warnings in a local file as the only trace.
@@ -161,13 +175,30 @@ button click, window close, close-all-windows, and their refusals).
 **Failure mode**: if the audit insert itself fails, the ERP write still stands and the
 failure is logged locally only.
 
-**Viewing**: `/auditoria` in the chat shows the recent entries; the table is yours to query.
+**Viewing**: `/auditoria [N]` in the chat shows the user's own recent entries; the table is
+yours to query. The `AI_*` tables are refused by `run_query`, so the assistant cannot read its
+own records through the model-written SQL — only through `/auditoria`.
+
+### Who sees whose records
+
+Chat sessions and audit entries are scoped to the ERP user who created them: an ordinary user
+sees their own conversations and their own actions and nothing else. An ERP administrator,
+super administrator or technician is treated as a supervisor — a badge in the header,
+`/auditoria todos [N]`, and a "Todos os utilizadores" switch on the conversation list. A
+conversation that belongs to someone else opens read-only: nothing the supervisor writes
+lands in it, and rename and delete are refused.
+
+The profile is read from the ERP (`AdmEngine`, `clsUtilizador`) when the company opens, and
+the scoping is applied in C# before the query runs. **It is an application control, not a
+database permission**: the rows live in the company database and anyone who can reach it with
+a SQL client reads all of them, whatever their ERP profile says. The user's registered e-mail
+address is read but never placed in the system prompt.
 
 ## 7. Local logs
 
 `%LocalAppData%\Cegid\Extensions\AITOOL\Logs\`, daily rotation, 7-day retention, never
-uploaded. DEBUG builds log verbosely, including tool arguments; RELEASE logs warnings and
-above; RELEASE builds log Info and above (operations and ERP-write context, never the key).
+uploaded. DEBUG builds log verbosely, including tool arguments; RELEASE builds log Info and
+above (operations and ERP-write context, never the key).
 Web-search queries are never logged — they can embed names and tax ids.
 
 ## 8. Prompt injection
@@ -180,15 +211,15 @@ never as instructions; `untrusted_content` marking on web results with an inline
 telemetry on known injection phrasings.
 
 Residual risk, stated plainly: a successful injection could cause a tool call the user did not
-intend. It is bounded by the tool set, the SQL guard, the commit-button gate and the audit
-trail — **not** by a confirmation dialog. See section 4.
+intend. What bounds it is the tool set, the SQL guard, the write gate — an injected
+instruction cannot obtain the card's token, so it cannot make the ERP save anything — and the
+audit trail. See section 4.
 
 ## 9. Network
 
 Outbound, over TLS 443, to whichever of these you enable: your AI provider's API host, your
-web-search provider, `ec.europa.eu` (VIES) and `nif.pt` if `enrich_entity` is used,
-`www.google.com/s2/favicons` for the icons on web-search source cards (the hostnames of the
-sources are sent to Google), and your Sentry host if you configure a DSN. Nothing else. There is no inbound listener.
+web-search provider, `ec.europa.eu` (VIES) and `nif.pt` if `enrich_entity` is used, and
+your Sentry host if you configure a DSN. Nothing else. There is no inbound listener.
 
 The chat UI is served from a WebView2 virtual host (`https://aitool.local`) that never
 touches the network.
@@ -196,7 +227,8 @@ touches the network.
 ## 10. Checklist before approving
 
 - [ ] Choose the AI provider — or a local model — and review its data-usage policy
-- [ ] Decide whether the write tools are enabled at all
+- [ ] Decide whether the write tools are enabled at all (every write is gated on a
+      confirmation card a person has to click)
 - [ ] Decide whether `run_query` is enabled, and whether to point the addon at a read-only
       SQL login
 - [ ] Accept that three tables are created in the company database, with no retention policy

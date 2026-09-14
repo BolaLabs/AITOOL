@@ -34,8 +34,6 @@ instalação se faltar):
 pwsh -File Installer\build-installer.ps1
 ```
 
-**CI** — tag `v*` ou `workflow_dispatch` (ver [CI/CD](#cicd)).
-
 O script compila a solução em Release para `Installer\staging\` (compile-only,
 não toca no ERP), lê a versão da `AITOOL.dll` e produz
 `Installer\dist\AITOOL-Setup-<versão>.exe` com o SHA256 impresso no fim.
@@ -83,6 +81,19 @@ espelhadas no fim da instalação com as mesmas regras (`appsettings*.json`
 nunca esmagam um existente; `.pdb` e `appsettings.Development*` ficam fora).
 Todas as pastas instaladas ficam registadas em `HKLM\SOFTWARE\Bola Labs\AITOOL`
 (`InstallDirs`) e o uninstall remove-as todas.
+
+## Skills partilhadas
+
+As skills incluídas na versão ficam em `{app}\Skills` e são substituídas em cada
+upgrade, como o resto do addon. O instalador cria vazia a pasta partilhada
+`%ProgramData%\AITOOL\Skills` (secção `[Dirs]`) e, em `[Run]`, corre um `icacls` com
+`/inheritance:r` que a deixa com SYSTEM e Administradores em controlo total e
+`BUILTIN\Users` apenas em leitura e execução. O `Permissions:` do Inno não chegava: é
+aditivo e mantinha a ACE herdada de `C:\ProgramData`, que dá escrita a qualquer
+utilizador. A ACL é reposta em cada instalação; a pasta e o seu conteúdo sobrevivem ao
+uninstall (`uninsneveruninstall`). As duas skills que a 2.12.0 copiou para lá
+(`prospecao-de-leads`, `_modelo`) são removidas por `[InstallDelete]`, para que a versão
+que vem no addon volte a ganhar.
 
 ## Registo na Extensibilidade
 
@@ -222,7 +233,7 @@ distribuir publicamente:
 | Uninstall multi-instância | Remove todas as pastas registadas em `InstallDirs` (só padrões `...\Extensions\AITOOL`) |
 | Segredos de dev | `appsettings.Development*.json` nunca é empacotado e é apagado de deploys manuais antigos |
 | Cache de extensões do host | Limpa `%LocalAppData%\Cegid\Extensions\<área>\*` que contenha `AITOOL.dll` (só do utilizador que corre o setup) |
-| Uninstall | Não apaga `%LocalAppData%\Cegid\Extensions\AITOOL` (config, secrets.dat, logs) e informa onde fica |
+| Uninstall | Não apaga `%LocalAppData%\Cegid\Extensions\AITOOL` (config, secrets.dat, logs) nem `%ProgramData%\AITOOL` (skills partilhadas) e informa onde ficam |
 | `.pdb` | Fora por omissão; `-IncludePdb` para builds de diagnóstico |
 | Idioma | Wizard em português ou inglês (seleção no arranque) |
 | Fim da instalação | Opção de abrir o ERP (não elevado, `runasoriginaluser`) |

@@ -28,8 +28,8 @@ released later as premium will be marked as premium; nothing you already have is
 - **Deployment and support**: installing and configuring the addon in a Primavera v10
   environment, connecting AI providers, SQL Server setup, priority fixes and upgrade help
   for production.
-- **Premium features** as they are released: semantic search over the ERP, deeper
-  automation, and whatever the roadmap adds next — see [ROADMAP.md](ROADMAP.md).
+- **Premium features** as they are released: purchase invoice intake, purchase documents,
+  deeper automation, and whatever the roadmap adds next — see [ROADMAP.md](ROADMAP.md).
 
 Pricing is set case by case; there is no public price list yet.
 

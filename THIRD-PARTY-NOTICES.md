@@ -32,8 +32,8 @@ half of this section does not apply.
 with no warranty**, so the compile surface is legible without installing the runtime first.
 Nothing resolves from that folder — the project has no `HintPath` and Crystal is resolved
 from the GAC — and nothing from it is staged into the setup. Building or customising
-reports requires SAP Crystal Reports for Visual Studio under your own licence. See
-[ReportEngine/Lib/README.md](ReportEngine/Lib/README.md).
+reports requires SAP Crystal Reports for Visual Studio under your own licence. The README in
+`ReportEngine/Lib/` (source repository only) lists those files.
 
 ## Open-source dependencies (NuGet)
 
@@ -46,14 +46,21 @@ license; consult the package for authoritative terms.
 | Dapper | Lightweight SQL data access | Apache-2.0 |
 | NLog | Logging | BSD-3-Clause |
 | Sentry / Sentry.NLog | Error monitoring | MIT |
-| MiniExcel | Excel export | Apache-2.0 |
-| PDFsharp | PDF export | MIT |
-| Xceed DocX | Word export | Xceed license terms (verify before redistribution) |
+| PDFsharp | PDF rendering of ERP documents | MIT |
 | Costura.Fody / Fody | Assembly embedding at build | MIT |
 | FluentResults | Result pattern | MIT |
 | FlaUI.Core / FlaUI.UIA3 | UI Automation used to drive the ERP's own windows | MIT |
+| Interop.UIAutomationClient | COM interop assembly for the Windows UI Automation API, pulled in by FlaUI.UIA3 | MIT (FlaUI) |
+| System.Management | WMI queries (process and window discovery) | MIT |
 | System.Text.Json, System.Net.Http.Json, System.Text.Encodings.Web, System.Data.SqlClient, Microsoft.Extensions.* , Microsoft.Bcl.AsyncInterfaces, System.Resources.Extensions | Runtime/framework support | MIT |
 | Microsoft.SourceLink.GitHub | Build-time only (source link metadata); not shipped | MIT |
+
+## Installer
+
+The setup is built with [Inno Setup 6](https://jrsoftware.org/isinfo.php) (Jordan Russell,
+Martijn Laan). Its engine and uninstaller are part of every `AITOOL-Setup-*.exe`, under the
+[Inno Setup License](https://jrsoftware.org/files/is/license.txt); Inno Setup itself is not
+relicensed by AITOOL.
 
 ## Vendored web assets (chat UI)
 

@@ -3,8 +3,8 @@
 Uma skill é um fluxo de trabalho escrito para o assistente em Markdown simples: que
 ferramentas usar, por que ordem, o que confirmar, o que nunca fazer. O assistente lê-a
 quando o pedido corresponde à descrição da skill e segue-a. Nenhum código corre a partir de
-uma skill — ela só combina as ferramentas que o addon já tem, com a mesma confirmação em
-dois passos e a mesma auditoria.
+uma skill — ela só combina as ferramentas que o addon já tem, com o mesmo cartão de
+confirmação em cada escrita e a mesma auditoria.
 
 Versão inglesa: [SKILLS.md](SKILLS.md).
 
@@ -12,16 +12,21 @@ Versão inglesa: [SKILLS.md](SKILLS.md).
 
 | Pasta | Quem | Notas |
 |---|---|---|
-| `<ERP>\Config\EV\Extensions\AITOOL\Skills\<nome>\SKILL.md` | O próprio addon | As skills que vêm com cada versão (`incluida` no `/skills`); substituídas em cada atualização, por isso não edite aqui |
-| `%ProgramData%\AITOOL\Skills\<nome>\SKILL.md` | Toda a gente nesta máquina (e, em cliente-servidor, cada posto que a partilhe) | O instalador coloca aqui as skills incluídas e nunca sobrepõe as suas edições |
+| `<ERP>\Config\EV\Extensions\AITOOL\Skills\<nome>\SKILL.md` | O próprio addon | As skills que vêm com cada versão (`incluída` no `/skills`); substituídas em cada atualização, por isso não edite aqui |
+| `%ProgramData%\AITOOL\Skills\<nome>\SKILL.md` | Toda a gente nesta máquina (e, em cliente-servidor, cada posto que a partilhe) | Criada vazia pelo instalador, que repõe a ACL em cada instalação para que só o SYSTEM e os administradores escrevam; uma atualização nunca toca no que lá estiver |
 | `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<nome>\SKILL.md` | Só você | Abra-a em Definições → Skills → "Abrir a minha pasta de skills" |
 
 Uma skill partilhada com o mesmo nome de uma incluída substitui-a, e uma skill na sua pasta
 substitui ambas. Uma pasta ou `name` a começar por `_` é um modelo: aparece na lista, nunca
 é oferecida ao assistente. As skills que desligar ficam registadas em
-`%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json`. Definições → Skills
-lista todas as skills encontradas, a origem, e deixa desligar cada uma. `/skills` no chat
-lista-as; `/skills recarregar` relê as pastas (uma conversa nova passa a usá-las).
+`%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json` — um ficheiro por
+utilizador, pelo que desligar uma skill partilhada só o afeta a si. Definições → Skills mostra
+quantas skills foram encontradas e, para cada uma, uma pill Incluída / Partilhada / Minha, a
+descrição, as frases que a ativam e o interruptor. O botão "Abrir pasta partilhada" só aparece
+a um supervisor (administrador, super administrador ou técnico do ERP), porque o que lá for
+posto corre para toda a gente na máquina. `/skills` no chat lista-as; `/skills recarregar`
+relê as pastas e reconstrói o system prompt da conversa aberta, pelo que a mensagem seguinte
+já vê a alteração.
 
 ## O ficheiro
 
@@ -42,8 +47,8 @@ author: BolaLabs
 1. Percebe o alvo (setor, zona, dimensão). Pergunta uma coisa de cada vez se faltar algo.
 2. `web_search` para candidatas; recolhe nome, NIF, site, e-mail.
 3. `search_entities` pelo NIF e pelo nome: reutiliza um cliente existente.
-4. Senão `enrich_entity` e depois `create_entity` em dois passos.
-5. `create_opportunity` em dois passos.
+4. Senão `enrich_entity` e depois `create_entity` (pré-visualização e cartão).
+5. `create_opportunity` (pré-visualização e cartão).
 6. `draft_email` para o contacto da empresa, ou para o utilizador se pediu um resumo interno.
 ```
 
@@ -52,9 +57,9 @@ Chaves do cabeçalho:
 - `name`: curto, sem espaços; é assim que o assistente chama a skill. Se faltar, usa-se o nome da pasta.
 - `description` (obrigatório): uma frase; o assistente lê-a para decidir se a skill se aplica.
 - `triggers`: palavras que costumam aparecer no pedido, separadas por vírgulas.
-- `tools`: ferramentas que a skill pode usar, separadas por vírgulas; vazio = todas as
-  ativas. A lista restringe, nunca acrescenta: uma ferramenta desligada nas Definições
-  continua desligada.
+- `tools`: ferramentas que a skill conta usar, separadas por vírgulas. A lista orienta o
+  assistente; não o restringe. O que o assistente pode chamar decide-se nas Definições, e
+  uma ferramenta desligada lá continua desligada diga a skill o que disser.
 - `version`, `author`: texto livre, mostrado nas Definições.
 
 O corpo é Markdown livre. Mantenha as instruções abaixo de 12 000 caracteres (o cabeçalho
@@ -64,9 +69,12 @@ parar e perguntar.
 
 ## O que uma skill não pode fazer
 
-- Saltar a confirmação em dois passos de uma gravação. `create_entity`, `update_entity`,
-  `create_sales_document` e `create_opportunity` pré-visualizam sempre e só gravam depois
-  do "sim" explícito do utilizador; o texto da skill não muda isso.
+- Saltar a confirmação de uma gravação. `create_entity`, `update_entity`,
+  `create_sales_document` e `create_opportunity` pré-visualizam sempre, e a confirmação é
+  sempre o cartão: a gravação precisa de uma autorização de uso único que a aplicação emite ao
+  desenhar esse cartão e que o clique do utilizador devolve. Uma skill que mande o assistente
+  gravar diretamente, ou aceitar um "sim" escrito, não muda nada — a chamada é recusada e
+  auditada.
 - Sobrepor-se ao system prompt. As instruções da skill entram depois dele, e o prompt diz
   ao modelo que as skills nunca dispensam as suas regras.
 - Enviar o que quer que seja. `draft_email` prepara um rascunho que o utilizador abre no seu
@@ -79,7 +87,7 @@ parar e perguntar.
 
 | Skill | O que faz |
 |---|---|
-| `prospecao-de-leads` | Pesquisa web de empresas-alvo → verificação de cliente existente → ficha de cliente (dois passos) → oportunidade de venda no CRM (dois passos) → rascunho de e-mail para revisão |
+| `prospecao-de-leads` | Pesquisa web de empresas-alvo → verificação de cliente existente → ficha de cliente (preview, cartão) → oportunidade de venda no CRM (preview, cartão) → rascunho de e-mail para revisão |
 | `_modelo` | O modelo para copiar; fica desativado até ser renomeado |
 
 ## Partilhar skills

@@ -29,7 +29,7 @@ body:
     id: version
     attributes:
       label: AITOOL / Primavera version
-      placeholder: "AITOOL <commit>, Primavera v10 SG100"
+      placeholder: "AITOOL 2.12.1 (Settings, last line) · Primavera v10 SG100 build ..."
     validations:
       required: true
   - type: textarea

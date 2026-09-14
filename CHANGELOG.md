@@ -8,6 +8,127 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.12.1] - 2026-09-14
+
+### Added
+
+- The assistant knows who is signed into the ERP. It reads the name, the login and the
+  profile of the ERP user (`AdmEngine`/`clsUtilizador`: name, administrator, super
+  administrator, technician, profile description) when the company opens, addresses the
+  person by their first name, and the message bubble carries that name. The registered
+  e-mail address is never put in the system prompt.
+- Supervisor view. An administrator, super administrator or technician of the ERP gets a
+  "Supervisor" badge in the header, the `/auditoria todos [N]` command and a "Todos os
+  utilizadores" switch on the conversation list. Everyone else sees only their own
+  conversations and their own audit entries — the audit trail was visible to every user
+  before. This is an application control decided in C# from the ERP profile, not a database
+  boundary: whoever holds the SQL connection still reads the `AI_*` tables.
+- A confirmation card with a hard gate on every write. `create_entity`, `update_entity`,
+  `create_sales_document`, `create_opportunity` and a commit button pressed through
+  `interact_erp_window` render a card built in C# from the ERP's own preview — fields,
+  warnings and, on documents, the totals the ERP computed. The commit runs only with a
+  single-use token the application issues while drawing that card, valid for 15 minutes and
+  bound to the exact arguments previewed. The model never sees the token, so a `confirm=true`
+  call on its own is refused and lands in `AI_AuditLog` as
+  `Recusou (sem confirmação no cartão)`, with the pending card highlighted again. Typing
+  "sim" no longer saves anything.
+- The assistant does not claim an ERP action it did not perform. When an answer says it
+  opened, created or saved something in a turn where no tool ran, the reply gains a note —
+  "Nenhuma ação foi executada no ERP neste turno." — and the log a warning. The answer
+  itself is not rewritten.
+- The change card puts the current value beside the new one for every field `update_entity`
+  touches, read off the ficha before anything is applied.
+
+### Fixed
+
+- The user name in the Crystal formulas (`PRI_NomeUtilizador`) came out empty on the
+  official document PDFs.
+- Reloading skills (`/skills recarregar`, Settings → Skills) rebuilds the system prompt of the
+  open conversation; a new skill no longer waited for a new chat.
+- OpenAI-compatible providers keep a 10-minute ceiling on the HTTP client, so the configurable
+  inactivity timeout is what decides when a stalled request is repeated.
+- Remaining strings in pt-PT with accents; gold accent text meets contrast in the light theme.
+- The reasoning block opens and closes from the keyboard; the slash-command palette announces
+  its items and the selection to screen readers.
+- The confirmation token is matched to the arguments by value and not by the raw JSON: an
+  accent written literally or escaped, or the keys written in another order, no longer
+  breaks the match between the card and the commit.
+- A commit the ERP refused reissues the card's token, so Confirmar can be pressed again
+  instead of reaching a gate that no longer holds an authorisation.
+- Skill descriptions and trigger phrases are bounded in the system prompt, so a long
+  `SKILL.md` header cannot crowd out the rules.
+- The footer showed a four-part version; a cancelled turn raised two toasts; system messages
+  carried emojis.
+- The turn that follows a confirmed card no longer gains the "Nenhuma ação foi executada"
+  note: that turn runs no tool by design.
+- Answering an ERP dialog ("Sim", "OK") or a save button that only resolved inside the
+  automation reaches the same confirmation card; the model was told to ask for
+  `confirm=true`, which the gate then refused.
+- A supervisor opening another user's conversation sees it read-only: nothing they write
+  lands in that user's history, and delete and rename are refused on conversations that are
+  not theirs. `/auditoria` without a known login shows nothing instead of everything.
+- A commit whose outcome the ERP could not confirm closes the card instead of offering a
+  second Confirmar; a failure inside the commit resolves the card instead of leaving it on
+  "A gravar…".
+- The theme button switches on the first click; starting from "sistema" it used to apply the
+  theme already on screen.
+- The PDF card's "Mais" menu opens anchored to its button and closes on scroll or resize,
+  instead of drifting away from it.
+
+### Changed
+
+- The installer creates an empty `%ProgramData%\AITOOL\Skills` and resets its ACL on every
+  run, so only SYSTEM and administrators can write there. The skills that ship with the addon
+  (`prospecao-de-leads`, `_modelo`) stay in the addon's own `Skills` folder and are no longer
+  copied there; the copies 2.12.0 left in the shared folder are removed on upgrade, and
+  precedence user > shared > shipped is unchanged.
+- A fresh install starts on OpenRouter with `openai/gpt-5.6-sol` (1M of context; the same
+  model is `gpt-5.6-sol` on OpenAI direct), changeable in Settings as before. An unknown
+  model, one the provider's catalogue does not describe, is assumed to hold 128k.
+- Reasoning effort reads Desligado / Rápido / Equilibrado / Profundo / Máximo, and what each
+  one sends is decided from the provider's catalogue for that model (`none`, `minimal`,
+  `xhigh` or `max` where they are supported) instead of guessing from the model name. The
+  choice is remembered per model, so switching models and back restores it.
+- Settings → Skills redesigned: a count, an Incluída / Partilhada / Minha pill per skill,
+  the description and the phrases that trigger it, and an "Abrir pasta partilhada" button
+  that only a supervisor sees. Switching a shared skill off affects only the user who did it.
+- A skill's `tools` list guides the assistant; it does not restrict the tools it may call.
+- The RELEASE log records every tool that ran, with its duration and its outcome, and every
+  request with the model and the reasoning effort. Names, timings and outcomes only — never
+  arguments, prompts or keys. A tool that answers `success: false` is an error in that line
+  and not an "ok": an ERP refusal used to be recorded as a completed call.
+- `create_entity` proposes a code from the name when the user gives none — accents stripped,
+  uppercased, cut at the 12 characters the ERP column holds — and shows it on the preview
+  card. A code longer than the column is refused before the BSO, which used to truncate it in
+  silence.
+- Reasoning is asked of OpenRouter as a `reasoning: {effort}` object and read back from
+  `delta.reasoning`; the OpenAI-style `reasoning_effort` had OpenRouter billing the thinking
+  tokens without ever returning them. When a provider bills reasoning and returns no text,
+  the block reads the effort and the time to the first token ("Profundo · 4 s") instead of
+  staying empty.
+- An installation that only ever had an OpenAI key stays on OpenAI: the active provider is
+  deduced from the key that is configured, and the new OpenRouter default applies only where
+  nothing is set.
+- The PDF card leads with Ver, Imprimir and Guardar como…, with the rest of the actions under
+  Mais.
+- The Word, Excel and CSV exporters were removed with the packages behind them (Xceed DocX,
+  under a non-commercial licence, and MiniExcel); none of the three was ever reachable from
+  the UI. Conversations still export to Markdown, HTML and plain text.
+
+### Security
+
+- A tool switched off in Settings is refused at execution, not only left out of the list sent
+  to the model.
+- The "open file" action from the chat only opens files under the addon's own documents
+  folder (`%TEMP%\AITOOL_Docs`); any other path is refused.
+- Only the card's token authorises a commit; the card id, which the page carries, no longer
+  counts as a credential. Assistant text is no longer attached to telemetry events.
+- `run_query` refuses the `AI_*` tables; the assistant's own records are read through
+  `/auditoria`.
+- The chat page's CSP no longer allows images or connections to external hosts (the page's
+  own origin only), and `data:` navigation is removed.
+- The API key no longer appears in the Debug log (`updateApiKey` messages).
+
 ## [2.12.0] - 2026-09-02
 
 ### Added
@@ -77,7 +198,7 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 - Skills: a folder with a `SKILL.md` teaches the assistant a workflow — a description it
   reads to know when the skill applies, and the steps to follow with the tools it already
-  has. Shared folder (`%ProgramData%\AITOOL\Skills`, filled by the installer) and per-user
+  has. Shared folder (`%ProgramData%\AITOOL\Skills`) and per-user
   folder; Settings → Skills lists and switches them; `/skills` in the chat; `use_skill` tool.
   A skill never dispenses with the two-step confirmation of a save. See docs/SKILLS.md.
 - `prospecao-de-leads`, the first shipped skill: web search for target companies, existing-

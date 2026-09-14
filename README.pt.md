@@ -9,7 +9,8 @@ sem conta no fabricante, sem licença por posto, sem créditos contados — com 
 escolher, incluindo um local. Responde a partir dos dados do seu negócio, abre qualquer ecrã
 do ERP que descreva por palavras suas, preenche janelas e cria clientes e documentos de venda
 através dos objetos de negócio do próprio ERP: primeiro um preview validado pelo ERP, gravação
-só depois de concordar, e cada escrita num registo de auditoria na sua própria base de dados.
+só a partir do cartão de confirmação que carrega, e cada escrita num registo de auditoria na
+sua própria base de dados.
 
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 [![DevExpress](https://img.shields.io/badge/DevExpress-21.2.3-FF7200)](https://www.devexpress.com/)
@@ -42,11 +43,12 @@ só depois de concordar, e cada escrita num registo de auditoria na sua própria
 Abra o ERP como sempre. Um botão novo no friso (ribbon) abre um chat. Pergunte, por palavras
 suas: *"quanto é que este cliente me deve, e desde quando?"* — e o assistente responde a
 partir dos seus dados reais, com os números que o próprio ERP lhe daria. Peça-lhe para
-preparar uma proposta e ele preenche-a, mostra-lhe os totais para rever e só grava depois de
-dizer que sim. Cada alteração que faz passa pelas mesmas validações que o ERP lhe aplica a
-si, e fica num registo de auditoria na sua própria base de dados.
+preparar uma proposta e ele preenche-a, mostra-lhe os totais para rever e só grava quando
+carregar no botão do cartão de confirmação. Cada alteração que faz passa pelas mesmas
+validações que o ERP lhe aplica a si, e fica num registo de auditoria na sua própria base de
+dados.
 
-Quatro coisas o distinguem de colar os seus dados num chatbot:
+Cinco coisas o distinguem de colar os seus dados num chatbot:
 
 - **Corre onde decidir.** Dentro do seu ERP, nas suas próprias máquinas. Não há nenhum
   servidor da Bola Labs no caminho, nenhuma conta a criar, e com um modelo de IA local nada
@@ -57,10 +59,15 @@ Quatro coisas o distinguem de colar os seus dados num chatbot:
 - **Qualquer ecrã, a pedir.** "Abre o extrato de conta do fornecedor", "abre o
   explorador de vendas": encontra a função no catálogo do ribbon e abre-a, seja qual for
   o módulo onde vive. Ninguém precisa de se lembrar onde está um ecrã.
-- **Mostra a escrita antes de a fazer.** Criar ou alterar registos está desenhado em dois
-  passos: um preview validado pelo próprio ERP, depois uma segunda chamada confirmada que o
-  assistente está instruído a fazer só depois de dizer que sim — e cada gravação, recusa e
-  falha fica num registo de auditoria que pode ler a partir do chat.
+- **Mostra a escrita antes de a fazer.** Criar ou alterar registos corre em dois passos: um
+  preview validado pelo próprio ERP, depois um cartão de confirmação com os campos e os
+  totais calculados pelo ERP. A gravação acontece com o seu clique nesse cartão e com mais
+  nada — e cada gravação, recusa e falha fica num registo de auditoria que pode ler a partir
+  do chat.
+- **Sabe quem está a perguntar.** O assistente lê o nome, o login e o perfil do utilizador
+  com sessão iniciada no ERP e trata-o pelo nome; administradores, super administradores e
+  técnicos ganham ainda uma vista de supervisor sobre a auditoria e sobre as conversas de
+  todos. O e-mail registado nunca é enviado ao modelo.
 
 O produto é gratuito, para empresas e parceiros. Instale-o a partir do assistente de instalação
 ([como funciona](#instalação-utilizadores-finais)), configure uma chave de IA e está a
@@ -79,7 +86,7 @@ funcionar em minutos.
 </tr>
 <tr>
 <td><sub>"Dá-me a lista de pendentes desde 2015" — a consulta de pendentes do próprio ERP, em cartões e tabela viva.</sub></td>
-<td><sub>Uma escrita é pré-visualizada pelo ERP e só gravada depois do "sim".</sub></td>
+<td><sub>Uma escrita é pré-visualizada pelo ERP e só gravada a partir do cartão de confirmação.</sub></td>
 <td><sub>Cada gravação, recusa e falha fica na <code>AI_AuditLog</code>, na sua base de dados.</sub></td>
 <td><sub>Contexto, tokens e custo por pedido; um clique compacta uma conversa longa.</sub></td>
 </tr>
@@ -104,7 +111,7 @@ OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI
 Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas automaticamente:
 
 - **Lê dados reais do ERP.** Pendentes com a consulta do próprio ERP, análise de vendas por
-  período, cliente e artigo, contagens de vendas e compras por ano via SQL guardado, saldos de conta corrente com antiguidade, stock por armazém, pesquisa de
+  período, cliente e artigo, contagens de vendas e compras por ano via `run_query`, saldos de conta corrente com antiguidade, stock por armazém, pesquisa de
   documentos, pesquisa de entidades por nome, código, NIF ou localidade — mais uma tool de
   SQL só de leitura, guardada a `SELECT`/`WITH` e limitada a 500 linhas. As respostas
   tabulares aparecem como tabelas vivas com cartões KPI, e cada linha tem um menu de
@@ -121,16 +128,15 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
   (propostas, encomendas, faturas) e atualiza fichas existentes, sempre através dos objetos
   de negócio do Primavera, para que todas as validações do ERP corram e a numeração
   continue a ser do ERP. A primeira chamada é validada pelo ERP (`ValidaActualizacao`) e
-  devolve um preview com totais reais sem gravar; a gravação é uma segunda chamada,
-  confirmada, que o assistente está instruído a fazer só depois de concordar no chat.
-  Depois de uma gravação, um aviso diz-lhe que janelas abertas do ERP ficaram
-  desatualizadas. Cada gravação, recusa e falha fica escrita na `AI_AuditLog` na sua
-  própria base de dados; `/auditoria` no chat lê-a de volta.
-- **Botões de commit exigem uma flag explícita.** A automação de janelas pode escrever em
+  devolve um preview com totais reais sem gravar; esse preview é desenhado como um cartão de
+  confirmação — os campos, os avisos e os totais calculados pelo ERP — e a gravação só corre
+  quando carrega no botão dele. Depois de uma gravação, um aviso diz-lhe que janelas abertas
+  do ERP ficaram desatualizadas. Cada gravação, recusa e falha fica escrita na `AI_AuditLog`
+  na sua própria base de dados; `/auditoria` no chat lê-a de volta.
+- **Os botões de commit passam pelo mesmo cartão.** A automação de janelas pode escrever em
   campos e premir botões, mas um botão que grava ou destrói dados (gravar, guardar, anular,
-  apagar, eliminar, remover, confirmar) é recusado a menos que a chamada traga uma flag de
-  autorização explícita, que o assistente está instruído a definir só depois de o
-  utilizador pedir essa ação. A verificação corre sobre o botão que o ERP resolveu, não
+  apagar, eliminar, remover, confirmar) é recusado a menos que a chamada traga a autorização
+  que o cartão emite. A verificação corre sobre o botão que o ERP resolveu, não
   sobre a legenda pedida. Dentro de um diálogo modal a regra inverte-se: só passam recusas
   (Cancelar, Não) e diálogos de um só botão, pelo que responder "Sim" a "Gravar
   alterações?" exige a mesma autorização. Cada escrita de campo, escrita em grelha, clique
@@ -155,8 +161,10 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
   cancelar que para o turno em menos de um segundo; blocos de raciocínio colapsáveis;
   Markdown, Mermaid e syntax highlighting renderizados totalmente offline (bibliotecas
   vendored, com versões fixas e verificação SRI); chips de sugestão de seguimento;
-  histórico de conversas no seu SQL Server com pesquisa e mudança de nome; slash commands;
-  temas claro/escuro/sistema; atalhos de teclado (`Ctrl+N` novo chat, `Ctrl+B` sessões,
+  histórico de conversas no seu SQL Server com pesquisa e mudança de nome; oito slash
+  commands (`/novo`, `/limpar`, `/exportar`, `/config`, `/auditoria [N] | todos [N]`,
+  `/compactar`, `/skills`, `/ajuda`); temas claro/escuro/sistema; atalhos de teclado (`Ctrl+N` novo chat,
+  `Ctrl+B` sessões,
   `Ctrl+,` definições); janela destacável; exportação para Markdown, HTML ou texto simples.
   O assistente declara que é um sistema de IA, como exige o artigo 50.º do AI Act.
 
@@ -166,7 +174,7 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
 | --- | --- |
 | `search_entities` | Pesquisa clientes, fornecedores e artigos por nome, código, NIF ou localidade |
 | `get_entity_details` | Detalhes completos de uma entidade (cliente, fornecedor, artigo) |
-| `get_pending_items` | Documentos pendentes por entidade, ou de todas as entidades, com filtros de datas |
+| `get_pending_items` | Documentos pendentes por entidade, ou de todas as entidades; aceita argumentos de data |
 | `query_account_balance` | Saldo de conta corrente de um cliente/fornecedor, com escalões de antiguidade |
 | `query_documents` | Pesquisa documentos comerciais por tipo, entidade, data ou estado |
 | `analyze_sales` | Análise de vendas por cliente, artigo ou período; top-N e comparação de períodos. O âmbito vem da classificação de documentos do próprio ERP, pelo que notas de crédito e devoluções são descontadas — os valores são líquidos |
@@ -176,14 +184,14 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
 | `open_record` | Abre um registo (ficha, documento, extrato de conta) no seu editor nativo do ERP |
 | `open_erp_function` | Abre qualquer função do ERP pelo nome, navegando o ribbon; lista o inventário em caso de dúvida |
 | `interact_erp_window` | Lista janelas e campos, preenche campos e células de grelha, clica botões — janelas .NET e nativas (VB6) |
-| `print_document` | Gera o PDF do relatório oficial de um documento; o cartão vê, imprime, abre e guarda |
+| `print_document` | Gera o PDF do relatório oficial de um documento; o cartão oferece Ver, Imprimir, Guardar como… e o resto em Mais |
 | `get_sales_document_types` | Lista os tipos de documento de venda configurados nesta instalação do ERP, cada um com a natureza que o ERP lhe atribui (orçamento, encomenda, guia, fatura) |
 | `get_sales_series` | Lista as séries de um tipo de documento, com a série por omissão e a validade à data de hoje |
 | `get_article_price` | Preço/desconto sugerido pelas regras de preços do ERP (listas de preços, regras por cliente, escalões de quantidade) |
-| `create_entity` | Cria uma ficha de cliente/fornecedor via BSO — preview primeiro, grava numa segunda chamada confirmada |
-| `create_sales_document` | Cria um documento de venda via BSO — preview com totais reais, depois confirmar para gravar |
-| `update_entity` | Atualiza campos de uma ficha de cliente/fornecedor existente — preview primeiro, grava numa segunda chamada confirmada |
-| `create_opportunity` | Cria uma oportunidade de venda no CRM para um cliente existente — preview primeiro, grava numa segunda chamada confirmada |
+| `create_entity` | Cria uma ficha de cliente/fornecedor via BSO — preview primeiro, gravação a partir do cartão de confirmação |
+| `create_sales_document` | Cria um documento de venda via BSO — preview com totais reais, gravação a partir do cartão de confirmação |
+| `update_entity` | Atualiza campos de uma ficha de cliente/fornecedor existente — preview primeiro, gravação a partir do cartão de confirmação |
+| `create_opportunity` | Cria uma oportunidade de venda no CRM para um cliente existente — preview primeiro, gravação a partir do cartão de confirmação |
 | `draft_email` | Prepara um rascunho de e-mail (para, assunto, texto) num cartão; o utilizador abre-o no seu programa de correio, nada é enviado |
 | `use_skill` | Carrega as instruções de uma skill — um fluxo de trabalho escrito em Markdown por quem usa o ERP; ver [docs/SKILLS.pt.md](docs/SKILLS.pt.md) |
 | `enrich_entity` | Preenche uma ficha a partir de registos públicos pelo NIF (VIES, NIF.pt), mostrando um diff campo a campo antes de qualquer escrita |
@@ -194,9 +202,9 @@ inteira tem um kill switch (`ErpTools:Enabled` / `AITOOL_ERP_TOOLS_ENABLED`).
 
 Um fluxo típico de ponta a ponta — *"esta empresa enviou-nos um email, faz-lhes uma
 proposta"*: `web_search` encontra a empresa → `search_entities` verifica se já existe →
-`create_entity` (preview → confirmar → gravar) → `get_sales_document_types` + `get_sales_series`
+`create_entity` (preview → cartão → o seu clique) → `get_sales_document_types` + `get_sales_series`
 escolhem o tipo de proposta real e uma série válida → `create_sales_document` (preview com
-totais calculados pelo ERP → confirmar → gravar) → `print_document` para o PDF oficial.
+totais calculados pelo ERP → cartão → o seu clique) → `print_document` para o PDF oficial.
 
 ---
 
@@ -205,13 +213,20 @@ totais calculados pelo ERP → confirmar → gravar) → `print_document` para o
 Uma skill é uma pasta com um `SKILL.md`: uma descrição que o assistente lê para saber quando
 a skill se aplica, e os passos a seguir — que ferramentas, por que ordem, o que confirmar.
 Sem código, sem plugin para instalar: quem sabe escrever um procedimento para um colega sabe
-escrever uma. As skills vivem numa pasta partilhada que todos os postos leem e na pasta de
-cada utilizador; Definições → Skills lista-as e desliga-as; `/skills` mostra-as no chat.
+escrever uma. As skills que vêm com cada versão ficam na pasta do próprio addon. Ao lado
+delas, uma pasta partilhada `%ProgramData%\AITOOL\Skills`, onde só administradores escrevem,
+guarda as que a sua organização acrescentar, e cada utilizador tem uma pasta pessoal que se
+sobrepõe às duas. Definições → Skills lista-as com a contagem, uma pill Incluída / Partilhada /
+Minha, a descrição e as frases que ativam cada uma, e desliga-as — desligar uma skill
+partilhada só o afeta a si, e só um supervisor tem o botão que abre a pasta partilhada.
+`/skills` mostra-as no chat. O campo `tools` de uma skill orienta o assistente; não restringe
+as ferramentas que ele pode chamar.
 
 A skill incluída `prospecao-de-leads` corre o fluxo de prospeção inteiro: pesquisa web de
-empresas-alvo, verificação se a empresa já existe, ficha de cliente (pré-visualização e o
-seu "sim"), oportunidade de venda no CRM (pré-visualização e o seu "sim") e um rascunho de
-e-mail que abre no seu programa de correio para revisão. Nada é gravado nem enviado sem si.
+empresas-alvo, verificação se a empresa já existe, ficha de cliente e oportunidade de venda
+no CRM (cada uma pré-visualizada, cada uma gravada a partir do seu cartão de confirmação) e um
+rascunho de e-mail que abre no seu programa de correio para revisão. Nada é gravado nem
+enviado sem si.
 O formato e as regras estão em [docs/SKILLS.pt.md](docs/SKILLS.pt.md).
 
 ## Encontre qualquer ecrã por palavras suas
@@ -245,7 +260,7 @@ posto de trabalho chega à pasta partilhada `SG100` (mapas, configuração, exte
 de uma partilha Windows. O AITOOL é uma extensão nessa pasta, por isso o setup corre **uma
 vez**, na máquina que tem o `SG100`, e cada posto apanha o assistente no arranque seguinte.
 Não há nada a instalar por posto: um posto de trabalho precisa apenas do runtime Microsoft
-Edge WebView2, que o Windows 10 e 11 já trazem.
+Edge WebView2, que o Windows 10 e 11 já trazem e que o setup verifica e instala se faltar.
 
 O setup é um assistente Windows normal que faz o trabalho do lado do ERP sozinho: encontra
 a instalação do Primavera, deteta ERPs multi-instância, regista o addon no ecrã de
@@ -297,11 +312,12 @@ problema de funcionalidades. As salvaguardas, pela ordem em que importam:
 
 | Salvaguarda | Como funciona |
 | --- | --- |
-| **Protocolo de escrita em dois passos** | `create_entity`, `update_entity`, `create_sales_document` e `create_opportunity` exigem `confirm=false` primeiro: o ERP valida o rascunho e devolve um preview (com totais reais nos documentos) sem gravar. Gravar exige uma segunda chamada com `confirm=true`, que o assistente está instruído a fazer só depois de o utilizador concordar explicitamente no chat. As gravações são single-flight — uma segunda gravação concorrente é recusada. **Isto é uma fronteira de instrução ao modelo, não um portão de UI**: hoje nenhum caminho de código bloqueia um commit num gesto do utilizador, pelo que um modelo que ignore a instrução pode fazer commit num só passo. Uma confirmação de UI obrigatória está no roadmap; entretanto, o registo de auditoria e os interruptores por tool são o que limita o risco. |
+| **As escritas passam por um cartão de confirmação** | `create_entity`, `update_entity`, `create_sales_document`, `create_opportunity` e qualquer botão de gravação premido por `interact_erp_window` são pré-visualizados primeiro: o ERP valida o rascunho e devolve os campos e, nos documentos, os totais que calculou. A aplicação desenha essa pré-visualização como um cartão e, ao fazê-lo, emite uma autorização de uso único — válida 15 minutos e ligada aos argumentos exatos pré-visualizados. A gravação só corre com essa autorização, que nasce do clique do utilizador no cartão e nunca é mostrada ao modelo. Uma chamada com `confirm=true` sem ela é recusada e registada na `AI_AuditLog` como recusa; escrever "sim" não grava nada. As gravações são single-flight — uma segunda gravação concorrente é recusada. O que isto não é: uma fronteira de base de dados. Limita o que o modelo pode desencadear, não o que alguém com a ligação SQL consegue fazer. |
+| **Visibilidade por utilizador** | As conversas e as entradas de auditoria são do utilizador ERP que as criou. Administradores, super administradores e técnicos do ERP veem um badge Supervisor, o `/auditoria todos` e um interruptor "Todos os utilizadores" na lista de conversas; a conversa de outro utilizador abre só de leitura, e só o dono a pode renomear ou apagar. É um controlo de aplicação decidido em C# a partir do perfil do ERP, não uma permissão de base de dados. |
 | **As escritas passam pelos objetos de negócio do ERP** | Os registos são criados via o modelo de objetos BSO do Primavera, pelo que todas as validações do ERP correm e os números de documento são atribuídos pelo ERP. Não há escritas diretas nas tabelas core do ERP. O `run_query` é só de leitura por guarda aplicacional, não por permissão de base de dados — corre na ligação do próprio ERP, pelo que empresas que queiram uma segunda barreira devem apontar o addon para um login SQL só de leitura. |
 | **SQL com guarda** | O `run_query` aceita apenas `SELECT`/`WITH`: uma blocklist rejeita palavras-chave de escrita/DDL/sistema (`INSERT`, `DROP`, `EXEC`, `xp_*`, `OPENROWSET`, …) depois de remover comentários, parêntesis retos e homóglifos Unicode para impedir contornos; o empilhamento de statements (`;`) é recusado; o número de linhas é limitado do lado do servidor. |
 | **Conteúdo não confiável é sinalizado** | O system prompt fixa uma regra: texto devolvido por tools (páginas web, resultados SQL, campos do ERP) é dado para analisar, nunca instruções para seguir. Os resultados do `web_search` levam adicionalmente `untrusted_content: true` mais um aviso inline, e formulações de injeção conhecidas são sinalizadas para a telemetria. |
-| **Automação de janelas contida** | O contrato de automação proíbe clicar em botões de gravar/anular/eliminar a menos que o utilizador o tenha pedido na conversa — o assistente preenche campos, resume e para. Corre uma interação de janela de cada vez. |
+| **Automação de janelas contida** | Um botão de gravar, anular ou eliminar carregado pela automação é recusado a menos que a chamada leve a autorização do cartão de confirmação; o prompt diz ainda ao assistente para preencher campos, resumir e parar. Corre uma interação de janela de cada vez. |
 | **Chaves cifradas em repouso** | As chaves de API (fornecedores e pesquisa web) vivem num cofre cifrado por utilizador com DPAPI (`secrets.dat`), nunca em configuração em texto simples. Os endpoints de pesquisa web têm de ser HTTPS e os redirects estão desativados, para que uma chave não possa fugir para um destino de redirect — a exceção é um SearXNG self-hosted em loopback ou numa gama privada, que não leva chave e só aceita HTTP simples quando explicitamente permitido. |
 | **Higiene de telemetria** | Os logs são locais (NLog, rotação diária). Builds RELEASE enviam apenas eventos de nível erro para o Sentry, com chaves de API, passwords de connection strings e caminhos de utilizador redigidos antes do envio. As pesquisas web nunca são registadas — podem conter nomes e NIFs. |
 | **Interruptores** | Cada tool liga e desliga individualmente nas definições; `ErpTools:Enabled` desliga a camada de tools inteira, deixando um chat simples. |
@@ -345,7 +361,7 @@ faturado de cada pedido e o painel mostra-o como tal; nos outros casos o addon a
 tokens com a lista de preços do fornecedor ou uma tabela interna para OpenAI e Anthropic),
 os últimos pedidos um a um e o peso do próximo pedido. O tamanho do contexto é o que o
 fornecedor publica para o modelo. Quando o modelo raciocina, um chip ao lado da caixa de
-escrita muda o esforço (Ctrl+Shift+E): "Desl." responde mais depressa, "Alto" pensa mais
+escrita muda o esforço (Ctrl+Shift+E): "Desligado" responde mais depressa, "Profundo" pensa mais
 em pedidos com vários passos. `/compactar` (ou o botão do painel) pede ao modelo um resumo das
 mensagens antigas e tira-as do pedido; ficam visíveis e no histórico. Ainda assim, vigie a
 primeira semana no dashboard do próprio fornecedor.
@@ -432,67 +448,35 @@ Para departamentos de IT, o deployment silencioso é suportado:
 [INSTALL.pt.md](INSTALL.pt.md).
 
 Numa instalação cliente-servidor, corra-o uma vez na máquina que tem o `SG100`; os postos
-não precisam de nada além do runtime WebView2 (veja
+não precisam de nada além do runtime WebView2, que o setup verifica e instala se faltar
+(veja
 [Instale uma vez, todos os postos o recebem](#instale-uma-vez-todos-os-postos-o-recebem)).
 
 Depois arranque o Primavera, abra o assistente a partir do ribbon e defina o fornecedor, o
 modelo e a chave de API no modal de definições. A chave fica guardada cifrada (DPAPI) no
-perfil desse utilizador. Primeira resposta útil: menos de cinco minutos desde o download.
+perfil desse utilizador. Entre o download e a primeira resposta não há mais nada a tratar:
+nenhuma conta a criar, nenhum servidor a levantar, nenhuma configuração do ERP a editar à
+mão.
 
 ### Compilar (licenciados do código)
 
-Compilar precisa de um ambiente Primavera SG100 licenciado para um deploy completo, mas
-compila em qualquer lado: todas as referências Primavera resolvem a partir da pasta vendored
-`Lib\`.
-
-```bat
-:: two gitignored files unblock the build
-type nul > Properties\licenses.licx
-copy appsettings.Development.example.json appsettings.Development.json
-
-msbuild AITOOL.sln -restore -p:Configuration=Debug
-```
-
-- Com o ERP instalado, o output faz deploy diretamente para
-  `<SG100>\Config\EV\Extensions\AITOOL\` (raiz resolvida a partir das variáveis
-  `PERCURSOSGE100`/`PERCURSOSGV100`; override com `-p:PrimaveraRoot=<path>`; é precisa
-  elevação quando o ERP vive em `C:\Program Files`).
-- Sem o ERP, o build avisa (`AITOOL001`) e recorre a `bin\<Config>\`; use
-  `-p:OutDir=<dir>` para uma verificação explícita só de compilação.
-
-A `Lib\` guarda 116 assemblies de referência de compilação — o fecho transitivo exato de que
-o compilador precisa, nunca copy-local, nunca distribuídos. Em runtime o addon liga-se aos
-assemblies do próprio ERP. Que o `FileVersion` vendored fique atrás de um service release
-instalado é inofensivo: o binding vai pelo `AssemblyVersion`, que o Primavera fixa em toda a
-v10.
-
-```powershell
-pwsh -File scripts\checks\Test-LibClosure.ps1        # prove the folder matches the closure
-pwsh -File scripts\Update-PrimaveraLibs.ps1          # report version drift, change nothing
-pwsh -File scripts\Update-PrimaveraLibs.ps1 -Apply   # refresh from this machine's install
-```
-
-Ambos resolvem a instalação a partir das mesmas variáveis de ambiente que o build usa, pelo
-que não há nada a configurar. Veja [`Lib/README.md`](Lib/README.md) para os detalhes e a
-nota de licenciamento.
+O código não é público; compilá-lo depende de um acordo escrito à parte — veja
+[COMMERCIAL.md](COMMERCIAL.md). A nota jurídica que interessa a quem lê aqui: compilar não
+precisa de nenhuma instalação do ERP, porque todas as referências Primavera resolvem a
+partir de uma pasta `Lib\` vendored de assemblies de referência de compilação, que nunca são
+copy-local nem distribuídos. Em runtime o addon liga-se aos assemblies do próprio ERP, pelo
+que nenhum binário Primavera é redistribuído. Um ambiente Primavera v10 (SG100) licenciado é
+preciso apenas para fazer deploy e correr.
 
 ### Compilar o instalador
-
-A partir do Visual Studio: escolha a configuração de solução **Installer** e Build Solution,
-ou clique com o botão direito no projeto `Installer` → **Build** a partir de qualquer
-configuração (o projeto está excluído dos builds Debug/Release, pelo que um F6 normal nunca
-empacota). Na linha de comandos:
 
 ```powershell
 pwsh -File Installer\build-installer.ps1
 ```
 
-Ambos correm o mesmo script: compila a solução em Release para uma pasta de staging local
-(sem nunca tocar no ERP), lê a versão do `AITOOL.dll` compilado e compila o script Inno
-Setup para `Installer\dist\AITOOL-Setup-<version>.exe`, imprimindo o seu SHA256.
-Parâmetros: `-Configuration`, `-IncludePdb`, `-OutputDir`. As releases fazem-se localmente
-com `scripts\Publish-Release.ps1`, que compila o setup, valida-o e publica a GitHub
-Release. Detalhes, seleção de instâncias, branding e notas de assinatura de código:
+O script prepara um build Release numa pasta de staging local (sem nunca tocar no ERP) e
+escreve `Installer\dist\AITOOL-Setup-<version>.exe` com o respetivo SHA256. Parâmetros,
+caminho pelo Visual Studio, seleção de instâncias, branding e assinatura de código:
 [Installer/README.md](Installer/README.md).
 
 ---
@@ -504,16 +488,16 @@ por utilizador (`%LocalAppData%\Cegid\Extensions\AITOOL\appsettings.User.json`) 
 nunca o sobrescrevem. Ordem de resolução: variável de ambiente → ficheiro do utilizador →
 `appsettings.{Environment}.json` → `appsettings.json` → defaults incorporados. A camada de
 ambiente cobre `Provider:*`, `ErpTools:*`, `Sql:*` e `Sentry:*`; as definições `Assistant:*`
-abaixo são lidas apenas dos ficheiros, com as chaves de pesquisa web como única exceção.
-Referência completa:
-[docs/CONFIGURATION.md](docs/CONFIGURATION.md).
+abaixo são lidas apenas dos ficheiros, exceto as chaves de pesquisa web e de enriquecimento
+de entidades, que aceitam overrides por ambiente. As variáveis que o código lê estão
+listadas família a família em [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
 
 | Definição | O que controla | Default |
 | --- | --- | --- |
-| `Provider:Active` | Fornecedor ativo: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | detetado do base URL |
-| `Provider:<id>:Model` | Id do modelo por fornecedor (seletor pesquisável com badges de capacidades) | preset |
+| `Provider:Active` | Fornecedor ativo: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | `openrouter` |
+| `Provider:<id>:Model` | Id do modelo por fornecedor (seletor pesquisável com badges de capacidades) | `openai/gpt-5.6-sol` no OpenRouter, `gpt-5.6-sol` na OpenAI direta |
 | `Provider:<id>:BaseUrl` | Endpoint, editável para fornecedores compatíveis com OpenAI | preset |
-| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max`, onde o modelo o suporta; `Off` num gpt-5 é enviado como `minimal`. Também se muda no chip ao lado da caixa de escrita | `Off` |
+| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max` — Desligado, Rápido, Equilibrado, Profundo, Máximo na interface — onde o modelo o suporta. O que cada nível envia é lido do catálogo do fornecedor para aquele modelo (`none`, `minimal`, `xhigh`, `max` quando existem), e a escolha é lembrada por modelo. Também se muda no chip ao lado da caixa de escrita | `Off` |
 | Chaves de API | Definidas na aplicação; cifradas com DPAPI por utilizador. Fallbacks de ambiente: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | — |
 | `Assistant:MaxTokens` | Máximo de tokens por resposta (256-128000) | `4096` |
 | `Assistant:Temperature` | 0-2; desativada para modelos de raciocínio | `0.7` |
@@ -577,9 +561,8 @@ onde isso se situa em relação ao resto.
 ## Roadmap
 
 Para onde isto vai, e o que está deliberadamente fora do âmbito, vive em
-[ROADMAP.md](ROADMAP.md). Itens mais próximos: um portão de confirmação de UI obrigatório
-nas escritas, mostrar as tool calls e o SQL por trás de cada resposta, entrada de faturas e
-exportação de tabelas.
+[ROADMAP.md](ROADMAP.md). Itens mais próximos: mostrar as tool calls e o SQL por trás de cada
+resposta, exportação de tabelas para Excel, anexos de e-mail e entrada de faturas.
 
 ---
 
@@ -600,10 +583,10 @@ exportação de tabelas.
   máquina.
 - As chaves de API ficam guardadas **cifradas na sua máquina** (Windows DPAPI, por
   utilizador) e são enviadas apenas para o fornecedor configurado — nunca para a Bola Labs.
-- As escritas no ERP acontecem apenas através dos seus objetos de negócio, desenhadas como
-  preview e depois gravação confirmada, com cada resultado na `AI_AuditLog`; não há escritas
-  diretas nas tabelas core do ERP. Nenhum conteúdo de chat é alguma vez enviado à Bola Labs
-  como telemetria.
+- As escritas no ERP acontecem apenas através dos seus objetos de negócio: um preview e
+  depois a gravação que o cartão de confirmação autoriza, com cada resultado na
+  `AI_AuditLog`; não há escritas diretas nas tabelas core do ERP. Nenhum conteúdo de chat é
+  alguma vez enviado à Bola Labs como telemetria.
 - O histórico de chat fica no seu SQL Server. Os logs são locais; em RELEASE, eventos de
   nível erro podem ir para o Sentry com chaves, connection strings e caminhos de utilizador
   redigidos — veja [SECURITY.md](SECURITY.md).
@@ -629,7 +612,9 @@ aqui; o instalador leva o runtime DevExpress ao abrigo dos termos de redistribui
 DevExpress — veja [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) e
 [DISTRIBUTION.md](DISTRIBUTION.md).
 
-O nome e o logótipo AITOOL são marcas — veja [TRADEMARKS.md](TRADEMARKS.md). Licenças de
+PRIMAVERA e Cegid são marcas da Cegid; o AITOOL não é afiliado, patrocinado nem endossado
+pela Cegid. O nome e o logótipo AITOOL são marcas — veja
+[TRADEMARKS.md](TRADEMARKS.md). Licenças de
 código, builds white-label, deployment, uso em produção com suporte e futuras funcionalidades
 premium estão em [COMMERCIAL.md](COMMERCIAL.md). Os ativos de marca e as regras de uso
 vivem em [docs/brand](docs/brand/README.md).

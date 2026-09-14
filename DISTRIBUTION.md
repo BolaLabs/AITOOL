@@ -73,8 +73,8 @@ commercial binaries of its own.
 
 ## Building
 
-No ERP installation is required to build: references resolve from the vendored `Lib/`
-folder. A licensed Primavera v10 (SG100) environment is required only to *deploy* and run —
-`Directory.Build.props` derives the deploy path from the `PERCURSOSGE100`/`PERCURSOSGV100`
-variables, and falls back to a local `bin\` folder with warning AITOOL001 when no ERP is
-present. See [README.md](README.md#build-developers) and [CONTRIBUTING.md](CONTRIBUTING.md).
+Building from source is available to source licensees under a written agreement — see
+[COMMERCIAL.md](COMMERCIAL.md). No ERP installation is required to compile (references
+resolve from `Lib/`); a licensed Primavera v10 (SG100) environment is required to deploy
+and run. The short version for the README reader is in
+[README.md](README.md#build-source-licensees).
