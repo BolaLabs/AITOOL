@@ -12,7 +12,7 @@ Portuguese version: [SKILLS.pt.md](SKILLS.pt.md).
 
 | Folder | Who | Notes |
 |---|---|---|
-| `<ERP>\Config\EV\Extensions\AITOOL\Skills\<name>\SKILL.md` | The addon itself | The skills that ship with each version (`incluída` in `/skills`); replaced on every update, so do not edit here |
+| `<ERP>\Config\<ED>\Extensions\AITOOL\Skills\<name>\SKILL.md` (`ED` = `EV`, `LE` or `LP`) | The addon itself | The skills that ship with each version (`incluída` in `/skills`); replaced on every update, so do not edit here |
 | `%ProgramData%\AITOOL\Skills\<name>\SKILL.md` | Everyone on this machine (and, in client-server setups, every workstation that shares it) | Created empty by the installer, which resets its ACL on every run so that only SYSTEM and administrators can write; an update never touches what is in it |
 | `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<name>\SKILL.md` | You | Open it from Settings → Skills → "Abrir a minha pasta de skills" |
 

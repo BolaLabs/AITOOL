@@ -394,7 +394,7 @@ Cegid's own published material:
 | --- | --- | --- |
 | Where it runs | A Cegid cloud service, reached over their API — including when your ERP is on-premise | In the ERP process, on your machine |
 | Account required | A Cegid Account per user | None |
-| Edition | Evolution only | Evolution (see requirements) |
+| Edition | Evolution only | Evolution, Executive and Professional (see requirements) |
 | The model | Cegid's | Yours — OpenAI, OpenRouter, Anthropic, any OpenAI-compatible endpoint, or a local one |
 | Cost of an action | Token allowance per edition, with paid top-ups | Whatever your provider charges you, directly |
 
@@ -404,8 +404,13 @@ be "nowhere", and where the choice of model is yours.
 
 ### Requirements
 
-- Licensed ERP Primavera v10 (SG100), Evolution edition
-- Microsoft Edge WebView2 Runtime
+- Licensed ERP Primavera v10 (SG100), version 10.20 or later. Evolution and Executive are
+  validated; Professional installs on the same rules and is awaiting a customer
+  confirmation. Older v10 builds that still embed the Chromium (CefSharp) browser lack the
+  WebView2 component the chat runs on, and the setup says so before copying anything
+- Microsoft .NET Framework 4.8 (the ERP runs from 4.7.2; the setup installs 4.8 if missing)
+- Microsoft Edge WebView2 Runtime, 125 or later recommended (installed by the setup when
+  missing)
 - SQL Server (the ERP's own instance; also stores chat history)
 - An API key for at least one provider (OpenAI, OpenRouter, Anthropic) — or a local
   OpenAI-compatible endpoint such as LM Studio, which needs no key
@@ -419,18 +424,25 @@ not code-signed yet, so Windows SmartScreen shows a warning on first run; the SH
 release notes is how you check the download. What it does for you, in order:
 
 1. **Finds your Primavera installation** automatically
-   (`PERCURSOSGE100`/`PERCURSOSGV100` → registry → previous install → prompt if all else
-   fails), and refuses to run while the ERP client is open.
-2. **Handles multi-instance ERPs**: detects `Config_<instance>` folders, lets you pick one
-   or several, with an optional PRIINSTANCIAS lookup on SQL Server.
-3. **Registers AITOOL in the ERP Extensibility screen** for you — as a common extension or
+   (`PERCURSOSGE100`/`PERCURSOSGV100`/`PERCURSOSGP100` → registry → previous install →
+   prompt if all else fails), and refuses to run while the ERP client is open.
+2. **Checks the workstation before copying anything**: ERP version per edition, the
+   WebView2 component of the ERP, DevExpress 21.2, .NET Framework 4.8, the WebView2 Runtime
+   (installed automatically when missing) and write access to each destination. Red items
+   explain what to fix; the rest warns and continues.
+3. **Handles every edition and instance**: each `Config[_instance]\EV`, `\LE` or `\LP`
+   folder with its executable is a target, all pre-selected, with an optional
+   PRIINSTANCIAS lookup on SQL Server.
+4. **Registers AITOOL in the ERP Extensibility screen** for you — as a common extension or
    for specific companies, written to each instance's PRIEMPRE database. No manual ERP
    configuration.
-4. **Uninstalls cleanly**: the same state is used to remove the registration on uninstall.
+5. **Verifies the result** target by target (file present, MD5 equal to the registered row,
+   executable found) and saves a report you can send to support.
+6. **Uninstalls cleanly**: the same state is used to remove the registration on uninstall.
 
 For IT departments, silent deployment is supported:
-`/VERYSILENT /INSTANCES=ALL /SQLSERVER=SRV /REGISTER=COMMON`, or
-`/VERYSILENT /DIR="<SG100>\Config\EV\Extensions\AITOOL"`. Manual copy steps are in
+`/VERYSILENT /INSTANCES=ALL /EDITIONS=ALL /SQLSERVER=SRV /REGISTER=COMMON`, or
+`/VERYSILENT /DIR="<SG100>\Config\LE\Extensions\AITOOL"`. Manual copy steps are in
 [INSTALL.md](INSTALL.md).
 
 On a client-server installation, run it once on the machine that holds `SG100`; workstations

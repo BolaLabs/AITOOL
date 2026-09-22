@@ -12,8 +12,9 @@ A comunicação de vulnerabilidades está em [SECURITY.md](../SECURITY.md).
 
 ## 1. Onde o software corre
 
-In-process dentro do `Erp100EV.exe`, na estação de trabalho do utilizador (.NET Framework
-4.8), instalado em `<SG100>\Config\EV\Extensions\AITOOL\` e registado na tabela de
+In-process dentro do cliente Primavera (`Erp100EV.exe`, `Erp100LE.exe` ou `Erp100LP.exe`,
+consoante a edição), na estação de trabalho do utilizador (.NET Framework 4.8), instalado
+em `<SG100>\Config\<EV|LE|LP>\Extensions\AITOOL\` e registado na tabela de
 Extensibilidade do ERP (`PRIEMPRE..ExtensibilityConfiguration`).
 
 Não existe componente de servidor. **Nenhum serviço da Bola Labs é contactado em

@@ -77,7 +77,7 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
 ## Packaging/deploy
 
 - Costura.Fody (6.2) embeds most NuGet dependencies into AITOOL.dll (~17 MB) and removes their loose copies from the output; DevExpress*, Shared.Config, ReportEngine and a few runtime libraries are excluded and ship loose
-- Deploys must mirror the FULL build output folder into `…\SG100\Config\EV\Extensions\AITOOL` (including `UI\Resources\Chat`), removing files that are no longer produced — a stale loose DLL shadows its embedded replacement because the CLR probes the app-base folder first
+- Deploys must mirror the FULL build output folder into `…\SG100\Config\<EV|LE|LP>\Extensions\AITOOL` (one folder per installed edition, including `UI\Resources\Chat`), removing files that are no longer produced — a stale loose DLL shadows its embedded replacement because the CLR probes the app-base folder first
 
 ---
 
@@ -160,5 +160,5 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
 ## Empacotamento/deploy
 
 - O Costura.Fody (6.2) embebe a maioria das dependências NuGet no AITOOL.dll (~17 MB) e remove as cópias soltas do output; DevExpress*, Shared.Config, ReportEngine e algumas bibliotecas de runtime estão excluídos e seguem soltos
-- O deploy tem de espelhar a pasta de output COMPLETA para `…\SG100\Config\EV\Extensions\AITOOL` (incluindo `UI\Resources\Chat`), removendo ficheiros que já não são produzidos — um DLL solto obsoleto faz shadowing da cópia embebida porque o CLR sonda primeiro a pasta base
+- O deploy tem de espelhar a pasta de output COMPLETA para `…\SG100\Config\<EV|LE|LP>\Extensions\AITOOL` (uma pasta por edição instalada, incluindo `UI\Resources\Chat`), removendo ficheiros que já não são produzidos — um DLL solto obsoleto faz shadowing da cópia embebida porque o CLR sonda primeiro a pasta base
 

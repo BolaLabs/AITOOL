@@ -406,7 +406,7 @@ com base no material publicado pela própria Cegid:
 | --- | --- | --- |
 | Onde corre | Um serviço cloud da Cegid, acedido pela API deles — mesmo quando o seu ERP é on-premise | No processo do ERP, na sua máquina |
 | Conta obrigatória | Uma Cegid Account por utilizador | Nenhuma |
-| Edição | Apenas Evolution | Evolution (ver requisitos) |
+| Edição | Apenas Evolution | Evolution, Executive e Professional (ver requisitos) |
 | O modelo | O da Cegid | O seu — OpenAI, OpenRouter, Anthropic, qualquer endpoint compatível com OpenAI, ou um local |
 | Custo de uma ação | Franquia de tokens por edição, com recargas pagas | O que o seu fornecedor lhe cobrar, diretamente |
 
@@ -416,8 +416,15 @@ do meu negócio" tem de ser "para lado nenhum", e em que a escolha do modelo é 
 
 ### Requisitos
 
-- ERP Primavera v10 (SG100) licenciado, edição Evolution
-- Microsoft Edge WebView2 Runtime
+- ERP Primavera v10 (SG100) licenciado, versão 10.20 ou superior. Evolution e Executive
+  estão validadas; Professional instala com as mesmas regras e aguarda confirmação de um
+  cliente. Builds v10 mais antigas, que ainda embebem o browser Chromium (CefSharp), não
+  têm o componente WebView2 em que o chat corre, e o setup di-lo antes de copiar seja o que
+  for
+- Microsoft .NET Framework 4.8 (o ERP corre a partir do 4.7.2; o setup instala o 4.8 se
+  faltar)
+- Microsoft Edge WebView2 Runtime, 125 ou superior recomendado (instalado pelo setup quando
+  falta)
 - SQL Server (a instância do próprio ERP; guarda também o histórico de chat)
 - Uma chave de API de pelo menos um fornecedor (OpenAI, OpenRouter, Anthropic) — ou um
   endpoint local compatível com OpenAI, como o LM Studio, que não precisa de chave
@@ -432,19 +439,26 @@ mostra um aviso na primeira execução; o SHA256 nas notas da release é a forma
 download. O que faz por si, por ordem:
 
 1. **Encontra a sua instalação do Primavera** automaticamente
-   (`PERCURSOSGE100`/`PERCURSOSGV100` → registry → instalação anterior → pergunta se tudo o
-   resto falhar), e recusa-se a correr com o cliente do ERP aberto.
-2. **Trata ERPs multi-instância**: deteta pastas `Config_<instance>`, deixa escolher uma ou
-   várias, com uma consulta opcional de PRIINSTANCIAS no SQL Server.
-3. **Regista o AITOOL no ecrã de Extensibilidade do ERP** por si — como extensão comum ou
+   (`PERCURSOSGE100`/`PERCURSOSGV100`/`PERCURSOSGP100` → registry → instalação anterior →
+   pergunta se tudo o resto falhar), e recusa-se a correr com o cliente do ERP aberto.
+2. **Verifica o posto antes de copiar seja o que for**: versão do ERP por edição, o
+   componente WebView2 do ERP, DevExpress 21.2, .NET Framework 4.8, o WebView2 Runtime
+   (instalado automaticamente quando falta) e escrita em cada destino. Os pontos a vermelho
+   explicam o que corrigir; o resto avisa e continua.
+3. **Trata todas as edições e instâncias**: cada pasta `Config[_instância]\EV`, `\LE` ou
+   `\LP` com o respetivo executável é um alvo, todos pré-selecionados, com uma consulta
+   opcional de PRIINSTANCIAS no SQL Server.
+4. **Regista o AITOOL no ecrã de Extensibilidade do ERP** por si — como extensão comum ou
    para empresas específicas, escrito na base de dados PRIEMPRE de cada instância. Sem
    configuração manual do ERP.
-4. **Desinstala de forma limpa**: o mesmo estado é usado para remover o registo na
+5. **Verifica o resultado** alvo a alvo (ficheiro presente, MD5 igual à linha registada,
+   executável encontrado) e guarda um relatório que pode enviar ao apoio.
+6. **Desinstala de forma limpa**: o mesmo estado é usado para remover o registo na
    desinstalação.
 
 Para departamentos de IT, o deployment silencioso é suportado:
-`/VERYSILENT /INSTANCES=ALL /SQLSERVER=SRV /REGISTER=COMMON`, ou
-`/VERYSILENT /DIR="<SG100>\Config\EV\Extensions\AITOOL"`. Os passos de cópia manual estão em
+`/VERYSILENT /INSTANCES=ALL /EDITIONS=ALL /SQLSERVER=SRV /REGISTER=COMMON`, ou
+`/VERYSILENT /DIR="<SG100>\Config\LE\Extensions\AITOOL"`. Os passos de cópia manual estão em
 [INSTALL.pt.md](INSTALL.pt.md).
 
 Numa instalação cliente-servidor, corra-o uma vez na máquina que tem o `SG100`; os postos

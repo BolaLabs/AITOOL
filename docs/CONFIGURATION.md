@@ -12,7 +12,7 @@ All projects read configuration through `Shared.Config` (`AITOOL.SharedConfig.Un
 
 | File | Location | Written by |
 | --- | --- | --- |
-| `appsettings.json`, `appsettings.{Environment}.json` | the addon folder, next to `AITOOL.dll` (`<SG100>\Config\EV\Extensions\AITOOL\`) | you, from the `*.example.json` templates. Neither is produced by the build or carried by the setup, and both are gitignored; read-only at runtime |
+| `appsettings.json`, `appsettings.{Environment}.json` | the addon folder, next to `AITOOL.dll` (`<SG100>\Config\<ED>\Extensions\AITOOL\`, where `ED` is `EV`, `LE` or `LP`; one folder per installed edition) | you, from the `*.example.json` templates. Neither is produced by the build or carried by the setup, and both are gitignored; read-only at runtime |
 | `appsettings.User.json` | `%LocalAppData%\Cegid\Extensions\AITOOL\` | the settings modal |
 | `secrets.dat` | `%LocalAppData%\Cegid\Extensions\AITOOL\` | the settings modal (DPAPI-encrypted) |
 

@@ -29,14 +29,14 @@ body:
     id: version
     attributes:
       label: AITOOL / Primavera version
-      placeholder: "AITOOL 2.12.1 (Settings, last line) · Primavera v10 SG100 build ..."
+      placeholder: "AITOOL 2.13.0 · Primavera 10.0020.3514 Executive · instância DEFAULT (Settings → Diagnóstico, first line)"
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
       label: Relevant logs
-      description: "From %LocalAppData%/Cegid/Extensions/AITOOL/Logs/ — redact any secrets first."
+      description: "Attach the zip from Settings → Diagnóstico → Exportar pacote de apoio (already redacted), or paste lines from %LocalAppData%/Cegid/Extensions/AITOOL/Logs/."
       render: text
     validations:
       required: false

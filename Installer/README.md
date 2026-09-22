@@ -46,16 +46,56 @@ sincronização dos espelhos PT, que por omissão corre antes de empacotar).
 
 Ordem de deteção da raiz SG100 (igual ao `Directory.Build.props`):
 
-1. `/DIR="..."` na linha de comandos (deploy empresarial; ignora instâncias)
-2. Variáveis `PERCURSOSGE100` / `PERCURSOSGV100` (apontam para `<SG100>\Apl`;
-   a raiz é a pasta-mãe)
+1. `/DIR="..."` na linha de comandos (deploy empresarial; ignora instâncias e edições)
+2. Variáveis `PERCURSOSGE100` / `PERCURSOSGV100` / `PERCURSOSGP100` (apontam para
+   `<SG100>\Apl`; a raiz é a pasta-mãe)
 3. Registo: `HKLM32\SOFTWARE\PRIMAVERA\WindowsService200\Services\PRIMAVERA
-   AutoUpdate\Applications\ERP100\EV\*` → `PRODUCTINSTALLDIR`
+   AutoUpdate\Applications\ERP100\<EV|LE|LP>\*` → `PRODUCTINSTALLDIR`
 4. Instalação anterior do AITOOL (`HKLM\SOFTWARE\Bola Labs\AITOOL` → `Sg100Root`)
 5. Pedido ao utilizador (valida que existe `Config` ou `Config_<instância>`;
    aceita a raiz ou a pasta `Apl`)
 
-Destino por instância: `<SG100>\Config[_Instância]\EV\Extensions\AITOOL\`.
+Destino por alvo: `<SG100>\Config[_Instância]\<EV|LE|LP>\Extensions\AITOOL\`.
+
+## Edições do Primavera
+
+As edições partilham a raiz SG100 e o `Apl`; só a subpasta de configuração muda:
+`EV` = Evolution (`Erp100EV.exe`), `LE` = Executive (`Erp100LE.exe`), `LP` = Professional
+(`Erp100LP.exe`). Uma pasta `Config[_X]\<ED>` só conta como alvo quando o executável da
+edição existe em `Apl`. O registo na Extensibilidade é por instância (a BD `PRIEMPRE` é
+partilhada pelas edições), por isso o instalador copia os mesmos bytes para todos os alvos:
+a linha registada tem um único `HashCode`.
+
+Uma pasta `Config[_X]\EV\Extensions\AITOOL` sem `Erp100EV.exe`, cujo único conteúdo é o
+AITOOL, foi deixada por um instalador antigo num posto sem Evolution (o caso reportado a
+2026-09-17 num posto Executive): é removida antes da cópia e o resultado regista-o.
+
+## Pré-verificação
+
+Página própria a seguir ao Bem-vindo (e em silencioso corre em `PrepareToInstall`), antes de
+qualquer cópia. Cada linha é OK, Aviso ou Bloqueante; "Repetir" reavalia:
+
+| Verificação | Como | Se falhar |
+| --- | --- | --- |
+| Versão do ERP por alvo | FileVersion de `Apl\Erp100<ED>.exe` (>= 10.0020 = validada) | Aviso ("não validada") |
+| Componente WebView2 da Cegid | `Apl\Cegid.Platform.WebBrowserControl.dll` existe e contém `Microsoft.Web.WebView2.Core` | Bloqueante |
+| DevExpress 21.2 | `Apl\DevExpress.XtraBars.v21.2.dll` | Bloqueante |
+| Motor de extensibilidade | `Apl\Primavera.Extensibility.Engine.dll` | Aviso |
+| .NET Framework 4.8 | `NDP\v4\Full\Release` >= 528040; senão instala o web installer oficial (`/q /norestart`; 3010 = reinício pedido no fim) | Aviso se a instalação falhar |
+| WebView2 Runtime | `EdgeUpdate\Clients\{F3017226…}\pv`; senão instala o bootstrapper Evergreen | Bloqueante se a instalação falhar; Aviso se < 125 |
+| ERP fechado | WMI `Win32_Process` para `Erp100EV/LE/LP.exe` | Bloqueante (Repetir) |
+| Escrita em cada destino | ficheiro temporário em `Config[_X]\<ED>` | Bloqueante |
+| Pasta EV órfã | ver acima | Aviso (será removida) |
+
+## Resultado
+
+Página depois da cópia (`wpInstalling`): por alvo, ficheiro presente, MD5 do ficheiro igual
+ao `HashCode` registado (lido da BD com a mesma ligação do registo), executável da edição
+encontrado; mais as pastas órfãs removidas e o estado do WebView2 Runtime. "Copiar
+relatório" (via PowerShell `Set-Clipboard`, para não perder acentos) e "Abrir relatório". O
+relatório em texto, com a pré-verificação e o resultado, fica em
+`%ProgramData%\AITOOL\Install\AITOOL-Setup-<versão>-<data>.txt`; o AITOOL inclui-o no
+pacote de apoio.
 
 ## Instâncias do Primavera
 
@@ -67,10 +107,11 @@ sem sufixo — e é o único cenário quando a BD `PRIINSTANCIAS` não existe.
 O instalador deteta as instâncias pelas pastas `Config[_X]` na raiz SG100 (o
 que está de facto implantado na máquina é o que conta para copiar ficheiros):
 
-- Uma única instância válida → nenhuma pergunta; instala como sempre.
-- Várias instâncias → página de seleção com checkboxes (multi-instância):
-  o AITOOL é instalado em todas as selecionadas. Instâncias já com AITOOL
-  aparecem pré-selecionadas ("será atualizada"); sem `EV` aparecem desativadas.
+- Um único alvo (instância × edição) → nenhuma pergunta; instala como sempre.
+- Vários alvos → página de seleção com checkboxes ("DEFAULT · Executive 10.0020.3514"):
+  todos pré-selecionados, porque as edições da mesma instância partilham o registo.
+  Alvos já com AITOOL mostram "instalada X — será atualizada" ou "será reparada" (mesma
+  versão). Instâncias só no servidor aparecem desativadas.
 - Botão "Consultar PRIINSTANCIAS no SQL Server...": opcional, liga ao SQL
   (autenticação Windows ou SQL) e cruza a lista local com `dbo.Instancias` —
   mostra descrições/estado bloqueada e instâncias registadas no servidor mas
@@ -117,7 +158,8 @@ Extensibilidade, escrito diretamente na base `PRIEMPRE` de cada instância
 ### Ligação SQL automática (PRISECLE.BIN)
 
 O instalador lê o servidor e as credenciais SQL do próprio ERP —
-`<SG100>\Config[_X]\EV\PRISECLE.BIN`, decifrado com o baralhamento reversível
+`<SG100>\Config[_X]\<EV|LE|LP>\PRISECLE.BIN`, o primeiro legível entre as edições da
+instância, decifrado com o baralhamento reversível
 do Primavera — e liga-se sem perguntar nada: a lista de instâncias é
 enriquecida com `PRIINSTANCIAS` (descrições, bloqueadas, `NomePriempre`) e as
 empresas carregam automaticamente ao entrar na página. O diálogo SQL manual
@@ -135,24 +177,26 @@ instalações antigas são consolidados; um registo novo entra com
 Falhas de registo nunca revertem a instalação dos ficheiros: fica o aviso e a
 indicação de registo manual.
 
-No fim, o instalador verifica o **WebView2 Runtime** (necessário ao chat) e,
-se faltar, instala-o automaticamente com o bootstrapper oficial da Microsoft
-(download ~2 MB); sem rede fica um aviso com o link.
+O **WebView2 Runtime** (necessário ao chat) é verificado na pré-verificação e,
+se faltar, instalado automaticamente com o bootstrapper oficial da Microsoft
+(download ~2 MB); no modo `/DIR` a mesma verificação corre no fim.
 
 ## Instalação silenciosa
 
 ```bat
 AITOOL-Setup-x.y.z.w.exe /SILENT
 AITOOL-Setup-x.y.z.w.exe /VERYSILENT /INSTANCES=DEFAULT,ALEX
-AITOOL-Setup-x.y.z.w.exe /VERYSILENT /INSTANCES=ALL /SQLSERVER=SRV\PRIMAVERA /REGISTER=COMMON
-AITOOL-Setup-x.y.z.w.exe /VERYSILENT /REGISTER=ERGO;ITM /SQLSERVER=SRV /SQLAUTH=sql /SQLUSER=sa /SQLPASSWORD=...
-AITOOL-Setup-x.y.z.w.exe /VERYSILENT /DIR="C:\Program Files\PRIMAVERA\SG100\Config\EV\Extensions\AITOOL"
+AITOOL-Setup-x.y.z.w.exe /VERYSILENT /INSTANCES=ALL /EDITIONS=ALL /SQLSERVER=SRV\PRIMAVERA /REGISTER=COMMON
+AITOOL-Setup-x.y.z.w.exe /VERYSILENT /EDITIONS=LE /REGISTER=ERGO;ITM /SQLSERVER=SRV /SQLAUTH=sql /SQLUSER=sa /SQLPASSWORD=...
+AITOOL-Setup-x.y.z.w.exe /VERYSILENT /DIR="C:\Program Files\PRIMAVERA\SG100\Config\LE\Extensions\AITOOL"
 ```
 
-- Sem `/INSTANCES`: reinstala nas instâncias onde o AITOOL já existe; senão na
-  `DEFAULT`; senão na primeira válida.
-- `/INSTANCES=ALL` instala em todas as instâncias com edição Evolution.
+- Sem `/INSTANCES` e sem `/EDITIONS`: todos os alvos (instância × edição) da máquina.
+- `/EDITIONS=EV,LE,LP` (ou `ALL`, a omissão) filtra as edições antes da seleção; código
+  desconhecido aborta.
 - Nome inválido em `/INSTANCES` aborta com a lista de instâncias disponíveis.
+- A pré-verificação corre também em silencioso; um ponto bloqueante aborta com a lista
+  (`PreSilentBlocked`) e o registo do Inno (`/LOG`) leva o detalhe.
 - `/REGISTER=COMMON|NONE|COD1;COD2` controla o registo na Extensibilidade
   (default em silencioso: `NONE`). Sem `/SQLSERVER`, as credenciais vêm
   automaticamente do `PRISECLE.BIN` do ERP; `/SQLSERVER` (com
@@ -208,20 +252,30 @@ distribuir publicamente:
 
 | Caso | Comportamento |
 | --- | --- |
-| ERP aberto (`Erp100EV.exe`/`Erp100LE.exe`) | Repetir/Cancelar no install e uninstall; em silencioso aborta |
+| ERP aberto (`Erp100EV.exe`/`Erp100LE.exe`/`Erp100LP.exe`) | Bloqueante na pré-verificação e Repetir/Cancelar no install e uninstall; em silencioso aborta |
 | Primavera não instalado | Deteção falha → pede a pasta (valida `Config[_*]`); silencioso aborta |
-| Só a instância DEFAULT (ou sem BD PRIINSTANCIAS) | Sem página de instâncias; comportamento clássico |
-| Várias instâncias (`Config_ALEX`, ...) | Página de seleção multi-instância; pré-seleciona as já instaladas |
-| Instância sem `EV` | Aparece desativada; se nenhuma tiver EV, pede confirmação global |
+| Raiz sem nenhuma edição reconhecida | Mensagem com as pastas encontradas; interativo deixa escolher outra raiz, silencioso aborta |
+| Só um alvo (uma instância, uma edição) | Sem página de seleção; comportamento clássico |
+| Evolution + Executive na mesma raiz | Dois alvos, ambos pré-selecionados; mesmos bytes, uma linha na BD |
+| Só Executive (ou só Professional) | Instala em `LE` (ou `LP`) sem perguntas; nada é criado em `EV` |
+| Pasta `Config\EV\Extensions\AITOOL` órfã (posto sem Evolution) | Removida antes da cópia; listada na pré-verificação e no resultado |
+| ERP anterior à 10.20 mas com os componentes | Aviso "não validada"; instala |
+| ERP da era CefSharp (sem `Cegid.Platform.WebBrowserControl.dll`) | Bloqueante; nada é copiado |
+| DevExpress diferente de 21.2 em `Apl` | Bloqueante; nada é copiado |
+| .NET 4.7.x | Instalação automática do 4.8; se falhar, aviso e instala na mesma |
+| Várias instâncias (`Config_ALEX`, ...) | Página de seleção multi-alvo; pré-seleciona todos |
 | Instância na BD sem pasta local | Listada (via consulta SQL) mas desativada |
 | Instância bloqueada (`Bloqueada=1`) | Marcada como bloqueada na lista |
 | `/INSTANCES` com nome inválido | Aborta com a lista de instâncias disponíveis |
 | SQL inacessível / sem PRIINSTANCIAS | Consulta é opcional; erro mostrado, lista local mantém-se |
 | PRISECLE.BIN ausente/ilegível ou servidor em baixo | Auto-ligação falha em silêncio; diálogo SQL manual e códigos manuais cobrem o resto |
+| Servidor SQL guardado por uma instalação anterior | Só é fallback: sem `/SQLSERVER`, o PRISECLE.BIN vem primeiro (o servidor guardado usava autenticação Windows e falhava com SSPI num SQL noutra máquina) |
 | Registo sem ligação SQL | Passa a "Não registar" com aviso; instalação continua |
 | Lista de empresas indisponível | Página aceita códigos manuais; validados por instância na escrita |
 | Filtro de empresas ativo | Seleção acumulada sobrevive a filtros; "Limpar" apaga também as escondidas |
-| WebView2 Runtime em falta | Instalação automática via bootstrapper oficial; sem rede fica aviso com link |
+| WebView2 Runtime em falta | Instalação automática na pré-verificação; se falhar (sem rede) é bloqueante com o link do instalador autónomo |
+| WebView2 Runtime anterior à 125 | Aviso; instala |
+| Fim da instalação | Página de resultado por alvo + relatório em `%ProgramData%\AITOOL\Install`; "Abrir o ERP" abre a edição do primeiro alvo |
 | Upgrade do registo | Upsert mantém `ID` e `ExecutionQueue`; duplicados antigos consolidados |
 | Empresa selecionada não existe noutra instância | Código filtrado por instância; instância sem nenhum código válido fica por registar, com aviso |
 | Base PRIEMPRE/tabela em falta | Aviso por instância; ficheiros ficam instalados |

@@ -12,7 +12,7 @@ Versão inglesa: [SKILLS.md](SKILLS.md).
 
 | Pasta | Quem | Notas |
 |---|---|---|
-| `<ERP>\Config\EV\Extensions\AITOOL\Skills\<nome>\SKILL.md` | O próprio addon | As skills que vêm com cada versão (`incluída` no `/skills`); substituídas em cada atualização, por isso não edite aqui |
+| `<ERP>\Config\<ED>\Extensions\AITOOL\Skills\<nome>\SKILL.md` (`ED` = `EV`, `LE` ou `LP`) | O próprio addon | As skills que vêm com cada versão (`incluída` no `/skills`); substituídas em cada atualização, por isso não edite aqui |
 | `%ProgramData%\AITOOL\Skills\<nome>\SKILL.md` | Toda a gente nesta máquina (e, em cliente-servidor, cada posto que a partilhe) | Criada vazia pelo instalador, que repõe a ACL em cada instalação para que só o SYSTEM e os administradores escrevam; uma atualização nunca toca no que lá estiver |
 | `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<nome>\SKILL.md` | Só você | Abra-a em Definições → Skills → "Abrir a minha pasta de skills" |
 

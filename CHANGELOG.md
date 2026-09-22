@@ -8,6 +8,62 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.13.0] - 2026-09-22
+
+### Added
+
+- Evolution, Executive and Professional. The installer treats every instance × edition pair
+  as a target (`Config[_X]\EV`, `\LE`, `\LP`, each backed by its `Erp100<ED>.exe`), installs
+  the same files into all of them and keeps one Extensibility row per instance. A previous
+  install left in `Config\EV` on a workstation without Evolution is removed and the addon
+  lands in the folder the ERP actually reads. `/EDITIONS=EV,LE,LP|ALL` for silent
+  deployments; `-p:PrimaveraEdition` and `-p:PrimaveraInstance` for the build and F5.
+- Pre-flight check in the installer, before any file is copied: Primavera version per
+  edition, the Cegid WebView2 component (`Cegid.Platform.WebBrowserControl.dll`, absent on
+  CefSharp-era builds), DevExpress 21.2, the extensibility engine, .NET Framework 4.8, the
+  WebView2 Runtime (installed automatically when missing), the ERP closed, write access to
+  each destination. Only the two missing ERP components and an uninstallable WebView2
+  Runtime block; everything else warns. A result page after the copy proves each target
+  (file present, MD5 equal to the registered row, executable found) and saves a report to
+  `%ProgramData%\AITOOL\Install`.
+- The addon checks the host before touching DevExpress or WebView2. On an ERP that lacks
+  the components it needs, the ribbon gets a single AITOOL button that explains what is
+  missing (ERP_004..006) instead of a silent empty tab. A missing WebView2 Runtime shows
+  "Instalar WebView2" and "Tentar novamente" in the chat panel (UI_001); any other browser
+  start-up failure shows the cause (UI_002). One browser profile per edition.
+- Diagnostics for everyone: the settings modal shows one status line and "Exportar pacote
+  de apoio", which writes a zip with a redacted report and the last seven days of logs;
+  supervisors also get the log folder, a "Registos detalhados (24 h)" switch that really
+  raises the log level and expires by itself, and the last warnings and errors.
+- "Testar ligação" now verifies the provider the way the chat uses it, in four steps: key
+  accepted, configured model reachable, streaming answer received, request with the ERP
+  tools accepted. It used to stop at the model list, which passed with a model the account
+  could not use.
+- Every user turn carries a correlation id (`T-xxxx`) through the log and on the error card
+  ("ref. T-xxxx"); the log layout carries the turn and the source class; a session header
+  records versions, edition, instance, user and folders; and in RELEASE the last Debug
+  lines are dumped into the file just before a warning or error (flight recorder).
+
+### Fixed
+
+- Installed on an Executive-only workstation, the setup used to write into `Config\EV` and
+  the ERP reported "Não existe: AITOOL.dll". Reported by an Executive user on 2026-09-17.
+- Chat resources and built-in skills were looked up under `Config*\EV` only; on any other
+  edition the chat fell back to the embedded page (no markdown, no diagrams) with a toast
+  that blamed the network.
+- Timeouts (AI_002), a company not yet open (ERP_001) and empty model answers (AI_004) now
+  reach the error card with their codes instead of a generic message or a blank bubble.
+- The DevExpress version probing on start-up was decorative (references are bound to
+  21.2.3.0) and is gone.
+
+### Changed
+
+- Requirements: Primavera v10.20 (build 10.0020) validated on Evolution and Executive;
+  Professional installable on the same rules, awaiting a customer confirmation; .NET
+  Framework 4.8; WebView2 Runtime 125 or later recommended.
+- The installer script compiles on Inno Setup 6.5 and 6.6+ (the `CreateCustomForm`
+  prototype changed in 6.6); `build-installer.ps1` picks the newest compiler installed.
+
 ## [2.12.1] - 2026-09-14
 
 ### Added

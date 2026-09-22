@@ -12,9 +12,10 @@ Vulnerability reporting is in [SECURITY.md](../SECURITY.md).
 
 ## 1. Where the software runs
 
-In-process inside `Erp100EV.exe` on the user's workstation (.NET Framework 4.8), deployed to
-`<SG100>\Config\EV\Extensions\AITOOL\` and registered in the ERP's Extensibility table
-(`PRIEMPRE..ExtensibilityConfiguration`).
+In-process inside the Primavera client (`Erp100EV.exe`, `Erp100LE.exe` or `Erp100LP.exe`,
+depending on the edition) on the user's workstation (.NET Framework 4.8), deployed to
+`<SG100>\Config\<EV|LE|LP>\Extensions\AITOOL\` and registered in the ERP's Extensibility
+table (`PRIEMPRE..ExtensibilityConfiguration`).
 
 There is no server component. **No Bola Labs service is contacted at runtime** — no licence
 check, no telemetry endpoint, no update check. Uninstalling is deleting one folder and one
