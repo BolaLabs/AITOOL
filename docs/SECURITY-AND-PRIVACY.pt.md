@@ -28,7 +28,8 @@ atualizações. Desinstalar é apagar uma pasta e uma linha de Extensibilidade.
 | O fornecedor de IA configurado por **si** | A conversa, o system prompt (que inclui o código da empresa, o utilizador e a janela do ERP atualmente aberta) e todos os resultados de tools — nomes de clientes, números de contribuinte, saldos, valores de vendas, linhas de resultados SQL | Em cada turno | Configurar um endpoint local compatível com OpenAI; nada sai da máquina |
 | Fornecedor de pesquisa web (Tavily / Brave / Serper / Exa / SearXNG self-hosted) | Apenas o texto da consulta de pesquisa | Apenas quando o `web_search` corre | Desativar a tool, ou deixar a chave por definir |
 | VIES e NIF.pt | Um número de contribuinte | Apenas quando o `enrich_entity` corre | Desativar a tool |
-| Sentry | Eventos de nível erro, sanitizados | **Apenas se um operador configurar um DSN. Nenhum DSN é distribuído.** | Deixar `Sentry:Dsn` vazio (a predefinição) |
+| Sentry | Eventos de nível erro, sessões de release health e uma amostra de 10% de traces de desempenho, sanitizados; sem conteúdo do chat | **Apenas se um operador configurar um DSN. Nenhum DSN é distribuído.** | Deixar `Sentry:Dsn` vazio (a predefinição) |
+| Quem receber o pacote de apoio enviado pelo utilizador | Um .zip com o relatório da instalação, os registos locais dos últimos 7 dias, as preferências do utilizador sem credenciais e os últimos relatórios do instalador; chaves, palavras-passe, connection strings e caminhos `C:\Users\<nome>` são redigidos. Os registos podem ainda mostrar clientes, artigos ou tabelas consultados pelas tools | Apenas quando um utilizador carrega em **Exportar pacote de apoio** (definições → Diagnóstico) e envia o ficheiro | Não o exportar, ou revê-lo antes de enviar |
 | Bola Labs | Nada, nunca | — | — |
 
 O que chega ao fornecedor é o que o assistente obteve para responder àquela pergunta —

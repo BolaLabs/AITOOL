@@ -8,6 +8,39 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.13.1] - 2026-09-24
+
+### Fixed
+
+- The log file now carries the key/value details of each entry (model, token counts,
+  billed cost, error code), which until now reached only Sentry: "Cost estimate for
+  request" is readable in a customer log again.
+- Two failures less than 2 s apart: the second one lost its `FLIGHT:` context, because the
+  throttle emptied the flight recorder instead of keeping it for the next write.
+- The support bundle redacts the logs and the installer reports too (keys, passwords,
+  connection strings, `C:\Users\<name>` paths), not only the report. The settings text now
+  says what the logs can still contain.
+- Professional was shown as "validada" on version alone. The installer pre-flight and the
+  session header now say "versão suportada; edição por confirmar" until a customer runs it.
+- Error text that reaches the user without a mapped code (connection test, key and web
+  search checks) is redacted the same way.
+- Diagnostics in settings: "Exportar pacote de apoio" shows progress and cannot start twice;
+  "Testar ligação" and "Registos detalhados" no longer stay stuck or show a state that was
+  not applied when the C# side fails; the error codes in "Últimos avisos e erros" are
+  readable in the dark theme; screen readers get the switch name and each step of the
+  connection test.
+- A chat opened without its formatting scripts logs `UI_003` (the toast mentioned a code
+  nothing recorded) and points to the support bundle.
+- Release script: a new release is created empty and its assets are uploaded with retries,
+  so a dropped 118 MB upload no longer deletes the release.
+
+### Changed
+
+- README and the security and privacy guide describe what Sentry receives when an operator
+  configures a DSN (errors, release-health sessions, a 10% trace sample) and list the
+  support bundle as a way data can leave the machine. The installer guide warns that
+  `/SQLPASSWORD` is visible on the command line.
+
 ## [2.13.0] - 2026-09-22
 
 ### Added
@@ -394,7 +427,7 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 ### Changed
 
 - Licence: the product ships under the AITOOL Community License (free of charge, binary
-  only, unmodified redistribution allowed) instead of MIT. The source repository is private;
+  only, unmodified redistribution allowed) instead of the previous permissive licence. The source repository is private;
   the public repository carries documentation, releases and the issue tracker.
 - The installer shows the licence; the setup is not code-signed and the docs now say so
   next to the download.

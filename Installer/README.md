@@ -201,7 +201,11 @@ AITOOL-Setup-x.y.z.w.exe /VERYSILENT /DIR="C:\Program Files\PRIMAVERA\SG100\Conf
   (default em silencioso: `NONE`). Sem `/SQLSERVER`, as credenciais vêm
   automaticamente do `PRISECLE.BIN` do ERP; `/SQLSERVER` (com
   `/SQLAUTH=windows` por omissão, ou `sql` + `/SQLUSER` + `/SQLPASSWORD`)
-  sobrepõe-se.
+  sobrepõe-se. Prefira o `PRISECLE.BIN` ou `/SQLAUTH=windows`: a linha de comandos de
+  um processo é visível a outros utilizadores do posto e fica nos registos das
+  ferramentas de distribuição (GPO, SCCM), por isso `/SQLPASSWORD` expõe a senha. Se
+  tiver de o usar, use uma conta SQL com o mínimo para escrever em `ExtensibilityConfiguration`
+  e mude a senha a seguir.
 - Em modo silencioso não há prompts: se o Primavera não for detetado nem houver
   `/DIR`, ou se o ERP estiver aberto, o setup aborta com exit code diferente de 0.
   Falhas só de registo não alteram o exit code (ficheiros instalados; aviso no log).

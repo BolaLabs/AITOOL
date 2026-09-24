@@ -312,7 +312,7 @@ The guardrails, in the order they matter:
 | **Untrusted content is spotlighted** | The system prompt pins a rule: text returned by tools (web pages, SQL results, ERP fields) is data to analyze, never instructions to follow. `web_search` results additionally carry `untrusted_content: true` plus an inline warning, and known injection phrasings are flagged to telemetry. |
 | **Restrained window automation** | A save, void or delete button pressed through the automation is refused unless the call carries the confirmation card's authorisation; the prompt additionally tells the assistant to fill fields, summarize and stop. One window interaction runs at a time. |
 | **Keys encrypted at rest** | API keys (providers and web search) live in a per-user DPAPI-encrypted store (`secrets.dat`), never in plaintext config. Web-search endpoints must be HTTPS and redirects are disabled, so a key cannot leak to a redirect target — the exception is a self-hosted SearXNG on loopback or a private range, which carries no key and accepts plain HTTP only when explicitly allowed. |
-| **Telemetry hygiene** | Logs are local (NLog, daily rotation). RELEASE builds send only error-level events to Sentry, with API keys, connection-string passwords and user paths redacted before sending. Web-search queries are never logged — they can embed names and tax ids. |
+| **Telemetry hygiene** | Logs are local (NLog, daily rotation). No Sentry DSN ships; if an operator configures one, RELEASE builds send error-level events, release-health sessions and a 10% trace sample, with API keys, connection-string passwords and user paths redacted before sending and no chat content. Web-search queries are never logged — they can embed names and tax ids. |
 | **Off switches** | Each tool toggles individually in settings; `ErpTools:Enabled` turns the whole tool layer off, leaving a plain chat. |
 
 What leaves the machine, what is stored in your database, and what bounds the assistant is
@@ -579,8 +579,9 @@ table export to Excel, e-mail attachments, and invoice intake.
 - Writes to the ERP happen only through its business objects: a preview, then a save the
   confirmation card authorises, with every outcome in `AI_AuditLog`; there are no direct
   writes to ERP core tables. No chat content is ever sent to Bola Labs as telemetry.
-- Chat history stays in your SQL Server. Logs are local; in RELEASE, error-level events may
-  go to Sentry with keys, connection strings and user paths redacted — see [SECURITY.md](SECURITY.md).
+- Chat history stays in your SQL Server. Logs are local. No Sentry DSN ships; if an operator
+  configures one, RELEASE builds send errors, release-health sessions and a 10% trace sample,
+  with keys, connection strings and user paths redacted — see [SECURITY.md](SECURITY.md).
 
 ---
 

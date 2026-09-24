@@ -28,7 +28,8 @@ Extensibility row.
 | The AI provider **you** configure | The conversation, the system prompt (which carries the company code, the user and the currently open ERP window) and every tool result — customer names, tax numbers, balances, sales figures, SQL result rows | Every turn | Configure a local OpenAI-compatible endpoint; nothing leaves the machine |
 | Web-search provider (Tavily / Brave / Serper / Exa / self-hosted SearXNG) | The search query text only | Only when `web_search` runs | Disable the tool, or leave the key unset |
 | VIES and NIF.pt | A tax number | Only when `enrich_entity` runs | Disable the tool |
-| Sentry | Error-level events, sanitized | **Only if an operator configures a DSN. No DSN ships.** | Leave `Sentry:Dsn` empty (the default) |
+| Sentry | Error-level events, release-health sessions and a 10% sample of performance traces, sanitized; no chat content | **Only if an operator configures a DSN. No DSN ships.** | Leave `Sentry:Dsn` empty (the default) |
+| Whoever the user sends the support bundle to | A .zip with an installation report, the last 7 days of local logs, user preferences without credentials and the last installer reports; keys, passwords, connection strings and `C:\Users\<name>` paths are redacted. Logs can still name customers, items or tables that tools looked up | Only when a user clicks **Exportar pacote de apoio** (settings → Diagnóstico) and sends the file | Do not export it, or review it before sending |
 | Bola Labs | Nothing, ever | — | — |
 
 What reaches the provider is what the assistant retrieved to answer that question — not a

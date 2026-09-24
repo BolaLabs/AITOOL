@@ -319,7 +319,7 @@ problema de funcionalidades. As salvaguardas, pela ordem em que importam:
 | **Conteúdo não confiável é sinalizado** | O system prompt fixa uma regra: texto devolvido por tools (páginas web, resultados SQL, campos do ERP) é dado para analisar, nunca instruções para seguir. Os resultados do `web_search` levam adicionalmente `untrusted_content: true` mais um aviso inline, e formulações de injeção conhecidas são sinalizadas para a telemetria. |
 | **Automação de janelas contida** | Um botão de gravar, anular ou eliminar carregado pela automação é recusado a menos que a chamada leve a autorização do cartão de confirmação; o prompt diz ainda ao assistente para preencher campos, resumir e parar. Corre uma interação de janela de cada vez. |
 | **Chaves cifradas em repouso** | As chaves de API (fornecedores e pesquisa web) vivem num cofre cifrado por utilizador com DPAPI (`secrets.dat`), nunca em configuração em texto simples. Os endpoints de pesquisa web têm de ser HTTPS e os redirects estão desativados, para que uma chave não possa fugir para um destino de redirect — a exceção é um SearXNG self-hosted em loopback ou numa gama privada, que não leva chave e só aceita HTTP simples quando explicitamente permitido. |
-| **Higiene de telemetria** | Os logs são locais (NLog, rotação diária). Builds RELEASE enviam apenas eventos de nível erro para o Sentry, com chaves de API, passwords de connection strings e caminhos de utilizador redigidos antes do envio. As pesquisas web nunca são registadas — podem conter nomes e NIFs. |
+| **Higiene de telemetria** | Os logs são locais (NLog, rotação diária). Nenhum DSN do Sentry é distribuído; se um operador configurar um, as builds RELEASE enviam eventos de nível erro, sessões de release health e uma amostra de 10% de traces, com chaves de API, passwords de connection strings e caminhos de utilizador redigidos antes do envio e sem conteúdo do chat. As pesquisas web nunca são registadas — podem conter nomes e NIFs. |
 | **Interruptores** | Cada tool liga e desliga individualmente nas definições; `ErpTools:Enabled` desliga a camada de tools inteira, deixando um chat simples. |
 
 O que sai da máquina, o que fica guardado na sua base de dados e o que limita o assistente
@@ -601,9 +601,10 @@ resposta, exportação de tabelas para Excel, anexos de e-mail e entrada de fatu
   depois a gravação que o cartão de confirmação autoriza, com cada resultado na
   `AI_AuditLog`; não há escritas diretas nas tabelas core do ERP. Nenhum conteúdo de chat é
   alguma vez enviado à Bola Labs como telemetria.
-- O histórico de chat fica no seu SQL Server. Os logs são locais; em RELEASE, eventos de
-  nível erro podem ir para o Sentry com chaves, connection strings e caminhos de utilizador
-  redigidos — veja [SECURITY.md](SECURITY.md).
+- O histórico de chat fica no seu SQL Server. Os logs são locais. Nenhum DSN do Sentry é
+  distribuído; se um operador configurar um, as builds RELEASE enviam erros, sessões de
+  release health e uma amostra de 10% de traces, com chaves, connection strings e caminhos de
+  utilizador redigidos — veja [SECURITY.md](SECURITY.md).
 
 ---
 
