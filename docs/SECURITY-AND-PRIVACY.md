@@ -28,6 +28,7 @@ Extensibility row.
 | The AI provider **you** configure | The conversation, the system prompt (which carries the company code, the user and the currently open ERP window) and every tool result — customer names, tax numbers, balances, sales figures, SQL result rows | Every turn | Configure a local OpenAI-compatible endpoint; nothing leaves the machine |
 | Web-search provider (Tavily / Brave / Serper / Exa / self-hosted SearXNG) | The search query text only | Only when `web_search` runs | Disable the tool, or leave the key unset |
 | VIES and NIF.pt | A tax number | Only when `enrich_entity` runs | Disable the tool |
+| Jev (TypeSafe AI, hosted in the United States), directly or through OpenRouter | Window titles, menu names, field and column labels, button captions and dialog texts of the ERP window being automated, plus the name the user gave to what they asked for. Never the values written into fields, never table data | **Only if a user switches on "Decisões rápidas (Jev)" in settings. Off by default**; the settings panel shows a data-protection notice next to the switch | Leave the switch off |
 | Sentry | Error-level events, release-health sessions and a 10% sample of performance traces, sanitized; no chat content | **Only if an operator configures a DSN. No DSN ships.** | Leave `Sentry:Dsn` empty (the default) |
 | Whoever the user sends the support bundle to | A .zip with an installation report, the last 7 days of local logs, user preferences without credentials and the last installer reports; keys, passwords, connection strings and `C:\Users\<name>` paths are redacted. Logs can still name customers, items or tables that tools looked up | Only when a user clicks **Exportar pacote de apoio** (settings → Diagnóstico) and sends the file | Do not export it, or review it before sending |
 | Bola Labs | Nothing, ever | — | — |
@@ -42,8 +43,9 @@ bulk export. There is no data-residency control beyond the provider's own.
 - **Drive the ERP client**: open functions by navigating the ribbon, open records in their
   editors, list and fill fields and grid cells in open windows — including the classic VB6
   editors, via UI Automation.
-- **Write**: create and update customer/supplier files, create sales documents, create CRM
-  sales opportunities — each one gated on the confirmation card described in section 4.
+- **Write**: create and update customer/supplier files, create articles, create sales
+  documents, create CRM sales opportunities, and, for administrators and technicians only,
+  extend or reactivate a sales series — each one gated on the confirmation card described in section 4.
   E-mail drafts are handed to the default mail client for review and never sent by the addon.
 - **Generate** the official Crystal report PDF of a document and open it.
 - **Search the web**, with results marked as untrusted content.
@@ -65,7 +67,8 @@ gated on a token the application issues while it draws the confirmation card, de
 detail below. Commit and destroy buttons in the window automation (gravar, guardar, anular,
 apagar, eliminar, remover, confirmar) go through the same gate — judged on the button
 the ERP resolved, not on the caption requested, because the resolver matches by substring.
-Inside a modal dialog only refusals and single-button acknowledgements pass without it. One window interaction at a time;
+Inside a modal dialog only refusals and single-button acknowledgements pass; every other
+answer is left to the user, in the ERP itself. One window interaction at a time;
 commits are single-flight. Web-search endpoints are HTTPS with redirects disabled. The chat
 page's CSP confines script, style, framing and form-action sources to the page's own origin,
 and every library is vendored with SRI. Two limits are worth stating plainly: inline script
@@ -136,7 +139,7 @@ the Windows profile. A non-persistent profile means the key is re-entered every 
 
 ## 6. What is stored in your database
 
-Three tables are created **automatically, in the ERP company database** (`PRI<CodEmp>`) on
+Four tables are created **automatically, in the ERP company database** (`PRI<CodEmp>`) on
 first use. There is no separate database and no migration step.
 
 | Table | Contents |
@@ -144,11 +147,13 @@ first use. There is no separate database and no migration step.
 | `AI_ChatSessions` | Session metadata per user and company |
 | `AI_ChatMessages` | Message content, plain text, including ERP data returned by tools |
 | `AI_AuditLog` | Timestamp, user, company, tool, summary, success flag, and the serialized tool arguments with key/token/secret/password values redacted, truncated at 2000 characters |
+| `AI_AutomationKnowledge` | What the window automation learned, shared by the workstations: the wording of a request, the window, the caption and control name of the field, column or ERP function it meant, the captions a user rejected, a use count, the date and the user who last changed it. Names and captions only, never the values typed |
 
 **There is no retention policy and no purge job.** Sessions can be deleted individually from
 the UI; nothing expires, and the data survives uninstalling the addon. For a deployment
 subject to GDPR retention or erasure obligations, that is a policy you have to add — a
-scheduled delete against these three tables is the whole of it.
+scheduled delete against the first three tables is the whole of it. `AI_AutomationKnowledge`
+holds no personal data beyond the user code of whoever last changed a row.
 
 Required permissions: whatever the ERP connection already has, plus `CREATE TABLE` on the
 database and `ALTER` on the `dbo` schema the first time the addon runs.
@@ -156,7 +161,9 @@ database and `ALTER` on the `dbo` schema the first time the addon runs.
 If your login is not allowed to create tables — and many are not — run
 [`sql/AI_Schema.sql`](../sql/AI_Schema.sql) once per company as `db_owner`. After that the
 addon needs no DDL rights at all: `SELECT, INSERT, UPDATE, DELETE` on `AI_ChatSessions` and
-`AI_ChatMessages`, and `SELECT, INSERT` on `AI_AuditLog`, which is never updated or deleted.
+`AI_ChatMessages`, `SELECT, INSERT` on `AI_AuditLog`, which is never updated or deleted, and
+`SELECT, INSERT, UPDATE` on `AI_AutomationKnowledge`. Without that last table nothing fails:
+each workstation keeps what it learned to itself.
 
 **A commit is refused when the audit trail cannot be reached.** Creating or changing a record
 in the ERP from the confirmation card checks first that the log can be written, and stops
@@ -166,10 +173,11 @@ left two warnings in a local file as the only trace.
 
 ### What the audit trail covers
 
-**Covered**: commits through the object model (create/update entity, create sales document,
-create sales opportunity),
-refused commits, failures, and the five mutating window actions (field write, grid write,
-button click, window close, close-all-windows, and their refusals).
+**Covered**: commits through the object model (create/update entity, create article, create
+sales document, create sales opportunity, update sales series),
+refused commits, failures, and the mutating window actions (field write, one or several;
+grid write, a cell or a row; button click, window close, close-all-windows, and their
+refusals).
 
 **Not covered**: previews and non-confirmed attempts, ribbon navigation
 (`open_erp_function`), reads, `print_document`, and `enrich_entity` (read-only).
@@ -203,6 +211,18 @@ uploaded. DEBUG builds log verbosely, including tool arguments; RELEASE builds l
 above (operations and ERP-write context, never the key).
 Web-search queries are never logged — they can embed names and tax ids.
 
+The same folder holds `automation-memory.json`: what the window automation learned, as plain
+JSON, with a backup of the previous version beside it. It records which field, grid column
+or ERP function a wording ended up meaning ("plafond" is "Limite" on the client record) and
+which ones the user rejected. Names and captions only; the values typed are never written
+to it. It can be read, edited or deleted. Settings → Avançado empties it on that workstation
+and, through the shared table, on the others; that is refused unless the user is an
+administrator, super administrator or technician in the ERP.
+
+The knowledge the addon ships with is inside the addon and, as text, in
+`Knowledge\automation-knowledge.json` in the extension folder. That file is the one an
+administrator edits. The ERP checks the integrity of the addon's DLL, not of this file.
+
 ## 8. Prompt injection
 
 ERP fields, SQL results and web pages are text an attacker can influence, and all three reach
@@ -220,8 +240,9 @@ audit trail. See section 4.
 ## 9. Network
 
 Outbound, over TLS 443, to whichever of these you enable: your AI provider's API host, your
-web-search provider, `ec.europa.eu` (VIES) and `nif.pt` if `enrich_entity` is used, and
-your Sentry host if you configure a DSN. Nothing else. There is no inbound listener.
+web-search provider, `ec.europa.eu` (VIES) and `nif.pt` if `enrich_entity` is used,
+`api.typesafe.ai` or `openrouter.ai` if fast decisions (Jev) are switched on, and your Sentry
+host if you configure a DSN. Nothing else. There is no inbound listener.
 
 The chat UI is served from a WebView2 virtual host (`https://aitool.local`) that never
 touches the network.
@@ -233,10 +254,10 @@ touches the network.
       confirmation card a person has to click)
 - [ ] Decide whether `run_query` is enabled, and whether to point the addon at a read-only
       SQL login
-- [ ] Accept that three tables are created in the company database, with no retention policy
+- [ ] Accept that four tables are created in the company database, with no retention policy
       (or schedule your own purge)
 - [ ] Decide the Sentry DSN (default: none)
-- [ ] Know the removal path: delete the folder, remove the Extensibility row; the three
+- [ ] Know the removal path: delete the folder, remove the Extensibility row; the four
       tables survive by design
 - [ ] Note that the installer is not code-signed today — SmartScreen will warn, and the
       SHA256 published with each release is how you verify the download

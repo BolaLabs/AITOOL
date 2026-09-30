@@ -27,7 +27,7 @@ card you click, and every write in an audit trail in your own database.
 | I want to... | Go to |
 | --- | --- |
 | Understand what this is, without the engineering | [In plain terms](#in-plain-terms) |
-| See what the assistant can actually do | [What it does](#what-it-does) · [The 24 tools](#the-24-tools) |
+| See what the assistant can actually do | [What it does](#what-it-does) · [The 26 tools](#the-26-tools) |
 | Reach a screen I cannot find in the menus | [Find any screen in plain language](#find-any-screen-in-plain-language) |
 | Decide whether it is safe to put near my ERP | [Security and trust](#security-and-trust) · [docs/SECURITY-AND-PRIVACY.md](docs/SECURITY-AND-PRIVACY.md) |
 | Install it, on one PC or on a whole network | [Install once, every workstation gets it](#install-once-every-workstation-gets-it) · [Install (end users)](#install-end-users) |
@@ -104,7 +104,7 @@ Nothing in it is a mock-up.
 AITOOL is a WinForms extension (.NET Framework 4.8) that embeds a chat assistant into the
 Primavera v10 (SG100) client via WebView2. The assistant talks to the model of your choice —
 OpenAI, OpenRouter, native Anthropic, or any OpenAI-compatible endpoint (LM Studio is one) —
-and acts on the ERP through 24 auto-discovered tools:
+and acts on the ERP through 26 auto-discovered tools:
 
 - **Reads real ERP data.** Pending items with the ERP's own query, sales analysis by
   period, client and article, sales and purchase counts per year via `run_query`, current-account balances with aging, stock per warehouse, document search,
@@ -134,8 +134,10 @@ and acts on the ERP through 24 auto-discovered tools:
   apagar, eliminar, remover, confirmar) is refused unless the call carries the authorisation
   the card issues. The check runs on the button the ERP actually resolved, not on the caption
   that was asked for. Inside a modal dialog the rule inverts: only a refusal (Cancelar, Não)
-  and single-button acknowledgements pass, so answering "Sim" to "Save changes?" needs the
-  same authorisation. Every field write, grid write, button click and window close through
+  and single-button acknowledgements pass; any other answer, "Sim" to "Save changes?"
+  included, is given by the user in the ERP itself, because a dialog the ERP is waiting on
+  blocks the window the chat lives in. A click is reported as a click: the card says
+  "Gravado" only for what the ERP confirmed. Every field write, grid write, button click and window close through
   the automation is recorded in `AI_AuditLog` with the user, company, tool, arguments and
   outcome. Ribbon navigation is not audited, and if the audit insert itself fails the ERP
   write still stands (the failure is logged locally). See [SECURITY.md](SECURITY.md) for
@@ -150,6 +152,21 @@ and acts on the ERP through 24 auto-discovered tools:
 - **Web search.** Five providers — Brave, Exa, Serper, Tavily or a self-hosted SearXNG —
   with your own key, for leads and company data; results are explicitly marked as
   untrusted content.
+- **Fills whole screens in one step.** `set_fields` writes every field of a record,
+  including the ones on other tabs, and `set_grid_row` a whole document line in the ERP's own
+  grid, reporting field by field where each value landed. A window is read in under half a
+  second. With the optional fast decision model (Jev, off by default) the names that do not
+  match — "NIF" for "Contribuinte", "plafond" for "Limite", "editor de documentos de venda"
+  for a ribbon path — are resolved in about 0.3 s, ERP dialogs are classified, and buttons
+  get a second opinion that can only ask for more confirmation.
+- **Learns your wording, for every workstation.** The addon ships knowing what common
+  requests mean in the ERP windows, in a text file an administrator can edit once for
+  everyone. Each workstation adds what it learns — from the values the ERP kept, from the
+  correction that followed a request it could not place, and from your answer on the card
+  ("Era isto" / "Não era isto") — and shares it with the others through the company
+  database. What you reject is not proposed again. Names of fields, columns and functions
+  only, never the values; and no file is indispensable: a missing or damaged one is
+  rebuilt.
 - **Discovers instead of guessing.** Document types, series (with validity) and article
   prices come from the ERP configuration through dedicated lookup tools.
 - **Chat that behaves like a product.** Streaming with phase indicators and a cancel that
@@ -162,7 +179,7 @@ and acts on the ERP through 24 auto-discovered tools:
   `Ctrl+B` sessions, `Ctrl+,` settings); pop-out window; export to Markdown, HTML or plain
   text. The assistant states that it is an AI system, as AI Act Article 50 requires.
 
-### The 24 tools
+### The 26 tools
 
 | Tool | What it does |
 | --- | --- |
@@ -185,6 +202,8 @@ and acts on the ERP through 24 auto-discovered tools:
 | `create_entity` | Creates a customer/supplier file via BSO — preview first, saved from the confirmation card |
 | `create_sales_document` | Creates a sales document via BSO — preview with real totals, saved from the confirmation card |
 | `update_entity` | Updates fields of an existing customer/supplier file — preview first, saved from the confirmation card |
+| `create_article` | Creates an article (goods or service) via BSO, with unit, VAT code and price — preview first, saved from the confirmation card; the VAT code is never guessed |
+| `update_sales_series` | Extends or reactivates a sales series when the ERP refuses a document for a series that ran out; administrators and technicians only — preview first, applied from the confirmation card |
 | `create_opportunity` | Creates a CRM sales opportunity for an existing customer — preview first, saved from the confirmation card |
 | `draft_email` | Prepares an e-mail draft (to, subject, body) shown as a card; the user opens it in their own mail client, nothing is sent |
 | `use_skill` | Loads the instructions of a skill — a workflow written in Markdown by whoever uses the ERP; see [docs/SKILLS.md](docs/SKILLS.md) |
@@ -305,7 +324,7 @@ The guardrails, in the order they matter:
 
 | Guardrail | How it works |
 | --- | --- |
-| **Writes are gated on a confirmation card** | `create_entity`, `update_entity`, `create_sales_document`, `create_opportunity` and any commit button pressed through `interact_erp_window` are previewed first: the ERP validates the draft and returns the fields and, for documents, the totals it computed. The application renders that preview as a card and, while doing so, issues a single-use authorisation token — valid for 15 minutes and bound to the exact arguments previewed. The commit runs only with that token, which is produced by the user's click on the card and is never shown to the model. A `confirm=true` call without it is refused and recorded in `AI_AuditLog` as a refusal; typing "sim" saves nothing. Saves are single-flight — a second concurrent save is refused. What this is not: a database boundary. It bounds what the model can trigger, not what someone with the SQL connection can do. |
+| **Writes are gated on a confirmation card** | `create_entity`, `create_article`, `update_entity`, `update_sales_series`, `create_sales_document`, `create_opportunity` and any commit button pressed through `interact_erp_window` are previewed first: the ERP validates the draft and returns the fields and, for documents, the totals it computed. The application renders that preview as a card and, while doing so, issues a single-use authorisation token — valid for 15 minutes and bound to the exact arguments previewed. The commit runs only with that token, which is produced by the user's click on the card and is never shown to the model. A `confirm=true` call without it is refused and recorded in `AI_AuditLog` as a refusal; typing "sim" saves nothing. Saves are single-flight — a second concurrent save is refused. What this is not: a database boundary. It bounds what the model can trigger, not what someone with the SQL connection can do. |
 | **Per-user visibility** | Conversations and audit entries are scoped to the ERP user who created them. ERP administrators, super administrators and technicians see a Supervisor badge, `/auditoria todos` and a "Todos os utilizadores" switch on the conversation list; another user's conversation opens read-only, and only its owner can rename or delete it. It is an application control decided in C# from the ERP profile, not a database permission. |
 | **Writes go through the ERP's business objects** | Records are created via the Primavera BSO object model, so every ERP validation runs and document numbers are assigned by the ERP. There are no direct writes to ERP core tables. `run_query` is read-only by application guard, not by database permission — it runs on the ERP's own connection, so companies wanting a second barrier should point the addon at a read-only SQL login. |
 | **Guarded SQL** | `run_query` accepts only `SELECT`/`WITH`: a blocklist rejects write/DDL/system keywords (`INSERT`, `DROP`, `EXEC`, `xp_*`, `OPENROWSET`, …) after stripping comments, brackets and Unicode homoglyphs to prevent bypasses; statement stacking (`;`) is refused; row counts are bounded server-side. |
@@ -499,9 +518,10 @@ overrides. The variables the code reads are listed family by family in
 | `Assistant:Temperature` | 0-2; gated off for reasoning models | `0.7` |
 | `Assistant:MaxToolIterations` | Tool-call rounds per turn (1-15) | `15` |
 | `Assistant:StreamingEnabled` | Server-sent streaming | on |
-| Per-tool toggles | Enable/disable each of the 24 tools (`Assistant:DisabledTools`) | all on |
+| Per-tool toggles | Enable/disable each of the 26 tools (`Assistant:DisabledTools`) | all on |
 | `ErpTools:Enabled` | Kill switch for the entire tool layer | on |
 | Web search | Providers (`tavily`, `brave`, `serper`, `exa`, self-hosted `searxng`) + keys in the encrypted store; fan-out or fallback mode | `tavily` |
+| Fast decisions (Jev) | `Jev:Enabled`, `Jev:Route` (`openrouter` uses the OpenRouter key, `typesafe` its own key in the encrypted store), `Jev:MinConfidence` (0.50-0.95) | off, `openrouter`, `0.60` |
 | Custom system prompt | Extra instructions appended to the built-in prompt | empty |
 | Theme | Light / dark / system, toggle in the chat header | system |
 | Export | Folder, default format (`md`/`html`/`txt`), auto-open | `md` |
@@ -547,7 +567,7 @@ as a pluggable layer. A related step on the same road is speaking
 [MCP](https://modelcontextprotocol.io) (Model Context Protocol): the current MCP spec's
 Streamable HTTP transport supports stateless servers, which fits this addon's in-process,
 per-turn model — an MCP client in AITOOL would let the assistant consume third-party tool
-servers beyond the built-in 24 tools. See [ROADMAP.md](ROADMAP.md) for where that sits
+servers beyond the built-in 26 tools. See [ROADMAP.md](ROADMAP.md) for where that sits
 relative to everything else.
 
 ---

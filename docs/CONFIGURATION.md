@@ -93,12 +93,13 @@ event payloads are sanitized by `TelemetryInitializer`.
 
 | Family | Variables | Setting overridden | Default |
 | --- | --- | --- | --- |
-| Provider | `{OPENAI,OPENROUTER,ANTHROPIC,LMSTUDIO}_API_KEY` (`AI_API_KEY` for a custom id), `{PREFIX}_BASE_URL`, `{PREFIX}_MODEL`, `{PREFIX}_REASONING_EFFORT`, `AITOOL_AI_PROVIDER` | `Provider:{id}:ApiKey` / `BaseUrl` / `Model` / `ReasoningEffort`, `Provider:Active` | preset |
+| Provider | `{OPENAI,OPENROUTER,ANTHROPIC,LMSTUDIO,JEV}_API_KEY` (`AI_API_KEY` for a custom id), `{PREFIX}_BASE_URL`, `{PREFIX}_MODEL`, `{PREFIX}_REASONING_EFFORT`, `AITOOL_AI_PROVIDER` | `Provider:{id}:ApiKey` / `BaseUrl` / `Model` / `ReasoningEffort`, `Provider:Active` | preset |
 | HTTP | `OPENAI_TIMEOUT`, `OPENAI_STREAMING` | `OpenAI:TimeoutSeconds`, `OpenAI:StreamingEnabled` | `100`, `true` |
 | Web search | `AITOOL_WEBSEARCH_MODE`, `AITOOL_WEBSEARCH_PROVIDERS` (legacy singular `AITOOL_WEBSEARCH_PROVIDER`), `AITOOL_WEBSEARCH_TIMEOUT` (ms), `AITOOL_WEBSEARCH_NATIVE_MAXUSES` | `Assistant:WebSearch:Mode` / `Providers` / `TimeoutMs` / `Native:MaxUses` | `fanout`, `tavily`, `15000`, `5` |
 | Web search endpoints | `AITOOL_WEBSEARCH_{BRAVE,EXA,SERPER,TAVILY}_ENDPOINT` | `Assistant:WebSearch:{Brave,Exa,Serper,Tavily}Endpoint` | the provider's public API URL |
 | SearXNG | `AITOOL_WEBSEARCH_SEARXNG_BASEURL`, `AITOOL_WEBSEARCH_SEARXNG_ALLOWINSECURE` | `Assistant:WebSearch:Searxng:BaseUrl` / `AllowInsecure` | unset, `false` |
 | Enrichment (`enrich_entity`) | `AITOOL_ENRICHMENT_VIES_ENABLED`, `AITOOL_ENRICHMENT_NIFPT_ENABLED`, `AITOOL_ENRICHMENT_TIMEOUT` (ms), `AITOOL_ENRICHMENT_CACHE_TTL_MINUTES`, `AITOOL_ENRICHMENT_CODE_RULE`, `AITOOL_ENRICHMENT_STRICT_ERP_CHECK` | `Assistant:Enrichment:Vies:Enabled` / `NifPt:Enabled` / `TimeoutMs` / `CacheTtlMinutes` / `CodeRule` / `StrictErpCheck` | `true`, `true`, `4000`, `1440`, `hybrid`, `false` |
+| Fast decisions (Jev) | `AITOOL_JEV_ENABLED`, `AITOOL_JEV_ROUTE`, `AITOOL_JEV_MIN_CONFIDENCE`, `AITOOL_JEV_TIMEOUT_MS`, `AITOOL_JEV_MODEL`, `AITOOL_JEV_BASE_URL` | `Jev:Enabled` / `Route` / `MinConfidence` / `TimeoutMs` / `Model` / `BaseUrl` | `false`, `openrouter`, `0.6` (0.5-0.95), `2500` (500-10000), `jev-latest`, `https://api.typesafe.ai/v1/systemone` |
 | SQL | `AITOOL_SQL_ENCRYPT`, `AITOOL_SQL_TRUST_SERVER_CERT`, `AITOOL_SQL_TIMEOUT` | `Sql:*` (see above) | as above |
 | Sentry | `SENTRY_DSN`, `SENTRY_ENVIRONMENT`, `SENTRY_DEBUG_MODE` | `Sentry:*` (see above) | unset |
 | Tools, environment | `AITOOL_ERP_TOOLS_ENABLED`, `AITOOL_ENVIRONMENT` | `ErpTools:Enabled`, the environment name | `true`, by build |

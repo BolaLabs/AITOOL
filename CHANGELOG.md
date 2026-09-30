@@ -8,6 +8,183 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.14.0] - 2026-09-30
+
+### Added
+
+- `interact_erp_window` fills a whole screen in one call: `set_fields` writes every field of
+  a record in the order given and `set_grid_row` a whole document line (article first). The
+  result says, field by field, which ERP field each value went to and whether the ERP kept
+  it; a dialog that opens midway stops the batch instead of typing into a blocked window.
+  One tool call replaces one model round trip per field, and the chat shows the outcome as
+  a card ("3 de 3 campos", one row per field).
+- Fields on other tabs. A record is read with every tab it has (119 fields on the client
+  record, 104 of them outside the tab in view) and the tab is selected before the value is
+  written: "NIF" reaches Dados Fiscais and "plafond" reaches Crédito without the user
+  switching tabs. A field the ERP keeps closed comes back with the options beside it that
+  open it ("Limite" with "Limite em valor").
+- Document lines in the ERP's own grids. The line grids of the editors are FarPoint
+  spreads; `set_grid_row`, `set_grid_cell` and `list_grid` now read and write them the way
+  a user does (the cell enters edit mode, takes the text and is left), so the article
+  lookup, the price and the totals run as if typed.
+- The assistant learns the windows, and what it learns reaches every workstation.
+  - **Shipped knowledge.** The addon comes with what a request means in the windows it was
+    measured on ("plafond" is "Limite" on the client record, "editor de documentos de venda"
+    is `Vendas → Documentos`). It is inside the addon, and the setup also puts it as text in
+    `Knowledge\automation-knowledge.json` in the extension folder, where an administrator
+    edits it once for every workstation: add an entry, switch a shipped one off, or delete
+    the file to get it back as shipped. Edits are picked up without restarting the ERP, an
+    upgrade never overwrites an edited file, and an unedited one follows the new version.
+  - **Learned knowledge.** Each workstation keeps what it learned in
+    `%LocalAppData%\Cegid\Extensions\AITOOL\automation-memory.json` and shares it with the
+    others through the company database (`AI_AutomationKnowledge`), the one place every
+    workstation of a client-server installation reaches. The exchange runs behind the turn;
+    a database that is slow, unreachable or without the table leaves the workstation
+    working with what it has.
+  - **It learns from three things:** what the ERP kept (a name resolved by Jev whose value
+    stayed in the field); corrections (a request that found no field, followed by the same
+    value written under the field's real name); and the user, on the cards, with "Era isto"
+    and "Não era isto"; a match that came with the addon is labelled "de origem", one
+    the installation learned "aprendido". What the user rejects is never proposed again for that wording and
+    never comes back by itself; only "Era isto" takes a rejection back. A value the ERP
+    refuses says nothing about the field, so nothing is unlearned there.
+  - **No file is indispensable.** A knowledge file that is missing, locked, cut short or
+    full of garbage is read as far as it can be, copied beside itself as `.corrupt` and
+    rebuilt; the workstation memory keeps a backup of the last good version and is written
+    through a temporary file, so a crash or a full disk leaves the previous one whole; two
+    ERP processes writing at once keep what both learned.
+  Names and captions only, never what was typed. Settings → Avançado shows the counts,
+  where the files are and whether the knowledge is being shared. Forgetting what was
+  learned reaches every workstation of the company, so it is reserved to the ERP
+  administrator, super administrator or technician, asks twice (the second click within
+  ten seconds), and is refused by the
+  addon itself for anyone else; a single wrong match is corrected by any user with
+  "Não era isto".
+- `open_erp_function` finds the function by the user's wording: memory first; then, when
+  the same function sits in two places of the ribbon (`Compras → Fornecedores` and
+  `Geral → Recursos → Tabelas → Terceiros → Fornecedores`), the shortest way; then Jev
+  against the whole ERP catalogue (865 entries here, asked in slices at the same time, the
+  best of each slice settled in a last question with one option per function). When nothing
+  is sure enough the model gets the dozen best candidates instead of the whole catalogue.
+  What Jev or the model chose is a proposal: the card asks, and it becomes memory when the
+  user says it was right or when the ERP keeps a value in the window it opened.
+- The dialogs the ERP raises around a save are known by name: "Movimentos para a
+  Contabilidade e Bancos", "O documento da contabilidade não está correto" and "Deseja
+  efetuar a sua correção?" come back with what each answer does, so the assistant can tell
+  the user that "Não" saves the document and leaves the entry as a draft.
+- Two more cards on the welcome screen: filling a window and creating with confirmation.
+- `interact_erp_window` `open_list` opens the ERP list of a code field, the F4 of that
+  field. "A lista de artigos" is a list, not the Artigos window: `search_entities` now
+  lists without a search term, and the record window opens only when asked for.
+- `create_article`: creates an article, goods or service, through the ERP object model,
+  in the same two steps as the other writers (preview, then the confirmation card). Every
+  unit of the article is the base one, so a document line is not refused for a missing
+  conversion. The VAT code is never guessed: without one the tool returns the company's
+  codes and rates. An optional sale price goes to PVP 1. It replaces filling the Artigos
+  window field by field, where the ERP refused the save for a VAT code and a unit the
+  assistant had not written.
+- `update_sales_series`: extends or reactivates a sales series, for administrators and
+  technicians, with the same preview and card as the other writers. Series carry an end
+  date and most installations let them run out at the turn of the year; until now every
+  document of that type was refused until somebody found the configuration screen. The
+  assistant names the series that ran out and offers to extend it. When the old year series
+  are still marked as default and would overlap, the extended series is kept and drops the
+  default mark, and the card says so.
+- Fast decisions with Jev (TypeSafe AI), off by default, in settings → Avançado. Through
+  OpenRouter it uses the OpenRouter key already configured; the direct TypeSafe route takes
+  its own key, stored encrypted. When on:
+  - labels that do not match by name ("NIF" → Contribuinte, "plafond" → Limite de Crédito)
+    are resolved against the visible fields or grid columns, all of them in one parallel
+    call of about 0.3 s, above an adjustable minimum confidence (0.50-0.95, default 0.60);
+    below it the result lists the most likely candidates instead of guessing;
+  - an ERP dialog the automation runs into comes back classified (information, save prompt,
+    destructive confirmation, error, open session, licence) with the safe next step;
+  - every button click without confirmation gets a second opinion that can only send it to
+    the confirmation card, never let it through.
+  Only window titles, menu names, labels, captions and dialog texts are sent, never field
+  values or table data; the settings panel shows the data-protection notice next to the switch, and
+  "Testar Jev" checks the key and the route. `scripts/checks/Test-JevDecisions.ps1` covers
+  the service offline and, with `-Live`, against both routes.
+
+### Changed
+
+- Reading the fields of an ERP window no longer goes through UI Automation. The editors are
+  WinForms trees where the editable control sits inside composites and its caption is a
+  label beside the composite; walking the tree takes 0.4 s where the UIA enrichment took
+  5 to 17 s and came back without captions. UIA stays for windows with fewer than four
+  managed fields.
+- A customer or supplier created through the object model had no place of operation, and
+  the accounting integration of its first purchase invoice fell on the aggregate account
+  ("Conta 221 não é de movimento"). The file now carries the same value the editor gives.
+- A customer or supplier created without a payment condition gets the one most files of
+  that kind already have, named in the preview; `create_sales_document` takes
+  `payment_terms` and, for a customer whose file has none, does the same instead of
+  stopping at "A condição de pagamento não está preenchida".
+- A sales document the ERP refuses for its type or series (a series of manual copies, one
+  with documents left unsigned, one out of date) comes back with the alternatives: the
+  other valid series and the types of the same nature, each already put to the ERP as a
+  preview, so the assistant proposes what the ERP does accept instead of stopping. What
+  reverses a sale (returns, credit and debit notes) is never offered in place of one.
+- What Jev was barely sure of is written but not remembered: under 0.80 the match stays a
+  proposal on the card ("Era este" / "Não era este") instead of becoming knowledge for
+  every workstation.
+- `open_list` looks for the field among the code fields and uses what is known about the
+  wording first: "cliente" in the sales editor opens the list of Entidade, not the discount
+  box whose control happens to be named DescCliente.
+- The totals row of the pending items card added up document numbers ("TOTAL 2,00" under
+  N.º Doc.); only amounts are totalled.
+- A list asked for without a search term starts with the records that have a name, not
+  with the blank ones.
+- A field name that matches the same caption on several tabs takes the one on the tab in
+  view ("Entidade" in the sales editor) instead of asking.
+- A compile-only build (`-p:OutDir=...`) with the ERP open no longer empties the shadow copy
+  the running ERP is using.
+- After a turn that opened or drove an ERP window, the keyboard returns to the chat
+  composer (docked chat only), so the next thing typed goes to the assistant and not to the
+  field the ERP focused.
+
+### Fixed
+
+- Dates written to masked boxes (the filters of Consulta de Pendentes) came out as
+  `20-15-1900`; they now go in as digits in the order of the mask, and `yyyy-MM-dd` sent to
+  a plain text box is shown the way the workstation shows dates.
+- The click gate let through buttons that post or convert without saying "gravar":
+  Estornar, Lançar, Emitir, Processar, Liquidar, Converter, Integrar, Aprovar, Transformar,
+  Registar, Contabilizar, Finalizar, Encerrar, and "Fechar" followed by Período, Caixa,
+  Exercício, Mês, Ano, Dia or Turno. They now go through the confirmation card; "Fechar" on
+  its own still closes windows.
+- The confirmation card of a button click said "Gravado" as soon as the click went out,
+  even when the ERP had answered with a dialog and nothing was saved. A click now ends as
+  "Clique feito" or, when the ERP opened a dialog or is still working, "Falta responder no
+  ERP", with the name of the dialog; "Gravado" is kept for writes the ERP confirmed. A
+  click that commits is watched for the dialog the ERP may raise after validating, and the
+  assistant says "cliquei em Gravar", not "ficou gravado", until it has seen the record.
+- Answers to an ERP dialog other than a refusal are no longer offered on a card: a dialog
+  the ERP is waiting on blocks the window the chat lives in, so the card could not be
+  clicked. The assistant says what the dialog asks and the user answers it in the ERP.
+- A document line with an article that does not exist made the ERP raise its own "Ocorreu
+  um erro inesperado" dialog, which blocked the chat until it was closed by hand. Articles
+  are checked before any line is added.
+- `get_sales_document_types` listed 17 of the 22 types of the demo company: the ERP list
+  it read leaves out quotes and orders. It now reads the table of types.
+- Reading the dialog the ERP opens after a click took 17 s through UI Automation and lost
+  a worker. Managed dialogs are read from their control tree and system message boxes from
+  their child windows, in milliseconds.
+- `create_sales_document` was refused with "a data do documento é posterior à data de
+  início do transporte" on series that carry a loading date: the loading date is now never
+  before the document date.
+- `get_sales_document_types` with the filter "orcamento" found nothing, because the
+  description is "Orçamento": the filter ignores accents and also matches the nature.
+- The list of articles in the chat showed the description blank: the card read a column
+  name with an accent that the query does not have.
+- An answer that says "o ERP recusou" in a turn where nothing was put to the ERP now
+  carries a note saying the ERP was not consulted, the same way an unbacked "gravei" does.
+- `set_field` on its own returned an empty `message` to the model; it now returns the
+  outcome and the value the ERP kept.
+- In a window with several grids (the sales editor shows the totals grid first) the grid
+  tools took the first one and never found "Artigo". The column now decides the grid, and
+  `list_grid` reports the editable, widest one.
+
 ## [2.13.1] - 2026-09-24
 
 ### Fixed

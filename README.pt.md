@@ -28,7 +28,7 @@ sua própria base de dados.
 | Quero... | Ir para |
 | --- | --- |
 | Perceber o que isto é, sem a engenharia | [Em termos simples](#em-termos-simples) |
-| Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 24 tools](#as-24-tools) |
+| Ver o que o assistente consegue mesmo fazer | [O que faz](#o-que-faz) · [As 26 tools](#as-26-tools) |
 | Chegar a um ecrã que não encontro nos menus | [Encontre qualquer ecrã por palavras suas](#encontre-qualquer-ecrã-por-palavras-suas) |
 | Decidir se é seguro pô-lo perto do meu ERP | [Segurança e confiança](#segurança-e-confiança) · [docs/SECURITY-AND-PRIVACY.pt.md](docs/SECURITY-AND-PRIVACY.pt.md) |
 | Instalá-lo, num PC ou numa rede inteira | [Instale uma vez, todos os postos o recebem](#instale-uma-vez-todos-os-postos-o-recebem) · [Instalação (utilizadores finais)](#instalação-utilizadores-finais) |
@@ -108,7 +108,7 @@ Nada nele é uma maquete.
 O AITOOL é uma extensão WinForms (.NET Framework 4.8) que embute um assistente de chat no
 cliente Primavera v10 (SG100) via WebView2. O assistente fala com o modelo à sua escolha —
 OpenAI, OpenRouter, Anthropic nativo ou qualquer endpoint compatível com OpenAI (o LM
-Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas automaticamente:
+Studio é um deles) — e atua sobre o ERP através de 26 tools descobertas automaticamente:
 
 - **Lê dados reais do ERP.** Pendentes com a consulta do próprio ERP, análise de vendas por
   período, cliente e artigo, contagens de vendas e compras por ano via `run_query`, saldos de conta corrente com antiguidade, stock por armazém, pesquisa de
@@ -138,8 +138,10 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
   apagar, eliminar, remover, confirmar) é recusado a menos que a chamada traga a autorização
   que o cartão emite. A verificação corre sobre o botão que o ERP resolveu, não
   sobre a legenda pedida. Dentro de um diálogo modal a regra inverte-se: só passam recusas
-  (Cancelar, Não) e diálogos de um só botão, pelo que responder "Sim" a "Gravar
-  alterações?" exige a mesma autorização. Cada escrita de campo, escrita em grelha, clique
+  (Cancelar, Não) e diálogos de um só botão; qualquer outra resposta, incluindo "Sim" a
+  "Gravar alterações?", é dada pelo utilizador no próprio ERP, porque um diálogo de que o
+  ERP está à espera bloqueia a janela onde o chat vive. Um clique é comunicado como um
+  clique: o cartão só diz "Gravado" para o que o ERP confirmou. Cada escrita de campo, escrita em grelha, clique
   de botão e fecho de janela através da automação fica registado na `AI_AuditLog` com o
   utilizador, a empresa, a tool, os argumentos e o resultado. A navegação no ribbon não é
   auditada, e se o próprio insert de auditoria falhar a escrita no ERP mantém-se (a falha
@@ -155,6 +157,22 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
 - **Pesquisa web.** Cinco fornecedores — Brave, Exa, Serper, Tavily ou um SearXNG
   self-hosted — com a sua própria chave, para leads e dados de empresas; os resultados são
   explicitamente marcados como conteúdo não confiável.
+- **Preenche ecrãs inteiros num só passo.** `set_fields` escreve todos os campos de uma
+  ficha, incluindo os dos outros separadores, e `set_grid_row` uma linha inteira de
+  documento na própria grelha do ERP, e diz campo a campo onde ficou cada valor. Uma janela
+  é lida em menos de meio segundo. Com o modelo opcional de decisões rápidas (Jev,
+  desligado por omissão), os nomes que não batem — "NIF" para "Contribuinte", "plafond"
+  para "Limite", "editor de documentos de venda" para um caminho do friso — são resolvidos
+  em cerca de 0,3 s, os diálogos do ERP são classificados e os botões têm uma segunda
+  opinião que só pode pedir mais confirmação.
+- **Aprende a sua forma de pedir, para todos os postos.** O addon já traz de origem o que
+  os pedidos mais comuns querem dizer nas janelas do ERP, num ficheiro de texto que um
+  administrador edita uma vez para todos. Cada posto acrescenta o que aprende — com os
+  valores que o ERP aceitou, com a correção que se seguiu a um pedido que não soube
+  colocar, e com a sua resposta no cartão ("Era isto" / "Não era isto") — e partilha-o com
+  os outros pela base de dados da empresa. O que rejeitar não volta a ser proposto. Só
+  nomes de campos, colunas e funcionalidades, nunca os valores; e nenhum ficheiro é
+  indispensável: um que falte ou esteja danificado é refeito.
 - **Descobre em vez de adivinhar.** Tipos de documento, séries (com validade) e preços de
   artigo vêm da configuração do ERP através de tools de consulta dedicadas.
 - **Um chat que se comporta como um produto.** Streaming com indicadores de fase e um
@@ -168,7 +186,7 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
   `Ctrl+,` definições); janela destacável; exportação para Markdown, HTML ou texto simples.
   O assistente declara que é um sistema de IA, como exige o artigo 50.º do AI Act.
 
-### As 24 tools
+### As 26 tools
 
 | Tool | O que faz |
 | --- | --- |
@@ -191,6 +209,8 @@ Studio é um deles) — e atua sobre o ERP através de 24 tools descobertas auto
 | `create_entity` | Cria uma ficha de cliente/fornecedor via BSO — preview primeiro, gravação a partir do cartão de confirmação |
 | `create_sales_document` | Cria um documento de venda via BSO — preview com totais reais, gravação a partir do cartão de confirmação |
 | `update_entity` | Atualiza campos de uma ficha de cliente/fornecedor existente — preview primeiro, gravação a partir do cartão de confirmação |
+| `create_article` | Cria um artigo (mercadoria ou serviço) via BSO, com unidade, código de IVA e preço — preview primeiro, gravação a partir do cartão de confirmação; o código de IVA nunca é adivinhado |
+| `update_sales_series` | Prolonga ou reativa uma série de vendas quando o ERP recusa um documento por a série ter acabado; só administradores e técnicos — preview primeiro, aplicada a partir do cartão de confirmação |
 | `create_opportunity` | Cria uma oportunidade de venda no CRM para um cliente existente — preview primeiro, gravação a partir do cartão de confirmação |
 | `draft_email` | Prepara um rascunho de e-mail (para, assunto, texto) num cartão; o utilizador abre-o no seu programa de correio, nada é enviado |
 | `use_skill` | Carrega as instruções de uma skill — um fluxo de trabalho escrito em Markdown por quem usa o ERP; ver [docs/SKILLS.pt.md](docs/SKILLS.pt.md) |
@@ -312,7 +332,7 @@ problema de funcionalidades. As salvaguardas, pela ordem em que importam:
 
 | Salvaguarda | Como funciona |
 | --- | --- |
-| **As escritas passam por um cartão de confirmação** | `create_entity`, `update_entity`, `create_sales_document`, `create_opportunity` e qualquer botão de gravação premido por `interact_erp_window` são pré-visualizados primeiro: o ERP valida o rascunho e devolve os campos e, nos documentos, os totais que calculou. A aplicação desenha essa pré-visualização como um cartão e, ao fazê-lo, emite uma autorização de uso único — válida 15 minutos e ligada aos argumentos exatos pré-visualizados. A gravação só corre com essa autorização, que nasce do clique do utilizador no cartão e nunca é mostrada ao modelo. Uma chamada com `confirm=true` sem ela é recusada e registada na `AI_AuditLog` como recusa; escrever "sim" não grava nada. As gravações são single-flight — uma segunda gravação concorrente é recusada. O que isto não é: uma fronteira de base de dados. Limita o que o modelo pode desencadear, não o que alguém com a ligação SQL consegue fazer. |
+| **As escritas passam por um cartão de confirmação** | `create_entity`, `create_article`, `update_entity`, `update_sales_series`, `create_sales_document`, `create_opportunity` e qualquer botão de gravação premido por `interact_erp_window` são pré-visualizados primeiro: o ERP valida o rascunho e devolve os campos e, nos documentos, os totais que calculou. A aplicação desenha essa pré-visualização como um cartão e, ao fazê-lo, emite uma autorização de uso único — válida 15 minutos e ligada aos argumentos exatos pré-visualizados. A gravação só corre com essa autorização, que nasce do clique do utilizador no cartão e nunca é mostrada ao modelo. Uma chamada com `confirm=true` sem ela é recusada e registada na `AI_AuditLog` como recusa; escrever "sim" não grava nada. As gravações são single-flight — uma segunda gravação concorrente é recusada. O que isto não é: uma fronteira de base de dados. Limita o que o modelo pode desencadear, não o que alguém com a ligação SQL consegue fazer. |
 | **Visibilidade por utilizador** | As conversas e as entradas de auditoria são do utilizador ERP que as criou. Administradores, super administradores e técnicos do ERP veem um badge Supervisor, o `/auditoria todos` e um interruptor "Todos os utilizadores" na lista de conversas; a conversa de outro utilizador abre só de leitura, e só o dono a pode renomear ou apagar. É um controlo de aplicação decidido em C# a partir do perfil do ERP, não uma permissão de base de dados. |
 | **As escritas passam pelos objetos de negócio do ERP** | Os registos são criados via o modelo de objetos BSO do Primavera, pelo que todas as validações do ERP correm e os números de documento são atribuídos pelo ERP. Não há escritas diretas nas tabelas core do ERP. O `run_query` é só de leitura por guarda aplicacional, não por permissão de base de dados — corre na ligação do próprio ERP, pelo que empresas que queiram uma segunda barreira devem apontar o addon para um login SQL só de leitura. |
 | **SQL com guarda** | O `run_query` aceita apenas `SELECT`/`WITH`: uma blocklist rejeita palavras-chave de escrita/DDL/sistema (`INSERT`, `DROP`, `EXEC`, `xp_*`, `OPENROWSET`, …) depois de remover comentários, parêntesis retos e homóglifos Unicode para impedir contornos; o empilhamento de statements (`;`) é recusado; o número de linhas é limitado do lado do servidor. |
@@ -517,9 +537,10 @@ listadas família a família em [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
 | `Assistant:Temperature` | 0-2; desativada para modelos de raciocínio | `0.7` |
 | `Assistant:MaxToolIterations` | Rondas de tool calls por turno (1-15) | `15` |
 | `Assistant:StreamingEnabled` | Streaming server-sent | on |
-| Toggles por tool | Ativa/desativa cada uma das 24 tools (`Assistant:DisabledTools`) | todas ativas |
+| Toggles por tool | Ativa/desativa cada uma das 26 tools (`Assistant:DisabledTools`) | todas ativas |
 | `ErpTools:Enabled` | Kill switch para a camada de tools inteira | on |
 | Pesquisa web | Fornecedores (`tavily`, `brave`, `serper`, `exa`, `searxng` self-hosted) + chaves no cofre cifrado; modo fan-out ou fallback | `tavily` |
+| Decisões rápidas (Jev) | `Jev:Enabled`, `Jev:Route` (`openrouter` usa a chave OpenRouter, `typesafe` uma chave própria no cofre cifrado), `Jev:MinConfidence` (0,50-0,95) | desligado, `openrouter`, `0,60` |
 | System prompt personalizado | Instruções extra acrescentadas ao prompt incorporado | vazio |
 | Tema | Claro / escuro / sistema, toggle no cabeçalho do chat | sistema |
 | Exportação | Pasta, formato por omissão (`md`/`html`/`txt`), abertura automática | `md` |
@@ -567,7 +588,7 @@ com a integração do ERP como camada plugável. Um passo relacionado no mesmo c
 [MCP](https://modelcontextprotocol.io) (Model Context Protocol): o transporte Streamable
 HTTP da spec MCP atual suporta servidores stateless, o que encaixa no modelo in-process e
 por turno deste addon — um cliente MCP no AITOOL deixaria o assistente consumir servidores
-de tools de terceiros para lá das 24 tools incorporadas. Veja [ROADMAP.md](ROADMAP.md) para
+de tools de terceiros para lá das 26 tools incorporadas. Veja [ROADMAP.md](ROADMAP.md) para
 onde isso se situa em relação ao resto.
 
 ---

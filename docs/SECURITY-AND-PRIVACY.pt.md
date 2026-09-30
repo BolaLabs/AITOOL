@@ -28,6 +28,7 @@ atualizações. Desinstalar é apagar uma pasta e uma linha de Extensibilidade.
 | O fornecedor de IA configurado por **si** | A conversa, o system prompt (que inclui o código da empresa, o utilizador e a janela do ERP atualmente aberta) e todos os resultados de tools — nomes de clientes, números de contribuinte, saldos, valores de vendas, linhas de resultados SQL | Em cada turno | Configurar um endpoint local compatível com OpenAI; nada sai da máquina |
 | Fornecedor de pesquisa web (Tavily / Brave / Serper / Exa / SearXNG self-hosted) | Apenas o texto da consulta de pesquisa | Apenas quando o `web_search` corre | Desativar a tool, ou deixar a chave por definir |
 | VIES e NIF.pt | Um número de contribuinte | Apenas quando o `enrich_entity` corre | Desativar a tool |
+| Jev (TypeSafe AI, alojado nos Estados Unidos), diretamente ou através da OpenRouter | Títulos de janelas, nomes de menus, etiquetas de campos e colunas, legendas de botões e texto dos diálogos da janela do ERP que está a ser automatizada, mais o nome que o utilizador deu ao que pediu. Nunca os valores escritos nos campos, nunca dados das tabelas | **Apenas se um utilizador ligar "Decisões rápidas (Jev)" nas definições. Desligado por omissão**; o painel mostra um aviso de proteção de dados junto do interruptor | Deixar o interruptor desligado |
 | Sentry | Eventos de nível erro, sessões de release health e uma amostra de 10% de traces de desempenho, sanitizados; sem conteúdo do chat | **Apenas se um operador configurar um DSN. Nenhum DSN é distribuído.** | Deixar `Sentry:Dsn` vazio (a predefinição) |
 | Quem receber o pacote de apoio enviado pelo utilizador | Um .zip com o relatório da instalação, os registos locais dos últimos 7 dias, as preferências do utilizador sem credenciais e os últimos relatórios do instalador; chaves, palavras-passe, connection strings e caminhos `C:\Users\<nome>` são redigidos. Os registos podem ainda mostrar clientes, artigos ou tabelas consultados pelas tools | Apenas quando um utilizador carrega em **Exportar pacote de apoio** (definições → Diagnóstico) e envia o ficheiro | Não o exportar, ou revê-lo antes de enviar |
 | Bola Labs | Nada, nunca | — | — |
@@ -43,8 +44,9 @@ próprio fornecedor oferecer.
 - **Conduzir o cliente ERP**: abrir funções navegando o friso (ribbon), abrir registos
   nos respetivos editores, listar e preencher campos e células de grelha em janelas
   abertas — incluindo os editores clássicos VB6, via UI Automation.
-- **Escrever**: criar e atualizar fichas de cliente/fornecedor, criar documentos de
-  venda, criar oportunidades de venda no CRM — cada uma delas dependente do cartão de
+- **Escrever**: criar e atualizar fichas de cliente/fornecedor, criar artigos, criar
+  documentos de venda, criar oportunidades de venda no CRM e, só para administradores e
+  técnicos, prolongar ou reativar uma série de vendas — cada uma delas dependente do cartão de
   confirmação descrito na secção 4. Os rascunhos de e-mail são entregues ao cliente de
   correio predefinido para revisão e nunca enviados pelo addon.
 - **Gerar** o PDF do mapa oficial Crystal de um documento e abri-lo.
@@ -68,7 +70,8 @@ autorização que a aplicação emite ao desenhar o cartão de confirmação, de
 Os botões de commit e de destruição na automação de janelas (gravar, guardar, anular, apagar,
 eliminar, remover, confirmar) passam pelo mesmo portão — avaliado sobre o
 botão que o ERP resolveu, e não sobre a legenda pedida, porque a resolução é por substring.
-Dentro de um diálogo modal só passam recusas e diálogos de um só botão. Uma interação de janela de
+Dentro de um diálogo modal só passam recusas e diálogos de um só botão; qualquer outra
+resposta fica para o utilizador, no próprio ERP. Uma interação de janela de
 cada vez; os commits são single-flight. Os endpoints de pesquisa web são HTTPS com
 redirects desativados. A CSP da página de chat confina as origens de script, estilo, framing
 e ações de formulário à origem da própria página, e todas as bibliotecas são vendorizadas com
@@ -145,7 +148,7 @@ sessão.
 
 ## 6. O que fica guardado na sua base de dados
 
-Três tabelas são criadas **automaticamente, na base de dados de empresa do ERP**
+Quatro tabelas são criadas **automaticamente, na base de dados de empresa do ERP**
 (`PRI<CodEmp>`) na primeira utilização. Não há base de dados separada nem passo de
 migração.
 
@@ -154,12 +157,14 @@ migração.
 | `AI_ChatSessions` | Metadados de sessão por utilizador e empresa |
 | `AI_ChatMessages` | Conteúdo das mensagens, em texto simples, incluindo dados do ERP devolvidos pelas tools |
 | `AI_AuditLog` | Timestamp, utilizador, empresa, tool, resumo, flag de sucesso, e os argumentos serializados da tool com os valores de key/token/secret/password ocultados, truncados a 2000 caracteres |
+| `AI_AutomationKnowledge` | O que a automação das janelas aprendeu, partilhado pelos postos: o texto do pedido, a janela, a etiqueta e o nome do controlo do campo, coluna ou funcionalidade do ERP que ele quis dizer, as etiquetas que um utilizador rejeitou, um contador de utilizações, a data e o utilizador que alterou por último. Só nomes e etiquetas, nunca os valores escritos |
 
 **Não há política de retenção nem job de purga.** As sessões podem ser apagadas
 individualmente na UI; nada expira, e os dados sobrevivem à desinstalação do addon. Para
 uma implementação sujeita a obrigações de retenção ou apagamento do RGPD, essa é uma
-política que tem de ser acrescentada por si — um delete agendado contra estas três
-tabelas é tudo o que é preciso.
+política que tem de ser acrescentada por si — um delete agendado contra as três primeiras
+tabelas é tudo o que é preciso. A `AI_AutomationKnowledge` não guarda dados pessoais além
+do código do utilizador que alterou a linha por último.
 
 Permissões necessárias: as que a ligação do ERP já tem, mais `CREATE TABLE` na base de dados
 e `ALTER` no esquema `dbo` na primeira execução do addon.
@@ -167,8 +172,9 @@ e `ALTER` no esquema `dbo` na primeira execução do addon.
 Se o seu login não puder criar tabelas — e muitos não podem — execute o
 [`sql/AI_Schema.sql`](../sql/AI_Schema.sql) uma vez por empresa, como `db_owner`. A partir
 daí o addon não precisa de nenhum direito de DDL: `SELECT, INSERT, UPDATE, DELETE` em
-`AI_ChatSessions` e `AI_ChatMessages`, e `SELECT, INSERT` em `AI_AuditLog`, que nunca é
-atualizado nem apagado.
+`AI_ChatSessions` e `AI_ChatMessages`, `SELECT, INSERT` em `AI_AuditLog`, que nunca é
+atualizado nem apagado, e `SELECT, INSERT, UPDATE` em `AI_AutomationKnowledge`. Sem esta
+última tabela nada falha: cada posto fica com o que aprendeu só para si.
 
 **Uma gravação é recusada quando o registo de auditoria está inacessível.** Criar ou alterar
 um registo no ERP a partir do cartão de confirmação verifica primeiro que consegue escrever no
@@ -179,10 +185,11 @@ bloqueasse as tabelas deixava a escrita passar e ficavam dois avisos num ficheir
 
 ### O que o trilho de auditoria cobre
 
-**Coberto**: commits através do modelo de objetos (criar/atualizar entidade, criar
-documento de venda, criar oportunidade de venda), commits recusados, falhas, e as cinco ações de janela que alteram
-estado (escrita em campo, escrita em grelha, clique em botão, fecho de janela, fecho de
-todas as janelas, e as respetivas recusas).
+**Coberto**: commits através do modelo de objetos (criar/atualizar entidade, criar artigo,
+criar documento de venda, criar oportunidade de venda, alterar série de vendas), commits recusados, falhas, e as
+ações de janela que alteram estado (escrita em campo, um ou vários; escrita em grelha, uma
+célula ou uma linha; clique em botão, fecho de janela, fecho de todas as janelas, e as
+respetivas recusas).
 
 **Não coberto**: previews e tentativas não confirmadas, navegação no friso
 (`open_erp_function`), leituras, `print_document` e `enrich_entity` (só de leitura).
@@ -217,6 +224,18 @@ enviados para fora. As builds DEBUG registam com verbosidade, incluindo argument
 tools; as RELEASE registam Info e acima (operações e contexto das escritas no ERP, nunca a chave). As consultas de pesquisa web nunca são
 registadas — podem conter nomes e números de contribuinte.
 
+A mesma pasta guarda o `automation-memory.json`: o que a automação das janelas aprendeu,
+em JSON legível, com uma cópia de segurança da versão anterior ao lado. Regista que campo,
+coluna de grelha ou funcionalidade do ERP um pedido acabou por querer dizer ("plafond" é
+"Limite" na ficha de cliente) e quais o utilizador rejeitou. Só nomes e etiquetas; os
+valores escritos nunca lá ficam. Pode ser lido, editado ou apagado. Definições → Avançado
+esvazia-o nesse posto e, pela tabela partilhada, nos outros; isso é recusado a quem não for
+administrador, superadministrador ou técnico no ERP.
+
+O conhecimento que o addon traz de origem está dentro do próprio addon e, em texto, em
+`Knowledge\automation-knowledge.json` na pasta da extensão. É esse o ficheiro que um
+administrador edita. O ERP verifica a integridade da DLL do addon, não deste ficheiro.
+
 ## 8. Prompt injection
 
 Campos do ERP, resultados SQL e páginas web são texto que um atacante pode influenciar, e
@@ -235,7 +254,8 @@ não consegue fazer o ERP gravar seja o que for — e o trilho de auditoria. Ver
 
 Saída, por TLS 443, para os destinos que ativar de entre estes: o host da API do seu
 fornecedor de IA, o seu fornecedor de pesquisa web, `ec.europa.eu` (VIES) e `nif.pt` se o
-`enrich_entity` for usado, e o seu host Sentry se configurar um DSN. Nada mais. Não há
+`enrich_entity` for usado, `api.typesafe.ai` ou `openrouter.ai` se as decisões rápidas (Jev)
+estiverem ligadas, e o seu host Sentry se configurar um DSN. Nada mais. Não há
 listener de entrada.
 
 A UI de chat é servida a partir de um host virtual do WebView2 (`https://aitool.local`)
@@ -249,10 +269,10 @@ que nunca toca na rede.
       cartão de confirmação que alguém tem de carregar)
 - [ ] Decidir se o `run_query` fica ativo, e se o addon deve apontar para um login SQL só
       de leitura
-- [ ] Aceitar que três tabelas são criadas na base de dados de empresa, sem política de
+- [ ] Aceitar que quatro tabelas são criadas na base de dados de empresa, sem política de
       retenção (ou agendar a sua própria purga)
 - [ ] Decidir o DSN do Sentry (predefinição: nenhum)
 - [ ] Conhecer o caminho de remoção: apagar a pasta, remover a linha de Extensibilidade;
-      as três tabelas sobrevivem por design
+      as quatro tabelas sobrevivem por design
 - [ ] Notar que o instalador ainda não é assinado (code signing) — o SmartScreen vai
       avisar, e o SHA256 publicado com cada release é a forma de verificar o download

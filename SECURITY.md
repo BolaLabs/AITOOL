@@ -4,9 +4,9 @@
 
 | Version | Supported |
 | ------- | --------- |
+| 2.14.x  | Yes       |
 | 2.13.x  | Yes       |
-| 2.12.x  | Yes       |
-| < 2.12  | No        |
+| < 2.13  | No        |
 
 This table is verified by `scripts/checks/Test-VersionCoherence.ps1`, which fails when the
 version stamped in `Properties/AssemblyInfo.cs` is not listed here.
@@ -66,9 +66,10 @@ This project follows these security practices:
 ### ERP access
 
 - **Writes exist and are deliberate.** The assistant can create customer and supplier
-  records, sales documents and CRM sales opportunities, update records, and drive ERP
-  windows. E-mail drafts open in the default mail client and are never sent by the addon. It cannot create
-  purchase documents or articles, post accounting entries, delete anything, or write
+  records, articles, sales documents and CRM sales opportunities, update records, extend a
+  sales series (administrators and technicians only), and drive ERP windows. E-mail drafts open in the default mail client and are never sent by the addon. It cannot create
+  purchase documents through the object model (it can fill the purchase editor, where saving
+  is the user's click on the confirmation card), post accounting entries, delete anything, or write
   directly to ERP tables — writes go through the Primavera BSO object model
   (`ErpCreationService`), so the ERP's own validation runs and document numbers are
   ERP-assigned. Commits are single-flight.
@@ -98,8 +99,9 @@ This project follows these security practices:
 
 ### What is stored in your database
 
-Three tables are created automatically in the ERP company database on first use:
-`AI_ChatSessions`, `AI_ChatMessages` and `AI_AuditLog`. Message content is stored in plain
+Four tables are created automatically in the ERP company database on first use:
+`AI_ChatSessions`, `AI_ChatMessages`, `AI_AuditLog` and `AI_AutomationKnowledge` (what the
+window automation learned: names and captions, never values). Message content is stored in plain
 text and contains whatever the conversation contained, including ERP data returned by tools.
 The audit detail holds the serialized tool arguments with key/token/secret/password values
 redacted, truncated at 2000 characters. **There is no retention policy and no purge job** —
