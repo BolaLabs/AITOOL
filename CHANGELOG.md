@@ -8,6 +8,17 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.14.1] - 2026-10-02
+
+### Fixed
+
+- The chat header and composer at narrow widths. Docked at the default 600 px, the
+  context pill ran under the supervisor badge and the AI disclosure ended in an ellipsis.
+  The left section now shrinks inside its own box, the badge keeps only its shield below
+  640 px (the tooltip keeps the role), the empty-context label collapses to the plus at
+  820 px, the model name gets more room, and the composer hint has a short form chosen by
+  width, so nothing truncates mid-word.
+
 ## [2.14.0] - 2026-09-30
 
 ### Added
