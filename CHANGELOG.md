@@ -8,6 +8,33 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.15.1] - 2026-10-07
+
+### Fixed
+
+- OpenAI's newer models on `/chat/completions` (gpt-5.6, gpt-6) refused every turn: they take
+  `max_completion_tokens` instead of `max_tokens`, spell the lowest reasoning effort `none`
+  instead of `minimal`, and accept function tools only with reasoning off. The request now
+  follows those rules for that generation, and any other 400 that names a parameter
+  ("Unsupported parameter", "Unsupported value", "set reasoning_effort to …") is learned
+  for the model and the request is sent once more with the correction; the chat never shows
+  the first refusal. The log carries `Request adapted for <model>: …` when that happens.
+- The settings tabs wrap to a second row when the panel is narrow; with the assistant docked
+  at 600 px, "Avançado" was behind a scrollbar that was not drawn.
+- Saving Max tokens at 0 (or anything outside 256–128 000) closed the modal on "saved" and
+  kept the old value. The modal now stays open on the field with the range; an empty field
+  goes back to the default 4096. Same check for the tool steps (1–15).
+- "Testar ligação" tests the model typed in the field, saved or not, and says so in its
+  verdict; it used to test the saved one, so a wrong model looked fine until Guardar. The
+  previous verdict no longer shows when the modal is reopened, and clears as soon as the
+  model is edited; the model suggestion list closes when the pointer leaves the field, so
+  it no longer sits over the test button.
+- The log file could stop at company open and stay silent for the whole session. The
+  addon only installed its NLog target when nothing else had configured NLog; when the
+  ERP's Dashboards engine got there first (or the extension bound to the ERP's own NLog),
+  our rules were never added. The target and rules are now added into the active
+  configuration, scoped to the addon's logger, and restored whenever the host replaces it.
+
 ## [2.15.0] - 2026-10-07
 
 ### Changed
