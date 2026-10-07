@@ -14,7 +14,7 @@ Versão inglesa: [SKILLS.md](SKILLS.md).
 |---|---|---|
 | `<ERP>\Config\<ED>\Extensions\AITOOL\Skills\<nome>\SKILL.md` (`ED` = `EV`, `LE` ou `LP`) | O próprio addon | As skills que vêm com cada versão (`incluída` no `/skills`); substituídas em cada atualização, por isso não edite aqui |
 | `%ProgramData%\AITOOL\Skills\<nome>\SKILL.md` | Toda a gente nesta máquina (e, em cliente-servidor, cada posto que a partilhe) | Criada vazia pelo instalador, que repõe a ACL em cada instalação para que só o SYSTEM e os administradores escrevam; uma atualização nunca toca no que lá estiver |
-| `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<nome>\SKILL.md` | Só você | Abra-a em Definições → Skills → "Abrir a minha pasta de skills" |
+| `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<nome>\SKILL.md` | Só você | Definições → Skills → "Nova skill" cria aqui uma a partir do modelo e abre-a; "Abrir a minha pasta" abre a pasta |
 
 Uma skill partilhada com o mesmo nome de uma incluída substitui-a, e uma skill na sua pasta
 substitui ambas. Uma pasta ou `name` a começar por `_` é um modelo: aparece na lista, nunca
@@ -22,9 +22,12 @@ substitui ambas. Uma pasta ou `name` a começar por `_` é um modelo: aparece na
 `%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json` — um ficheiro por
 utilizador, pelo que desligar uma skill partilhada só o afeta a si. Definições → Skills mostra
 quantas skills foram encontradas e, para cada uma, uma pill Incluída / Partilhada / Minha, a
-descrição, as frases que a ativam e o interruptor. O botão "Abrir pasta partilhada" só aparece
-a um supervisor (administrador, super administrador ou técnico do ERP), porque o que lá for
-posto corre para toda a gente na máquina. `/skills` no chat lista-as; `/skills recarregar`
+descrição, as frases que a ativam, o interruptor e um botão "Editar SKILL.md" ("Ver
+SKILL.md" nas incluídas, que cada atualização substitui, e nas partilhadas se não for
+supervisor). Um ficheiro que o catálogo não consegue usar (sem `description:`, cabeçalho por
+fechar, corpo demasiado longo) aparece com o motivo e fica desligado até ser corrigido. O
+botão "Abrir pasta partilhada" só aparece a um supervisor (administrador, super administrador
+ou técnico do ERP), porque o que lá for posto corre para toda a gente na máquina. `/skills` no chat lista-as; `/skills recarregar`
 relê as pastas e reconstrói o system prompt da conversa aberta, pelo que a mensagem seguinte
 já vê a alteração.
 
@@ -88,7 +91,7 @@ parar e perguntar.
 | Skill | O que faz |
 |---|---|
 | `prospecao-de-leads` | Pesquisa web de empresas-alvo → verificação de cliente existente → ficha de cliente (preview, cartão) → oportunidade de venda no CRM (preview, cartão) → rascunho de e-mail para revisão |
-| `_modelo` | O modelo para copiar; fica desativado até ser renomeado |
+| `_modelo` | O modelo por trás de "Nova skill" (e o que se copia à mão); não aparece como skill nem é oferecido ao assistente |
 
 ## Partilhar skills
 

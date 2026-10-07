@@ -210,8 +210,9 @@ and acts on the ERP through 26 auto-discovered tools:
 | `enrich_entity` | Fills a file from public registries by tax id (VIES, NIF.pt), showing a field-by-field diff before anything is written |
 | `web_search` | Public web search (Brave, Tavily, Exa, Serper or a self-hosted SearXNG); read-only, results flagged as untrusted content |
 
-Every tool can be toggled individually in settings; the whole tool layer has a kill switch
-(`ErpTools:Enabled` / `AITOOL_ERP_TOOLS_ENABLED`).
+Settings → Ferramentas lists them grouped by what they do (queries, documents, writes with
+confirmation, window automation, web and e-mail, skills) and toggles each one individually;
+the whole tool layer has a kill switch (`ErpTools:Enabled` / `AITOOL_ERP_TOOLS_ENABLED`).
 
 A typical end-to-end flow — *"this company emailed us, make them a proposal"*:
 `web_search` finds the company → `search_entities` checks if it already exists →
@@ -232,7 +233,10 @@ organisation adds, and each user has a personal folder that overrides both.
 Settings → Skills lists them with the count, an Incluída / Partilhada / Minha pill, the
 description and the phrases that trigger each one, and switches them off — switching a shared
 skill off affects only you, and only a supervisor gets the button that opens the shared
-folder. `/skills` shows them in the chat. A skill's `tools` list guides the assistant; it does
+folder. "Nova skill" asks for a name, creates the folder from the template and opens its
+`SKILL.md` in your editor; every card has an "Editar SKILL.md" button, and a file with a
+problem (a missing description, a header left open) says so on the card and stays off until
+fixed. `/skills` shows them in the chat. A skill's `tools` list guides the assistant; it does
 not restrict which tools it may call.
 
 The shipped `prospecao-de-leads` skill runs the whole prospecting flow: a web search for

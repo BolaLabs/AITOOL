@@ -14,7 +14,7 @@ Portuguese version: [SKILLS.pt.md](SKILLS.pt.md).
 |---|---|---|
 | `<ERP>\Config\<ED>\Extensions\AITOOL\Skills\<name>\SKILL.md` (`ED` = `EV`, `LE` or `LP`) | The addon itself | The skills that ship with each version (`incluída` in `/skills`); replaced on every update, so do not edit here |
 | `%ProgramData%\AITOOL\Skills\<name>\SKILL.md` | Everyone on this machine (and, in client-server setups, every workstation that shares it) | Created empty by the installer, which resets its ACL on every run so that only SYSTEM and administrators can write; an update never touches what is in it |
-| `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<name>\SKILL.md` | You | Open it from Settings → Skills → "Abrir a minha pasta de skills" |
+| `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<name>\SKILL.md` | You | Settings → Skills → "Nova skill" creates one here from the template and opens it; "Abrir a minha pasta" opens the folder |
 
 A shared skill with the same name as a shipped one replaces it, and a skill in your folder
 replaces both. A folder or `name` starting with `_` is a template: listed, never offered to
@@ -22,11 +22,14 @@ the assistant. Skills you switch off are remembered in
 `%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json` — a per-user file, so
 switching off a shared skill affects only you. Settings → Skills lists how many skills were
 found and, for each one, an Incluída / Partilhada / Minha pill, the description, the phrases
-that trigger it, and the switch. "Abrir pasta partilhada" is shown only to a supervisor (an
-ERP administrator, super administrator or technician), because what lands there runs for
-everyone on the machine. `/skills` in the chat lists them; `/skills recarregar` reads the
-folders again and rebuilds the system prompt of the open conversation, so the next message
-already sees the change.
+that trigger it, the switch and an "Editar SKILL.md" button ("Ver SKILL.md" for shipped
+skills, which every update replaces, and for shared ones unless you are a supervisor). A
+file the catalogue cannot use (no `description:`, header not closed, body too long) is
+listed with the reason and stays off until fixed. "Abrir pasta partilhada" is shown only to
+a supervisor (an ERP administrator, super administrator or technician), because what lands
+there runs for everyone on the machine. `/skills` in the chat lists them; `/skills recarregar`
+reads the folders again and rebuilds the system prompt of the open conversation, so the next
+message already sees the change.
 
 ## The file
 
@@ -84,7 +87,7 @@ which tool answers each step, what to do with the result, where to stop and ask.
 | Skill | What it does |
 |---|---|
 | `prospecao-de-leads` | Web search for target companies → existing customer check → customer record (preview, card) → CRM sales opportunity (preview, card) → e-mail draft for review |
-| `_modelo` | The template to copy; it stays disabled until renamed |
+| `_modelo` | The template behind "Nova skill" (and the one to copy by hand); not listed as a skill, never offered to the assistant |
 
 ## Sharing skills
 

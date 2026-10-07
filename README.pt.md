@@ -217,8 +217,10 @@ Studio é um deles) — e atua sobre o ERP através de 26 tools descobertas auto
 | `enrich_entity` | Preenche uma ficha a partir de registos públicos pelo NIF (VIES, NIF.pt), mostrando um diff campo a campo antes de qualquer escrita |
 | `web_search` | Pesquisa na web pública (Brave, Tavily, Exa, Serper ou um SearXNG self-hosted); só de leitura, resultados marcados como conteúdo não confiável |
 
-Cada tool pode ser ligada ou desligada individualmente nas definições; a camada de tools
-inteira tem um kill switch (`ErpTools:Enabled` / `AITOOL_ERP_TOOLS_ENABLED`).
+Definições → Ferramentas lista-as agrupadas pelo que fazem (consulta, documentos, escrita
+com confirmação, automação de janelas, web e e-mail, skills) e liga ou desliga cada uma
+individualmente; a camada de tools inteira tem um kill switch (`ErpTools:Enabled` /
+`AITOOL_ERP_TOOLS_ENABLED`).
 
 Um fluxo típico de ponta a ponta — *"esta empresa enviou-nos um email, faz-lhes uma
 proposta"*: `web_search` encontra a empresa → `search_entities` verifica se já existe →
@@ -239,7 +241,10 @@ guarda as que a sua organização acrescentar, e cada utilizador tem uma pasta p
 sobrepõe às duas. Definições → Skills lista-as com a contagem, uma pill Incluída / Partilhada /
 Minha, a descrição e as frases que ativam cada uma, e desliga-as — desligar uma skill
 partilhada só o afeta a si, e só um supervisor tem o botão que abre a pasta partilhada.
-`/skills` mostra-as no chat. O campo `tools` de uma skill orienta o assistente; não restringe
+"Nova skill" pede um nome, cria a pasta a partir do modelo e abre o `SKILL.md` no seu
+editor; cada cartão tem um botão "Editar SKILL.md", e um ficheiro com problema (descrição em
+falta, cabeçalho por fechar) di-lo no cartão e fica desligado até ser corrigido. `/skills`
+mostra-as no chat. O campo `tools` de uma skill orienta o assistente; não restringe
 as ferramentas que ele pode chamar.
 
 A skill incluída `prospecao-de-leads` corre o fluxo de prospeção inteiro: pesquisa web de
