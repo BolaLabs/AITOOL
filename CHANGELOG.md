@@ -8,6 +8,39 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.15.0] - 2026-10-07
+
+### Changed
+
+- Settings reorganised into seven tabs: Modelo, Ferramentas, Pesquisa web, Jev, Skills,
+  Exportação and Avançado. Each tab is one column of titled sections; the two-column grid
+  that packed unrelated fields side by side is gone, and "Diagnóstico" appears once. The
+  tools list is grouped (consulta, documentos, escrita, automação, pesquisa, skills), shows
+  the first sentence of each description with the full text one click away, and no longer
+  scrolls inside a 264 px box. "Testar ligação" sits next to the model it tests.
+- Skills: "Nova skill" asks for a name, creates the folder from the template with the header
+  filled in and opens SKILL.md in the editor; every skill card has "Editar SKILL.md" (or
+  "Ver SKILL.md" for shipped and shared ones). The template itself is no longer listed.
+
+### Fixed
+
+- A provider answer such as HTTP 400 or 401 to a non-streaming request (the model check and
+  the tools check of "Testar ligação", and any turn with streaming off) was reported as
+  "Não foi possível ligar ao fornecedor de IA. Verifique a ligação à internet". The body
+  was read and discarded; it now reaches the user as "O fornecedor recusou o pedido
+  (HTTP 400): …" with the provider's own reason, so a rejected tool schema or an unknown
+  parameter can be acted on. OpenRouter's numeric `"code"` in error bodies no longer breaks
+  parsing either.
+- "Testar ligação" with a refused key on a provider that lists models showed "✓ Chave
+  aceite pelo fornecedor — 0 modelos disponíveis" and then failed on the model step. A 401
+  on the listing is now reported as such, and the steps say what they prove: the listing is
+  "Fornecedor contactado" (OpenRouter lists models without any key), and the 1-token
+  completion is "Chave aceite e modelo disponível nesta conta".
+- Enabling two web-search providers one after the other kept only the second: each save
+  started from the configuration loaded at start-up. Saved sections are reloaded into
+  memory as soon as they are written, so toggles, order and mode persist together and the
+  modal shows the real state when reopened.
+
 ## [2.14.1] - 2026-10-02
 
 ### Fixed

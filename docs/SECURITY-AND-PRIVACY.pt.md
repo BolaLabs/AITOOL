@@ -228,7 +228,7 @@ A mesma pasta guarda o `automation-memory.json`: o que a automação das janelas
 em JSON legível, com uma cópia de segurança da versão anterior ao lado. Regista que campo,
 coluna de grelha ou funcionalidade do ERP um pedido acabou por querer dizer ("plafond" é
 "Limite" na ficha de cliente) e quais o utilizador rejeitou. Só nomes e etiquetas; os
-valores escritos nunca lá ficam. Pode ser lido, editado ou apagado. Definições → Avançado
+valores escritos nunca lá ficam. Pode ser lido, editado ou apagado. Definições → Jev
 esvazia-o nesse posto e, pela tabela partilhada, nos outros; isso é recusado a quem não for
 administrador, superadministrador ou técnico no ERP.
 

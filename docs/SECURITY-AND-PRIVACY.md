@@ -215,7 +215,7 @@ The same folder holds `automation-memory.json`: what the window automation learn
 JSON, with a backup of the previous version beside it. It records which field, grid column
 or ERP function a wording ended up meaning ("plafond" is "Limite" on the client record) and
 which ones the user rejected. Names and captions only; the values typed are never written
-to it. It can be read, edited or deleted. Settings → Avançado empties it on that workstation
+to it. It can be read, edited or deleted. Settings → Jev empties it on that workstation
 and, through the shared table, on the others; that is refused unless the user is an
 administrator, super administrator or technician in the ERP.
 
