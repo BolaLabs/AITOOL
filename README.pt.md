@@ -116,6 +116,10 @@ Studio é um deles) — e atua sobre o ERP através de 26 tools descobertas auto
   SQL só de leitura, guardada a `SELECT`/`WITH` e limitada a 500 linhas. As respostas
   tabulares aparecem como tabelas vivas com cartões KPI, e cada linha tem um menu de
   contexto: abrir no ERP, gerar o PDF, abrir o registo, mostrar os seus pendentes.
+- **Sabe o que tem aberto.** Cada mensagem leva a ficha de cliente, fornecedor ou artigo
+  aberta no ERP e a janela ativa, por isso «este cliente» ou «os pendentes daqui» dispensam o
+  código. O cabeçalho do chat mostra o que o assistente vê e desliga-o; `@` e um nome trazem
+  qualquer outra entidade para a mensagem.
 - **Conduz o cliente do ERP.** Abre qualquer função do ERP pelo nome a partir do catálogo
   do ribbon, em todos os contextos de navegação que a instalação tiver — Vendas,
   Contabilidade, Tesouraria, Recursos Humanos, o que estiver licenciado. Abre registos
@@ -191,7 +195,7 @@ Studio é um deles) — e atua sobre o ERP através de 26 tools descobertas auto
 | Tool | O que faz |
 | --- | --- |
 | `search_entities` | Pesquisa clientes, fornecedores e artigos por nome, código, NIF ou localidade |
-| `get_entity_details` | Detalhes completos de uma entidade (cliente, fornecedor, artigo) |
+| `get_entity_details` | Detalhes completos de um cliente, fornecedor ou artigo com a ficha aberta no ERP |
 | `get_pending_items` | Documentos pendentes por entidade, ou de todas as entidades; aceita argumentos de data |
 | `query_account_balance` | Saldo de conta corrente de um cliente/fornecedor, com escalões de antiguidade |
 | `query_documents` | Pesquisa documentos comerciais por tipo, entidade, data ou estado |

@@ -4,9 +4,9 @@
 
 | Version | Supported |
 | ------- | --------- |
+| 2.16.x  | Yes       |
 | 2.15.x  | Yes       |
-| 2.14.x  | Yes       |
-| < 2.14  | No        |
+| < 2.15  | No        |
 
 This table is verified by `scripts/checks/Test-VersionCoherence.ps1`, which fails when the
 version stamped in `Properties/AssemblyInfo.cs` is not listed here.
@@ -54,11 +54,13 @@ This project follows these security practices:
 
 ### Data sent to AI providers
 
-- Chat messages, the system prompt (which carries the company code, the user and the
-  currently open ERP window) and every tool result — including customer names, tax numbers,
-  balances and SQL result rows — are sent to the provider **you** configure, over TLS. It is
-  what the assistant retrieved to answer that question, not a bulk export. Review the
-  provider's data-usage policy.
+- Chat messages, the system prompt (which carries the company code and the user), the code
+  and name of the client, supplier and article records open in the ERP with the title of the
+  active window (one short block per message; the chat header shows it and switches it off)
+  and every tool result — including customer names, tax numbers, balances and SQL result
+  rows — are sent to the provider **you** configure, over TLS. It is what the assistant
+  retrieved to answer that question, not a bulk export. Review the provider's data-usage
+  policy.
 - Nothing is sent to Bola Labs at any point. There is no licence check, no update check and
   no telemetry endpoint of ours.
 - Pointing the addon at a local OpenAI-compatible endpoint keeps all of it on the machine.

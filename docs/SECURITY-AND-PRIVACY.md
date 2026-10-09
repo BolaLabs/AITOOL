@@ -25,7 +25,7 @@ Extensibility row.
 
 | Destination | What | When | How to stop it |
 | --- | --- | --- | --- |
-| The AI provider **you** configure | The conversation, the system prompt (which carries the company code, the user and the currently open ERP window) and every tool result — customer names, tax numbers, balances, sales figures, SQL result rows | Every turn | Configure a local OpenAI-compatible endpoint; nothing leaves the machine |
+| The AI provider **you** configure | The conversation, the system prompt (which carries the company code and the user), the code and name of the client, supplier and article records open in the ERP with the title of the active window, and every tool result — customer names, tax numbers, balances, sales figures, SQL result rows | Every turn | Configure a local OpenAI-compatible endpoint; nothing leaves the machine. The open-window block alone is switched off in the chat header ("Partilhar as janelas abertas") |
 | Web-search provider (Tavily / Brave / Serper / Exa / self-hosted SearXNG) | The search query text only | Only when `web_search` runs | Disable the tool, or leave the key unset |
 | VIES and NIF.pt | A tax number | Only when `enrich_entity` runs | Disable the tool |
 | Jev (TypeSafe AI, hosted in the United States), directly or through OpenRouter | Window titles, menu names, field and column labels, button captions and dialog texts of the ERP window being automated, plus the name the user gave to what they asked for. Never the values written into fields, never table data | **Only if a user switches on "Decisões rápidas (Jev)" in settings. Off by default**; the settings panel shows a data-protection notice next to the switch | Leave the switch off |

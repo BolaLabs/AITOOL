@@ -8,6 +8,58 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.16.0] - 2026-10-09
+
+### Added
+
+- The assistant knows what is open in the ERP. Each message carries the client, supplier and
+  article records open at that moment (code and name) and the title of the active window,
+  so "este cliente", "esta ficha" or "os pendentes daqui" need no code. The block is built
+  when the message is sent and kept with it, so a replayed conversation sends the same text
+  and the prompt cache holds; it is never stored or shown in the chat.
+- The chat header shows what the assistant sees: the active record (`CLI 0031 · name`, `+N`
+  for the others), the active window's title, or "Sem janelas abertas". Its popover lists
+  everything that goes with the next message and has the switch "Partilhar as janelas
+  abertas" (`Assistant:ShareOpenWindows`, on by default); with it off nothing about the ERP
+  windows leaves the machine.
+
+### Changed
+
+- `@` and a name now puts the entity into the message as text (`cliente SOFRIO (Sofrio,
+  Lda)`), so what the user sees is what the model gets.
+- The "Assistente AI" button on client, supplier and article records opens or brings the
+  chat forward without asking; the record is already in the context. On the F4 lists the
+  button is "Assistente AI" with the AITOOL logo, at the end of the bar, instead of a
+  "Selecionar" with a check mark that looked like the selection button other extensions
+  add and only opened the chat.
+- An empty code no longer falls back to an implicit entity: `get_pending_items` with no
+  code returns every entity's pending items, `query_account_balance` and `open_record` ask
+  for the code, and `get_entity_details` reads the records open in the ERP. With the context
+  automatic, an empty code would otherwise have meant whichever record happened to be open.
+
+### Removed
+
+- The "Adicionar contexto" picker, its entity chips and the hidden context lookup of the
+  chat window. A pick never reached the model when the chat was opened from the ribbon, a
+  reset brought back the record's entity instead of the one picked, and removing one chip
+  cleared them all.
+
+### Fixed
+
+- Opening a function by its full path (`Geral → Documentos Internos`) failed whenever other
+  catalogue entries ended in the same name: every path segment scored the same on all of
+  them and the tie was reported as ambiguous, even for the exact path the tool had just
+  proposed. A vague request ("editor de internos") then took four to six round trips to the
+  model. An exact path now wins, and `>` is accepted as a separator.
+- The toolbar buttons were one shared item per kind, linked into every open list or
+  record: with two lists open, closing one left the other's button dead, the item kept a
+  forced `Id = 0` that collided with the host's own items, and a close handler was added on
+  every window activation. Each window now gets its own item, created in its own bar
+  manager, which goes away with the window.
+- Pending items lost the entity's name column: the name lookup aliased its key `Código`
+  (accented in the 2.12 wording pass) and read `Codigo`, so it failed on every call and the
+  list showed codes only.
+
 ## [2.15.1] - 2026-10-07
 
 ### Fixed

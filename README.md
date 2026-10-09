@@ -112,6 +112,10 @@ and acts on the ERP through 26 auto-discovered tools:
   `SELECT`/`WITH` and capped at 500 rows. Tabular answers render as live tables with KPI
   cards, and each row carries a context menu: open in the ERP, generate the PDF, open the
   record, show its pending items.
+- **Knows what you have open.** Each message carries the client, supplier or article record
+  open in the ERP and the active window, so "this client" or "the pending items here" need no
+  code. The chat header shows what the assistant sees and switches it off; `@` and a name
+  bring any other record into the message.
 - **Drives the ERP client.** Opens any ERP function by name from the ribbon catalogue,
   across every navigation context the installation has — Sales, Accounting, Treasury, HR,
   whatever is licensed. Opens records (client, supplier and article cards, documents,
@@ -184,7 +188,7 @@ and acts on the ERP through 26 auto-discovered tools:
 | Tool | What it does |
 | --- | --- |
 | `search_entities` | Searches customers, suppliers and articles by name, code, tax id (NIF) or city |
-| `get_entity_details` | Full details of one entity (customer, supplier, article) |
+| `get_entity_details` | Full details of a customer, supplier or article whose record is open in the ERP |
 | `get_pending_items` | Pending documents per entity, or across all entities; accepts date arguments |
 | `query_account_balance` | Current-account balance for a customer/supplier, with aging buckets |
 | `query_documents` | Searches commercial documents by type, entity, date or status |
