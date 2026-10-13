@@ -8,6 +8,18 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.1] - 2026-10-13
+
+### Changed
+
+- The reasoning of a thinking model is one quiet line instead of an amber card with the
+  raw stream: while it thinks, "A pensar" with a muted glimpse of the last thought; after
+  the answer, "Raciocínio · esforço · tempo", collapsed, with the text one click away.
+- The automation steps stay grouped from the first one: while a tool runs the line says
+  what is happening and how many steps so far, and the list opens on a click and stays
+  as the user left it. With "Blocos técnicos das ferramentas" on, both the reasoning and
+  the steps open by themselves, as before.
+
 ## [2.17.0] - 2026-10-13
 
 ### Added
