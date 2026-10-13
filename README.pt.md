@@ -183,8 +183,8 @@ Studio é um deles) — e atua sobre o ERP através de 26 tools descobertas auto
   cancelar que para o turno em menos de um segundo; blocos de raciocínio colapsáveis;
   Markdown, Mermaid e syntax highlighting renderizados totalmente offline (bibliotecas
   vendored, com versões fixas e verificação SRI); chips de sugestão de seguimento;
-  histórico de conversas no seu SQL Server com pesquisa e mudança de nome; oito slash
-  commands (`/novo`, `/limpar`, `/exportar`, `/config`, `/auditoria [N] | todos [N]`,
+  histórico de conversas no seu SQL Server com pesquisa, mudança de nome, fixar e
+  «editar e reenviar»; oito slash commands (`/novo`, `/limpar`, `/exportar`, `/config`, `/auditoria [N] | todos [N]`,
   `/compactar`, `/skills`, `/ajuda`); temas claro/escuro/sistema; atalhos de teclado (`Ctrl+N` novo chat,
   `Ctrl+B` sessões,
   `Ctrl+,` definições); janela destacável; exportação para Markdown, HTML ou texto simples.

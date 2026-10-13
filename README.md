@@ -176,8 +176,8 @@ and acts on the ERP through 26 auto-discovered tools:
 - **Chat that behaves like a product.** Streaming with phase indicators and a cancel that
   stops the turn in under a second; collapsible thinking blocks; Markdown, Mermaid and
   syntax highlighting rendered fully offline (vendored, pinned, SRI-checked libraries);
-  follow-up suggestion chips; conversation history in your SQL Server with search and
-  rename; eight slash commands (`/novo`, `/limpar`, `/exportar`, `/config`,
+  follow-up suggestion chips; conversation history in your SQL Server with search,
+  rename, pinning and "edit and resend"; eight slash commands (`/novo`, `/limpar`, `/exportar`, `/config`,
   `/auditoria [N] | todos [N]`, `/compactar`, `/skills`, `/ajuda`); light/dark/system themes;
   keyboard shortcuts (`Ctrl+N` new chat,
   `Ctrl+B` sessions, `Ctrl+,` settings); pop-out window; export to Markdown, HTML or plain

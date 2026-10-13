@@ -8,6 +8,56 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.0] - 2026-10-13
+
+### Added
+
+- Conversations can be pinned: up to five per user stay in a "Fixadas" group at the top of
+  the list (`AI_ChatSessions.IsPinned`, added on first run). The list loads twenty at a
+  time with "Ver mais conversas", and the search box asks the server after two letters, so
+  it finds a conversation by what was said in it, not only by its title.
+- "Editar e reenviar" on the last question: the message and the answer it had leave the
+  conversation and the history, and the text comes back to the composer.
+- A "+" button in the chat header starts a new conversation; `Ctrl+N` and the sidebar
+  button still work.
+- The steps a turn ran in the ERP are kept with the answer (name, outcome and duration,
+  never arguments or results) and come back, folded, when the conversation is reopened.
+- The toast that warns at 80 % of the context now carries a "Compactar" button.
+- IBM Plex Sans and Mono ship with the extension, so the chat looks the same on every
+  workstation instead of only on the ones that happen to have the fonts installed.
+
+### Changed
+
+- When a turn ends, the automation steps fold into one line ("4 passos no ERP · 3,2 s", with
+  failures and cancellations named); a click reopens them and a pin keeps them always open.
+  A call refused by the repetition guard shows as "Chamada repetida, ignorada" instead of a
+  red error, and a cancelled step says so instead of reading as a failure.
+- Conversations get a real subject line: the heuristic title drops the opening verb and
+  cuts on a word boundary (60 characters instead of 30), and after the first answer the
+  model proposes a 3-to-6-word title, kept unless the user renamed the conversation
+  meanwhile. The exported file uses the conversation title.
+- The sidebar remembers whether it was open. Under 900 px it floats over the chat and
+  closes on an outside click instead of squeezing the conversation.
+- The theme button cycles light, dark and system, each with its own icon, and follows a
+  Windows theme change live. Code blocks use a light highlight theme on the light theme,
+  and Mermaid diagrams render with the dark theme on the dark one.
+- The technical tool blocks (arguments and results of every call) moved from Ferramentas to
+  Avançado → Diagnóstico, labelled as a diagnostics aid; the summarised steps are the
+  default for everyone.
+- "Esta semana" in the conversation list starts on Monday. The welcome screen no longer
+  hard-codes a demo client: the suggestions use the record open in the ERP when there is
+  one, and the card that matches the ERP window in view comes first.
+- When a field or column name does not match and the Jev decision model is off or does not
+  reach the confidence threshold, the result names the nearest visible labels ("Nomes
+  parecidos nesta janela: Cliente(s); Outro(s) Devedor(es)…") instead of a bare "não
+  encontrado", so the model corrects itself on the next call instead of listing the fields
+  again until the repetition guard stops it.
+
+### Fixed
+
+- The fill card said "Os valores ficaram na janela do ERP" even when none of the fields was
+  found; with zero fields written it now says so.
+
 ## [2.16.0] - 2026-10-09
 
 ### Added
