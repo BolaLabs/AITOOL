@@ -156,6 +156,10 @@ and acts on the ERP through 26 auto-discovered tools:
 - **Web search.** Five providers — Brave, Exa, Serper, Tavily or a self-hosted SearXNG —
   with your own key, for leads and company data; results are explicitly marked as
   untrusted content.
+- **Puts the right entity in the right field.** `set_entity` turns "a Sofrio" into the code
+  the ERP wants by reading the company tables, checks which entity kinds the open document
+  accepts, writes once and verifies the name the ERP shows; on the exploradores it fills the
+  restriction rows (several entities joined the ERP's way).
 - **Fills whole screens in one step.** `set_fields` writes every field of a record,
   including the ones on other tabs, and `set_grid_row` a whole document line in the ERP's own
   grid, reporting field by field where each value landed. A window is read in under half a

@@ -161,6 +161,10 @@ Studio é um deles) — e atua sobre o ERP através de 26 tools descobertas auto
 - **Pesquisa web.** Cinco fornecedores — Brave, Exa, Serper, Tavily ou um SearXNG
   self-hosted — com a sua própria chave, para leads e dados de empresas; os resultados são
   explicitamente marcados como conteúdo não confiável.
+- **Põe a entidade certa no campo certo.** `set_entity` transforma «a Sofrio» no código que o
+  ERP quer lendo as tabelas da empresa, verifica que tipos de entidade o documento aberto
+  aceita, escreve uma vez e confirma o nome que o ERP mostrou; nos exploradores preenche as
+  linhas de restrição (várias entidades unidas como o ERP espera).
 - **Preenche ecrãs inteiros num só passo.** `set_fields` escreve todos os campos de uma
   ficha, incluindo os dos outros separadores, e `set_grid_row` uma linha inteira de
   documento na própria grelha do ERP, e diz campo a campo onde ficou cada valor. Uma janela

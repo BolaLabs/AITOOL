@@ -8,6 +8,30 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.2] - 2026-10-13
+
+### Added
+
+- `set_entity` in `interact_erp_window`: the assistant puts a client, supplier or other third
+  party into a window by name or code. The code comes from the company tables (Clientes,
+  Fornecedores, OutrosTerceiros), the document configuration says which kinds the open
+  document accepts (`DocumentosVenda`, `DocumentosCompra`), the write happens once with the
+  code, and the name the ERP shows is checked. A supplier asked into a sales document is
+  refused before anything is written. On the exploradores several entities are joined with
+  `|`, the ERP's own separator, and a code range `A...Z` goes through as is.
+- The rows of the restriction grids of the exploradores (Cliente(s), Zona(s)...) are fields:
+  listed, written and, through `open_list`, their `...` opened. The classic toolbar buttons
+  of those windows (Atualizar, Imprimir) are clickable.
+
+### Changed
+
+- Every step says what it does and to what: "A abrir «Explorador de vendas»", "A ler os
+  campos · Explorador de vendas", "A clicar em «Atualizar»", "A consultar os pendentes de
+  0031"; the same wording in the status line and in reopened conversations.
+- One reasoning line per answer, even when the model thinks again between tools, with the
+  time summed. When the ERP window yields few fields, the Debug log keeps an inventory of its
+  controls, so an unknown grid is diagnosed from the log instead of from guesses.
+
 ## [2.17.1] - 2026-10-13
 
 ### Changed
