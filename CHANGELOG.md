@@ -8,6 +8,23 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.4] - 2026-10-14
+
+### Fixed
+
+- The end of the last answer could sit under the composer in the narrow pop-out window.
+  The space the chat keeps clear is now the measured distance from the composer's top edge
+  to the bottom of the window, refreshed when the composer grows and when an answer ends,
+  and the view stays pinned to the last line while it changes.
+
+### Changed
+
+- The assistant's instructions carry two short recipes for the simpler models: filtering an
+  explorador by entity is `set_entity` on the row, `Atualizar`, `list_grid`, three calls and
+  nothing else; putting an entity in a document is one `set_entity`, and a document that does
+  not take that kind of entity ends the attempt. A result that names similar labels or
+  candidate entities is used as returned, never retried with the same arguments.
+
 ## [2.17.3] - 2026-10-14
 
 ### Fixed
