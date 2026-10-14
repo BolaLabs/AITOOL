@@ -8,6 +8,21 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.3] - 2026-10-14
+
+### Fixed
+
+- The model switcher's popover was cut to its search box and dragged the header out of view
+  in the narrow pop-out window: the header section clips its overflow and the popover lived
+  inside it. It is now placed from the button's position, outside the clipped area, and the
+  search box takes focus without scrolling anything.
+
+### Changed
+
+- A button that does not exist in a window with its own buttons is answered at once with
+  the visible ones, instead of after a four-second UIA walk that came back empty. The name
+  check after `set_entity` in an editor waits at most 0,3 s.
+
 ## [2.17.2] - 2026-10-13
 
 ### Added
