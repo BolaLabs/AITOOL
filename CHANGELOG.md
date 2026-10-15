@@ -8,6 +8,20 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.6] - 2026-10-15
+
+### Added
+
+- A model that cannot take function tools no longer breaks the conversation. The provider's
+  catalogue (OpenRouter's `supported_parameters`), the preset and what the model refused
+  earlier decide, before the request, whether the ERP tools go: when they cannot, the
+  assistant answers in text with the instructions written for that case, says so once in a
+  warning ("Sem automação do ERP com este modelo…"), and never pretends to have opened or
+  read anything. A 400 or 404 that says the model has no tool support is learned on the
+  spot and the request is sent again without them. The model switcher marks such models
+  with "sem ferramentas", and models with less than 48 k of context with "contexto curto",
+  and says what each means when one is picked.
+
 ## [2.17.5] - 2026-10-15
 
 ### Fixed
