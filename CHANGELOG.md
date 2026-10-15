@@ -8,6 +8,21 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.17.5] - 2026-10-15
+
+### Fixed
+
+- The chat did not stay at the end: one scroll request ran once, and the content kept
+  changing height after it (the shipped fonts swapping in, code being highlighted, steps
+  folding), so a reopened conversation and the end of an answer could sit thousands of
+  pixels above the bottom. The end is now kept in view through every change in the chat's
+  content while the reader is there; a reader who scrolled up is left where they are.
+- The welcome screen overflowed under the composer in short windows; it is compact there
+  (smaller mark, no long notice, tighter cards) and fits above the composer.
+- The ERP context indicator became an empty dashed box with an eye when the header had no
+  room for the name; it is now a chip with the eye and a status dot (green with a record or
+  window, red when sharing is off), plus the type and code when a record is open.
+
 ## [2.17.4] - 2026-10-14
 
 ### Fixed
