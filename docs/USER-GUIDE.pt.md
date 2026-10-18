@@ -105,6 +105,13 @@ ERP.
 - Um documento que está pendente mas num estado que o tipo de liquidação não aceita (uma
   fatura de fornecedor à espera de aprovação de pagamento, por exemplo) é explicado com o
   nome do estado no ERP e o documento que muda esse estado. Não aparece como "não pendente".
+- "Aprova para pagamento as faturas do fornecedor X" grava a aprovação (o documento APR do
+  ERP) a partir do cartão: as faturas passam de "Aguarda Aprovação" a "Aprovada" e nada é
+  pago; o pagamento é o passo seguinte, com o seu próprio cartão.
+- No editor de liquidações (Contas Correntes), "põe 500 em valor a liquidar e distribui"
+  preenche o Valor Entregue do separador Distribuição Automática e carrega em Distribuir:
+  o ERP reparte o valor pelos pendentes mais antigos sem gravar nada; só o Confirmar grava,
+  e esse passa pelo cartão.
 - Quando a ficha do cliente não tem modo de pagamento e o tipo de liquidação comunica ao
   SAF-T, usa-se o modo com que esse tipo costuma ser gravado, e o cartão di-lo.
 
@@ -204,5 +211,5 @@ estimado de cada pedido.
 - Nunca anula nem apaga documentos sozinho, e não tem ferramenta para isso.
 - O Explorador de vendas não tem restrição por artigo: as vendas de um artigo são
   respondidas a partir dos dados, não nessa janela.
-- Letras, remessas bancárias e aprovações de pagamento fazem-se no ERP; o assistente explica
-  quando um documento está à espera de uma delas.
+- Letras e remessas bancárias fazem-se no ERP; o assistente explica quando um documento
+  está à espera de uma delas.

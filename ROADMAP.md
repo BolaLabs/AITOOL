@@ -106,7 +106,9 @@ What a customer hits in the first week of real use.
   context; running it unattended before the limit is hit is the next step.
 - A retention policy for `AI_ChatMessages` and `AI_AuditLog`. Today nothing
   expires and there is no purge — a GDPR question for a Portuguese market.
-- Approvals routing: a second-approver gate for writes above a threshold.
+- Approvals routing: a second-approver gate for writes above a threshold. (The ERP's
+  own payment approval, the APR document, is a write the assistant makes since 2.19;
+  this item is about who in the company may confirm it.)
 
 ## Efficiency and reliability
 
@@ -188,20 +190,45 @@ assistant never writes its own.
 
 ## Purchase invoice intake
 
-The largest competitive gap: document intake is table stakes at five ERP vendors,
-it is the case that pays first in Portugal (accounts payable), and a competitor
-already sells it on Primavera v10.
+The case that pays first in Portugal: accounts payable. Photos and PDFs of supplier
+invoices, receipts and expense notes arrive by many paths and someone types them in;
+the assistant should receive them, read them, attach them to the right ERP document,
+notice what is missing and ask for it, leaving people the exceptions and the final
+confirmation.
 
 Assisted, end to end: the Portuguese invoice QR code is the signed source of
-truth for header and VAT totals; vision reads only line items; a deterministic
-reconciliation in code must match the QR before anything is proposed; the
-human confirms every posting. If the numbers do not reconcile, it stops.
+truth for header and VAT totals; vision reads only what the QR does not carry (line
+items, due date, references, IBAN); a deterministic reconciliation in code must match
+the QR before anything is proposed; the human confirms every posting. If the numbers do
+not reconcile, it stops, with the request for the missing piece already written. Every
+ingested file is stored as an attachment of the ERP document, through the ERP's own
+attachment service, so the company's archive stays in one place.
 
 Portuguese constraint that shapes the design: AI must never *issue* fiscal
 documents — invoicing goes through AT-certified software with ATCUD and SAF-T.
 The input side (read, extract, classify, propose) is safe territory, and
 proposing inside the certified ERP for a human to commit is already the shape
 this product has.
+
+Planned in steps, each proven against the live ERP before the next:
+
+1. **Foundations (2.20).** Drag and paste of PDFs and photos into the chat; the QR code
+   decoded in code; the page sent to the model with a strict schema and a confidence per
+   field; totals reconciled with the QR; the purchase document card completed with
+   supplier date, due date, payment terms and withholding; the original file attached
+   to the saved document. Duplicates refused by ATCUD and file hash.
+2. **Rules and the queue (2.21).** The gap rules as data (unknown supplier, invalid tax
+   id, bank details that differ from the file, VAT that does not add up, missing order,
+   amount over a limit, foreign document); an `/entrada` queue with state, owner and
+   age; purchases searchable by supplier number; association to pending items and orders.
+3. **Automatic requests (2.22).** A dedicated mailbox read by the assistant; templated
+   requests to the supplier or the employee for what is missing, sent through the ERP's
+   mail profile; the reply threaded back to the same document and re-checked; a daily
+   digest of what still waits. Nothing is sent twice without a person.
+4. **Channels and learning (2.23).** A watched folder; per-supplier hints learned from
+   saved documents (usual article, payment terms, where the IBAN is); a "save all" card
+   for clean documents under a limit. Messaging channels and structured e-invoices (CIUS-PT)
+   after that.
 
 ## Further out — beyond one ERP
 

@@ -53,6 +53,10 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
   in `ERP/Services/ErpCreationService.cs`:
   - `commit=false` runs the ERP's own `ValidaActualizacao` and returns a preview, saving nothing
   - `commit=true` calls `Actualiza` on the BSO, so the ERP assigns numbers and enforces its rules
+  - Each document uses the engine the ERP itself uses for it: sales and purchases through
+    their document services, receipts, payments and encontros through `Liquidacoes`, state
+    changes such as the payment approval (type-5 documents) through `Transferencias` with a
+    `CctBEDocumentoTransf`, which `Liquidacoes` refuses
   - Commits are single-flight; a second concurrent commit is refused
   - Every commit, refusal and failure is written to `AI_AuditLog` by `ErpToolsService`
 - The commit is gated in `ErpToolsService`: the preview pass makes `WriteConfirmationStore`
@@ -136,6 +140,10 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
   objetos BSO da Primavera, em `ERP/Services/ErpCreationService.cs`:
   - `commit=false` corre o `ValidaActualizacao` do próprio ERP e devolve uma pré-visualização, sem gravar
   - `commit=true` chama `Actualiza` no BSO, para o ERP atribuir números e aplicar as suas regras
+  - Cada documento usa o motor que o próprio ERP usa para ele: vendas e compras pelos serviços
+    de documentos, recibos, pagamentos e encontros por `Liquidacoes`, mudanças de estado como
+    a aprovação para pagamento (documentos de tipo 5) por `Transferencias` com um
+    `CctBEDocumentoTransf`, que o `Liquidacoes` recusa
   - As gravações são single-flight; uma segunda gravação concorrente é recusada
   - Cada gravação, recusa e falha é registada em `AI_AuditLog` pelo `ErpToolsService`
 - O commit tem portão no `ErpToolsService`: a passagem de pré-visualização faz o

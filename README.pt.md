@@ -133,8 +133,8 @@ Studio é um deles) — e atua sobre o ERP através de 29 tools descobertas auto
   visível o cursor desliza até ele, para que veja o que está a ser clicado.
 - **Escreve com preview.** Cria fichas de cliente e fornecedor, artigos, documentos de
   venda (propostas, encomendas, faturas) e de compra (faturas e encomendas a fornecedor),
-  liquida contas correntes (recibos de clientes, pagamentos a fornecedores, encontros de
-  contas) e atualiza fichas existentes, sempre através dos objetos
+  liquida contas correntes (recibos de clientes, pagamentos a fornecedores, aprovações para
+  pagamento, encontros de contas) e atualiza fichas existentes, sempre através dos objetos
   de negócio do Primavera, para que todas as validações do ERP corram e a numeração
   continue a ser do ERP. A primeira chamada é validada pelo ERP (`ValidaActualizacao`) e
   devolve um preview com totais reais sem gravar; esse preview é desenhado como um cartão de
@@ -225,7 +225,7 @@ Studio é um deles) — e atua sobre o ERP através de 29 tools descobertas auto
 | `create_entity` | Cria uma ficha de cliente/fornecedor via BSO — preview primeiro, gravação a partir do cartão de confirmação |
 | `create_sales_document` | Cria um documento de venda via BSO — preview com totais reais, gravação a partir do cartão de confirmação |
 | `create_purchase_document` | Cria um documento de compra (fatura de fornecedor, encomenda) pelo motor de compras, sem abrir o editor — preview com totais reais, gravação a partir do cartão de confirmação |
-| `create_settlement` | Recibos de clientes, pagamentos a fornecedores e encontros de contas pelo motor de contas correntes — lê os pendentes, preview com os documentos e valores, gravação a partir do cartão de confirmação |
+| `create_settlement` | Recibos de clientes, pagamentos a fornecedores, aprovações para pagamento e encontros de contas pelo motor de contas correntes — lê os pendentes, preview com os documentos e valores, gravação a partir do cartão de confirmação |
 | `update_entity` | Atualiza campos de uma ficha de cliente/fornecedor existente — preview primeiro, gravação a partir do cartão de confirmação |
 | `create_article` | Cria um artigo (mercadoria ou serviço) via BSO, com unidade, código de IVA e preço — preview primeiro, gravação a partir do cartão de confirmação; o código de IVA nunca é adivinhado |
 | `update_sales_series` | Prolonga ou reativa uma série de vendas quando o ERP recusa um documento por a série ter acabado; só administradores e técnicos — preview primeiro, aplicada a partir do cartão de confirmação |
@@ -268,8 +268,11 @@ alguém escolher cada passo, e nada disso grava sem o cartão.
   euros" lê a tabela de pendentes do ERP, fica só com o que o tipo de recibo pode liquidar,
   pega primeiro nas dívidas mais antigas e na última em parte, e mostra cada documento e
   valor no cartão. Um encontro de contas encontra sozinho o fornecedor associado ao cliente.
-  Um documento que ainda não pode ser liquidado é explicado com o nome do estado no ERP e o
-  documento que o desbloqueia.
+  Uma fatura de fornecedor ainda à espera de aprovação é explicada com o nome do estado no
+  ERP, e "aprova para pagamento" grava o documento de aprovação a partir do cartão, para o
+  pagamento poder seguir. No próprio editor de liquidações, "põe 500 em valor a liquidar e
+  distribui" preenche o valor e carrega em Distribuir; só o Confirmar grava, e esse passa
+  pelo cartão.
 - **Resolve o que não disse.** Um tipo de fatura de compra quando não se indica nenhum, a
   série por omissão para hoje, uma condição ou modo de pagamento quando a ficha não os tem,
   o código por trás de "Fatura a 45 dias" ou "Armazém 2". Cada escolha é um aviso no cartão,

@@ -8,6 +8,37 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.19.0] - 2026-10-18
+
+### Added
+
+- `create_settlement` `kind=aprovacao`: approves supplier invoices for payment (the ERP's
+  `APR` document, which moves the pending items from "Aguarda Aprovação" to "Aprovada" and
+  pays nothing) from the confirmation card. A payment asked for an invoice still waiting
+  approval explains the state and proposes the approval first. A payment or approval named
+  by the customer file of a company that is also a supplier ("paga à Sofrio") uses the
+  supplier linked in the file or the one with the same tax id, and says so.
+
+### Fixed
+
+- `get_pending_items` answered "no pending items" for a supplier code the chat had never
+  loaded (the entity type defaulted to customer); the type now comes from the ERP when the
+  cache does not know the code.
+- In the settlement editor, `Distribuir` only spreads the amount over the pending grid and
+  no longer goes through the confirmation card; the one-button notice the ERP shows after a
+  click the user asked for is closed by the tool and its text reported, instead of leaving
+  the chat blocked behind the modal. A helper form the editor keeps modal while its grid
+  loads no longer blocks a click on a tab.
+- A learned skill was applied to a request of another window because both named a
+  customer; the prompt now limits a skill to the shape its description gives and carries on
+  with the rest of the request.
+- SECURITY.md listed the supported versions one release behind.
+
+### Changed
+
+- ROADMAP: the purchase invoice intake is laid out in steps (foundations, rules and
+  queue, automatic requests, channels and learning), each proven against the live ERP.
+
 ## [2.18.0] - 2026-10-18
 
 ### Fixed

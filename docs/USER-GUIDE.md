@@ -106,6 +106,13 @@ numbering is the ERP's.
 - A document that is pending but in a state the settlement type does not take (a supplier
   invoice still waiting for payment approval, for example) is explained with the ERP's own
   state name and the document that changes that state. It is not called "not pending".
+- "Approve supplier X's invoices for payment" saves the approval (the ERP's APR document)
+  from the card: the invoices move from "Aguarda Aprovação" to "Aprovada" and nothing is
+  paid; the payment is the next step, with its own card.
+- In the settlement editor (Contas Correntes), "put 500 in the amount to settle and
+  distribute" fills Valor Entregue on the Distribuição Automática tab and presses
+  Distribuir: the ERP spreads the amount over the oldest pending items without saving;
+  only Confirmar saves, and that goes through the card.
 - When the customer's record has no payment method and the settlement type reports to
   SAF-T, the method that type is usually saved with is used, and the card says so.
 
@@ -200,5 +207,5 @@ each request.
 - It never cancels or deletes documents by itself, and has no tool for that.
 - The sales explorer has no article restriction: sales of an article are answered from the
   data, not in that window.
-- Bills of exchange, bank remittances and payment approvals are done in the ERP; the
-  assistant explains when a document is waiting for one of them.
+- Bills of exchange and bank remittances are done in the ERP; the assistant explains when
+  a document is waiting for one of them.

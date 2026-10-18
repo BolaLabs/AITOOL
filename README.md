@@ -128,8 +128,8 @@ and acts on the ERP through 29 auto-discovered tools:
   clicked.
 - **Writes with a preview.** Creates customer and supplier records, articles, sales
   documents (proposals, orders, invoices) and purchase documents (supplier invoices, orders),
-  settles current accounts (customer receipts, supplier payments, encontros de contas) and
-  updates existing records, always through the
+  settles current accounts (customer receipts, supplier payments, payment approvals,
+  encontros de contas) and updates existing records, always through the
   Primavera business objects so every ERP validation runs and numbering stays the ERP's.
   The first call is validated by the ERP (`ValidaActualizacao`) and returns a preview with
   real totals without saving; that preview is drawn as a confirmation card — the fields, the
@@ -216,7 +216,7 @@ and acts on the ERP through 29 auto-discovered tools:
 | `create_entity` | Creates a customer/supplier file via BSO — preview first, saved from the confirmation card |
 | `create_sales_document` | Creates a sales document via BSO — preview with real totals, saved from the confirmation card |
 | `create_purchase_document` | Creates a purchase document (supplier invoice, order) via the purchases BSO without opening the editor — preview with real totals, saved from the confirmation card |
-| `create_settlement` | Customer receipts, supplier payments and encontro de contas through the current-accounts BSO — reads the pending documents, preview with the documents and amounts, saved from the confirmation card |
+| `create_settlement` | Customer receipts, supplier payments, payment approvals and encontro de contas through the current-accounts BSO — reads the pending documents, preview with the documents and amounts, saved from the confirmation card |
 | `update_entity` | Updates fields of an existing customer/supplier file — preview first, saved from the confirmation card |
 | `create_article` | Creates an article (goods or service) via BSO, with unit, VAT code and price — preview first, saved from the confirmation card; the VAT code is never guessed |
 | `update_sales_series` | Extends or reactivates a sales series when the ERP refuses a document for a series that ran out; administrators and technicians only — preview first, applied from the confirmation card |
@@ -256,9 +256,11 @@ without a human choosing each step, and none of it saves anything without the ca
 - **Settles current accounts end to end.** "Faz um recibo ao cliente SOFRIO de 100 euros"
   reads the ERP's pending table, keeps only what the receipt type may settle, takes the oldest
   debts first and the last one in part, and shows every document and amount on the card. An
-  encontro de contas finds the supplier associated to the customer by itself. A document that
-  cannot be settled yet is explained with the ERP's state name and the document that unlocks
-  it.
+  encontro de contas finds the supplier associated to the customer by itself. A supplier
+  invoice still waiting for approval is explained with the ERP's state name, and "aprova para
+  pagamento" saves the approval document from the card, so the payment can follow. In the
+  settlement editor itself, "põe 500 em valor a liquidar e distribui" fills the amount and
+  presses Distribuir; only Confirmar saves, and that goes through the card.
 - **Resolves what you did not say.** A purchase invoice type when none is given, the
   default series for today, a payment term or method when the record has none, the code
   behind "Fatura a 45 dias" or "Armazém 2". Each choice is a warning on the card, never a
