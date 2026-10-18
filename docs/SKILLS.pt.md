@@ -93,6 +93,19 @@ parar e perguntar.
 | `prospecao-de-leads` | Pesquisa web de empresas-alvo → verificação de cliente existente → ficha de cliente (preview, cartão) → oportunidade de venda no CRM (preview, cartão) → rascunho de e-mail para revisão |
 | `_modelo` | O modelo por trás de "Nova skill" (e o que se copia à mão); não aparece como skill nem é oferecido ao assistente |
 
+## Skills a partir do que o assistente aprendeu
+
+Um pedido que correu ferramentas do ERP e acabou sem erro nem cartão de confirmação fica
+guardado como receita: o pedido com os valores substituídos por `{v1}`, `{v2}`… e os passos
+que o resolveram. `/receitas` no chat lista-as com os usos; a partir do terceiro uso limpo os
+passos correm antes de o modelo ser consultado. `/receitas skill N nome` escreve a receita N
+como `SKILL.md` na sua pasta de skills, com o pedido como gatilho e os passos numa só chamada
+`erp_steps`, para a editar como qualquer outra skill e partilhar. As receitas vivem na base
+de dados da empresa (`AI_Recipes`): cada posto aprende com os outros.
+
+Uma skill cujas palavras-gatilho aparecem no pedido é entregue ao assistente logo no
+primeiro pedido, sem gastar uma ida ao modelo a pedi-la com `use_skill`.
+
 ## Partilhar skills
 
 Uma skill é uma pasta: comprima-a, envie-a, ou publique-a num repositório Git. Uma coleção

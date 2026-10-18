@@ -7,8 +7,8 @@
 **An assistant inside PRIMAVERA v10 that runs entirely on machines you control** — no vendor
 account, no per-seat licence, no metered credits — with the model you choose, including a
 local one. It answers from your business data, opens any ERP screen you describe in plain
-language, fills windows, and creates customers and sales documents through the ERP's own
-business objects: a preview validated by the ERP first, a save only from the confirmation
+language, fills windows, and creates customers, articles, sales and purchase documents, receipts,
+payments and encontros de contas through the ERP's own business objects: a preview validated by the ERP first, a save only from the confirmation
 card you click, and every write in an audit trail in your own database.
 
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
@@ -27,7 +27,9 @@ card you click, and every write in an audit trail in your own database.
 | I want to... | Go to |
 | --- | --- |
 | Understand what this is, without the engineering | [In plain terms](#in-plain-terms) |
-| See what the assistant can actually do | [What it does](#what-it-does) · [The 26 tools](#the-26-tools) |
+| See what the assistant can actually do | [What it does](#what-it-does) · [The 29 tools](#the-29-tools) |
+| See what it does without being told each step | [What it does on its own](#what-it-does-on-its-own) |
+| Learn to use it day to day | [User guide](docs/USER-GUIDE.md) |
 | Reach a screen I cannot find in the menus | [Find any screen in plain language](#find-any-screen-in-plain-language) |
 | Decide whether it is safe to put near my ERP | [Security and trust](#security-and-trust) · [docs/SECURITY-AND-PRIVACY.md](docs/SECURITY-AND-PRIVACY.md) |
 | Install it, on one PC or on a whole network | [Install once, every workstation gets it](#install-once-every-workstation-gets-it) · [Install (end users)](#install-end-users) |
@@ -104,7 +106,7 @@ Nothing in it is a mock-up.
 AITOOL is a WinForms extension (.NET Framework 4.8) that embeds a chat assistant into the
 Primavera v10 (SG100) client via WebView2. The assistant talks to the model of your choice —
 OpenAI, OpenRouter, native Anthropic, or any OpenAI-compatible endpoint (LM Studio is one) —
-and acts on the ERP through 26 auto-discovered tools:
+and acts on the ERP through 29 auto-discovered tools:
 
 - **Reads real ERP data.** Pending items with the ERP's own query, sales analysis by
   period, client and article, sales and purchase counts per year via `run_query`, current-account balances with aging, stock per warehouse, document search,
@@ -124,8 +126,10 @@ and acts on the ERP through 26 auto-discovered tools:
   windows — on .NET windows and on the legacy VB6 editors alike, through UI Automation.
   When the ribbon button is visible the cursor glides to it, so you see what is being
   clicked.
-- **Writes with a preview.** Creates customer and supplier records and sales documents
-  (proposals, orders, invoices) and updates existing records, always through the
+- **Writes with a preview.** Creates customer and supplier records, articles, sales
+  documents (proposals, orders, invoices) and purchase documents (supplier invoices, orders),
+  settles current accounts (customer receipts, supplier payments, encontros de contas) and
+  updates existing records, always through the
   Primavera business objects so every ERP validation runs and numbering stays the ERP's.
   The first call is validated by the ERP (`ValidaActualizacao`) and returns a preview with
   real totals without saving; that preview is drawn as a confirmation card — the fields, the
@@ -162,8 +166,9 @@ and acts on the ERP through 26 auto-discovered tools:
   restriction rows (several entities joined the ERP's way).
 - **Fills whole screens in one step.** `set_fields` writes every field of a record,
   including the ones on other tabs, and `set_grid_row` a whole document line in the ERP's own
-  grid, reporting field by field where each value landed. A window is read in under half a
-  second. With the optional fast decision model (Jev, off by default) the names that do not
+  grid, reporting field by field where each value landed. In the sales, purchase and
+  internal-document editors the line goes in through the editor's own events, so the ERP
+  computes it as if it had been typed. A window is read in under half a second. With the optional fast decision model (Jev, off by default) the names that do not
   match — "NIF" for "Contribuinte", "plafond" for "Limite", "editor de documentos de venda"
   for a ribbon path — are resolved in about 0.3 s, ERP dialogs are classified, and buttons
   get a second opinion that can only ask for more confirmation.
@@ -181,13 +186,13 @@ and acts on the ERP through 26 auto-discovered tools:
   stops the turn in under a second; collapsible thinking blocks; Markdown, Mermaid and
   syntax highlighting rendered fully offline (vendored, pinned, SRI-checked libraries);
   follow-up suggestion chips; conversation history in your SQL Server with search,
-  rename, pinning and "edit and resend"; eight slash commands (`/novo`, `/limpar`, `/exportar`, `/config`,
-  `/auditoria [N] | todos [N]`, `/compactar`, `/skills`, `/ajuda`); light/dark/system themes;
+  rename, pinning and "edit and resend"; nine slash commands (`/novo`, `/limpar`, `/exportar`, `/config`,
+  `/auditoria [N] | todos [N]`, `/compactar`, `/skills`, `/receitas`, `/ajuda`); light/dark/system themes;
   keyboard shortcuts (`Ctrl+N` new chat,
   `Ctrl+B` sessions, `Ctrl+,` settings); pop-out window; export to Markdown, HTML or plain
   text. The assistant states that it is an AI system, as AI Act Article 50 requires.
 
-### The 26 tools
+### The 29 tools
 
 | Tool | What it does |
 | --- | --- |
@@ -203,12 +208,15 @@ and acts on the ERP through 26 auto-discovered tools:
 | `open_record` | Opens a record (file, document, account statement) in its native ERP editor |
 | `open_erp_function` | Opens any ERP function by name, navigating the ribbon; lists the inventory when unsure |
 | `interact_erp_window` | Lists windows and fields, fills fields and grid cells, clicks buttons — .NET and native (VB6) windows |
+| `erp_steps` | Runs a whole sequence of ERP steps in one call (open, fill, refresh, read), stopping at the first failure or confirmation |
 | `print_document` | Generates the official report PDF of a document; the card offers Ver, Imprimir, Guardar como… and the rest under Mais |
 | `get_sales_document_types` | Lists the sales document types configured in this ERP installation, each with the nature the ERP assigns it (quote, order, delivery note, invoice) |
 | `get_sales_series` | Lists the series of a document type, with default and today's validity |
 | `get_article_price` | Suggested price/discount from ERP price rules (price lists, customer rules, quantity tiers) |
 | `create_entity` | Creates a customer/supplier file via BSO — preview first, saved from the confirmation card |
 | `create_sales_document` | Creates a sales document via BSO — preview with real totals, saved from the confirmation card |
+| `create_purchase_document` | Creates a purchase document (supplier invoice, order) via the purchases BSO without opening the editor — preview with real totals, saved from the confirmation card |
+| `create_settlement` | Customer receipts, supplier payments and encontro de contas through the current-accounts BSO — reads the pending documents, preview with the documents and amounts, saved from the confirmation card |
 | `update_entity` | Updates fields of an existing customer/supplier file — preview first, saved from the confirmation card |
 | `create_article` | Creates an article (goods or service) via BSO, with unit, VAT code and price — preview first, saved from the confirmation card; the VAT code is never guessed |
 | `update_sales_series` | Extends or reactivates a sales series when the ERP refuses a document for a series that ran out; administrators and technicians only — preview first, applied from the confirmation card |
@@ -229,6 +237,43 @@ pick the real proposal type and a valid series → `create_sales_document` (prev
 totals → card → your click) → `print_document` for the official PDF.
 
 ---
+
+## What it does on its own
+
+You say what you want; the steps in between are the assistant's. Everything below runs
+without a human choosing each step, and none of it saves anything without the card.
+
+- **Whole requests, not single commands.** "Open the purchase editor for supplier F0003 with
+  a line of A0002, quantity 3, price 250" is one request: the editor opens, the supplier goes
+  in, the line goes into the grid and quantity and price into the document line through the
+  editor's own events. The steps run as one batch (`erp_steps`) and stop at the first failure
+  or at the first thing that needs your confirmation.
+- **Requests that repeat become instant.** A request that ran cleanly is kept as a recipe,
+  with the values that change (customer, article, quantity) as placeholders. From its third
+  clean run it executes directly, before the AI model is asked anything: the same kind of
+  request with other values takes seconds and costs no tokens for the plan. Recipes are shared
+  through the company database and listed with `/receitas`.
+- **Settles current accounts end to end.** "Faz um recibo ao cliente SOFRIO de 100 euros"
+  reads the ERP's pending table, keeps only what the receipt type may settle, takes the oldest
+  debts first and the last one in part, and shows every document and amount on the card. An
+  encontro de contas finds the supplier associated to the customer by itself. A document that
+  cannot be settled yet is explained with the ERP's state name and the document that unlocks
+  it.
+- **Resolves what you did not say.** A purchase invoice type when none is given, the
+  default series for today, a payment term or method when the record has none, the code
+  behind "Fatura a 45 dias" or "Armazém 2". Each choice is a warning on the card, never a
+  silent decision.
+- **Learns the company's wording.** What a phrase means in a window (a field, a grid column,
+  a ribbon path) is learned from the values the ERP kept, from corrections and from the
+  user's verdict on the card, and shared with every workstation. What is rejected is not
+  proposed again.
+- **Keeps any model on track.** Fifteen models were run through the same requests on the
+  real ERP. When a model claims an ERP action without calling a tool, the addon asks again
+  with a tool required; a model without tool calling still gets its ERP questions answered;
+  slow providers are routed by latency. Most window automation ends up running from recipes,
+  independent of the model.
+
+The [user guide](docs/USER-GUIDE.md) shows each of these with the words to type.
 
 ## Teach it your own workflows
 
@@ -336,7 +381,7 @@ The guardrails, in the order they matter:
 
 | Guardrail | How it works |
 | --- | --- |
-| **Writes are gated on a confirmation card** | `create_entity`, `create_article`, `update_entity`, `update_sales_series`, `create_sales_document`, `create_opportunity` and any commit button pressed through `interact_erp_window` are previewed first: the ERP validates the draft and returns the fields and, for documents, the totals it computed. The application renders that preview as a card and, while doing so, issues a single-use authorisation token — valid for 15 minutes and bound to the exact arguments previewed. The commit runs only with that token, which is produced by the user's click on the card and is never shown to the model. A `confirm=true` call without it is refused and recorded in `AI_AuditLog` as a refusal; typing "sim" saves nothing. Saves are single-flight — a second concurrent save is refused. What this is not: a database boundary. It bounds what the model can trigger, not what someone with the SQL connection can do. |
+| **Writes are gated on a confirmation card** | `create_entity`, `create_article`, `update_entity`, `update_sales_series`, `create_sales_document`, `create_purchase_document`, `create_settlement`, `create_opportunity` and any commit button pressed through `interact_erp_window` are previewed first: the ERP validates the draft and returns the fields and, for documents, the totals it computed. The application renders that preview as a card and, while doing so, issues a single-use authorisation token — valid for 15 minutes and bound to the exact arguments previewed. The commit runs only with that token, which is produced by the user's click on the card and is never shown to the model. A `confirm=true` call without it is refused and recorded in `AI_AuditLog` as a refusal; typing "sim" saves nothing. Saves are single-flight — a second concurrent save is refused. What this is not: a database boundary. It bounds what the model can trigger, not what someone with the SQL connection can do. |
 | **Per-user visibility** | Conversations and audit entries are scoped to the ERP user who created them. ERP administrators, super administrators and technicians see a Supervisor badge, `/auditoria todos` and a "Todos os utilizadores" switch on the conversation list; another user's conversation opens read-only, and only its owner can rename or delete it. It is an application control decided in C# from the ERP profile, not a database permission. |
 | **Writes go through the ERP's business objects** | Records are created via the Primavera BSO object model, so every ERP validation runs and document numbers are assigned by the ERP. There are no direct writes to ERP core tables. `run_query` is read-only by application guard, not by database permission — it runs on the ERP's own connection, so companies wanting a second barrier should point the addon at a read-only SQL login. |
 | **Guarded SQL** | `run_query` accepts only `SELECT`/`WITH`: a blocklist rejects write/DDL/system keywords (`INSERT`, `DROP`, `EXEC`, `xp_*`, `OPENROWSET`, …) after stripping comments, brackets and Unicode homoglyphs to prevent bypasses; statement stacking (`;`) is refused; row counts are bounded server-side. |
@@ -373,10 +418,13 @@ The addon is free under the [Community License](LICENSE). There is no subscripti
 account to create, and no metering — nothing in AITOOL counts your actions.
 
 What you do pay is your AI provider, directly, at their price. A rough shape rather than a
-promise: a typical question that runs two or three tools carries the system prompt plus the
-tool schemas, so expect a few thousand input tokens per turn and a few hundred output.
-Cheaper models handle the day-to-day lookups; keep the strong ones for the multi-step
-document flows. The counter at the bottom of the chat opens the session panel: context
+promise: every request carries the system prompt plus the schemas of the tools that
+conversation needs (the ones that create, change, mail, print or search the web join only
+when asked for), about 12 thousand input tokens, and a question that runs two or three tools
+makes three or four requests. Providers that cache prompts (OpenAI, DeepSeek, Z.AI and
+others) bill most of that fixed part at a fraction of the price from the second request on.
+Measured on the same six ERP tasks, a low-cost model such as `openai/gpt-6-luna` did them
+all for about a hundredth of what a flagship model cost. The counter at the bottom of the chat opens the session panel: context
 window in use, messages in and out of context, requests, tokens sent and received since the
 ERP opened, the cost (OpenRouter reports the billed amount of each request and the panel
 shows it as such; otherwise the addon prices the tokens with the provider's published list
@@ -530,7 +578,7 @@ overrides. The variables the code reads are listed family by family in
 | `Assistant:Temperature` | 0-2; gated off for reasoning models | `0.7` |
 | `Assistant:MaxToolIterations` | Tool-call rounds per turn (1-15) | `15` |
 | `Assistant:StreamingEnabled` | Server-sent streaming | on |
-| Per-tool toggles | Enable/disable each of the 26 tools (`Assistant:DisabledTools`) | all on |
+| Per-tool toggles | Enable/disable each of the 29 tools (`Assistant:DisabledTools`) | all on |
 | `ErpTools:Enabled` | Kill switch for the entire tool layer | on |
 | Web search | Providers (`tavily`, `brave`, `serper`, `exa`, self-hosted `searxng`) + keys in the encrypted store; fan-out or fallback mode | `tavily` |
 | Fast decisions (Jev) | `Jev:Enabled`, `Jev:Route` (`openrouter` uses the OpenRouter key, `typesafe` its own key in the encrypted store), `Jev:MinConfidence` (0.50-0.95) | off, `openrouter`, `0.60` |
@@ -579,7 +627,7 @@ as a pluggable layer. A related step on the same road is speaking
 [MCP](https://modelcontextprotocol.io) (Model Context Protocol): the current MCP spec's
 Streamable HTTP transport supports stateless servers, which fits this addon's in-process,
 per-turn model — an MCP client in AITOOL would let the assistant consume third-party tool
-servers beyond the built-in 26 tools. See [ROADMAP.md](ROADMAP.md) for where that sits
+servers beyond the built-in 29 tools. See [ROADMAP.md](ROADMAP.md) for where that sits
 relative to everything else.
 
 ---
@@ -651,6 +699,7 @@ Copyright 2025-2026 Bruno Marques — Bola Labs
 | Resource | Description |
 | --- | --- |
 | [INSTALL.md](INSTALL.md) | End-user installation |
+| [docs/USER-GUIDE.md](docs/USER-GUIDE.md) | Day-to-day use: questions, screens, documents, receipts, the card, commands |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Data flow, WebView2 integration, packaging |
 | [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Full configuration reference |
 | [Installer/README.md](Installer/README.md) | Installer build, detection order, signing |

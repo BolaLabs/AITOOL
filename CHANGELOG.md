@@ -8,6 +8,180 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.18.0] - 2026-10-18
+
+### Fixed
+
+- `analyze_sales` summed the line value before discounts (`TotalIliquido`) and called it
+  the sales total; on DEMOV10 that was 685 281 EUR against 652 132 EUR actually invoiced
+  without VAT. It now sums `PrecoLiquido` (after line and customer discounts, the same as
+  the header's `TotalMerc - TotalDesc`), the margin uses the same value, and the result
+  tells the model the figures are final, so it stops redoing them in SQL.
+- A name that matches several customers and none exactly made the model pick one; it now
+  shows the candidates and asks.
+- A model that answered an ERP request in text (the tool call written out, "I used
+  analyze_sales" with nothing run, a chart of invented clients) is asked once more with a
+  tool call required; if it still makes none, the answer says it did not come from the ERP.
+- A question about company data sent to a model without tool support is answered by the
+  addon, saying so, instead of letting the model invent figures.
+- Closing a record with changes reported "still open" for a window that closed a second
+  later; the close now waits for the window, a prompt from the ERP or 12 seconds.
+- An explorer filter took the entity type from the model instead of the window: a sales
+  recipe applied to the purchases explorer looked for a client "F0003". The row's own
+  caption (Cliente(s), Fornecedor(es), Artigo(s)) decides, and articles are supported.
+- "Abre a consulta de pendentes do cliente X" opened the empty query and stopped; it opens
+  the query already filtered for that entity.
+- The model no longer names internal tools to the user or in the follow-up suggestions.
+- The Total column of a document's lines (document card and data-sheet PDF) showed the value
+  before the line's discount next to that discount; it now carries discounts 1 to 3 of the
+  line, as a printed invoice does. The customer discount stays in the header totals.
+- Opening a client, supplier or article whose code does not exist said "opened": the ERP
+  drill-down reports success and leaves the previous record on screen. The code is now
+  checked first, and the answer is that it does not exist, with the closest matches.
+- A button that is not in the window ("Exportar para Marte") got a write-confirmation card,
+  because the second opinion on clicks ran before anyone checked the button existed. The
+  answer is now "it does not exist" with the buttons that do, in under a quarter of a second.
+- A write into the code field of a record window (the "Cliente" of the Cliente window)
+  switched or started a record. It is refused, and `open_record` is the way to another one.
+- Low-cost models failed two or three times per form fill on the shape of the values; the
+  values are read as a list, a map of label to value, wrapped in an object or encoded twice,
+  with English or Portuguese keys.
+- A model that thought and then stopped without answering or calling a tool showed "resposta
+  vazia" at once; it is asked once more, and if it stops again the message says what to do.
+- The pasted e-mail address in a message opened the mention picker; only an @ that starts a
+  word does.
+- The token counter left out the tool definitions that go with every request.
+- A window named by description ("ficha de cliente SOFRIO" for the Cliente window) was not
+  found and the call was refused; a window caption inside the description, or the only
+  window open, is the one meant.
+- A request for a chart answered with a table only gets the chart asked for once more.
+- A chart the model drew after a result card was folded away with the rest of the text under
+  "Ver resposta do assistente"; the text stays open when it carries a chart.
+- A diagram that does not parse shows as its source instead of mermaid's error graphic.
+- The text the model writes between tool rounds no longer runs into the next round on the
+  same line.
+
+### Added
+
+- `create_settlement` makes customer receipts, supplier payments and encontros de contas
+  in the current-accounts engine, without the editor. It reads the pending documents the
+  settlement type may take, nets credit notes, settles the oldest first up to an amount
+  (the last one in part), and is saved only from the card, which lists every document and
+  amount. An encontro de contas takes the supplier associated to the customer, or the one
+  with the same tax id. A document pending in a state the type does not settle (a supplier
+  invoice waiting for payment approval) is explained with the ERP's own state name and the
+  document that changes it.
+- The sales and purchase cards show discounts and withholding tax, so the lines add up to
+  the total, and the payment terms by name.
+- `create_purchase_document` creates a purchase document (supplier invoice, order, receipt)
+  in the purchases engine without opening the editor: the ERP validates it on the preview,
+  the card shows the real totals, and it is saved only from the card. With no type given it
+  uses the company's most-used supplier invoice type and says so; with no series, the
+  type's default series for today.
+- The purchase and internal-documents editors fill a line through their own events, as the
+  sales editor does: the article goes into the grid and quantity, price, discount,
+  description and warehouse go into the document line when the ERP identifies it. The
+  article cell is written the way those editors take a value written in code (their own
+  `Linhas_EditMode`, read from the decompiled editors), without the cell editor.
+- A code field named by what it means ("Fatura a 45 dias", "Armazém 2", "Euro") takes the
+  code the company's tables have for those words: payment terms, warehouses, currencies,
+  sellers, zones, units, families and countries. Several matches go back to the user.
+- `analyze_sales` filters by article (`article_code`), so "how much did we sell of A0001 and
+  to whom" is answered with data; the sales explorer has no article restriction.
+- `erp_steps` runs a whole sequence of ERP tool calls in one request: the model sends the
+  plan once (open the explorer, filter, refresh, read the grid) and the addon runs it in
+  order, waits for each window to be ready, and stops at the first step that fails or needs
+  the user's confirmation. Each step still shows as its own pill and card. The recipes in
+  the system prompt use it, so a four-step task costs one round trip to the model instead of
+  four.
+- In the sales editor, a document line is written through the editor's own
+  `ArtigoIdentificado` event: the automation types the article into the grid and the
+  editor fills quantity, price, discount, description and warehouse into the line on the
+  spot, as the Primavera extensibility manual does. One grid commit per line instead of one
+  per column.
+- The assistant learns recipes: a request that ran tools and ended clean is stored in
+  `AI_Recipes` with the values that came from the request replaced by placeholders. The
+  next matching request gets the stored steps as a hint, and after three clean uses the
+  steps run before the model is even asked, so the answer round trip is the only one left.
+  Recipes are shared by the company and readable in SQL.
+- Windows the request names outright ("abre o explorador de vendas…") start opening while
+  the model is still planning; the model's own open call finds the window ready.
+- A recipe keeps "today" for a date the model filled in, and keeps the name for a client
+  code the model looked up from that name (set_entity resolves it again, and asks when it
+  is ambiguous). Values are replaced inside the batches of fields and grid columns too, and
+  a recipe where any value of the request would not reach its steps is not kept.
+- `/receitas` lists the learned recipes; `/receitas skill N nome` turns one into a skill in
+  the user's folder (the request as trigger, the steps as one `erp_steps` call) and
+  `/receitas apagar N` forgets it.
+- A skill whose trigger words are in the request goes along with the first model request,
+  so the `use_skill` round trip is gone for the requests it was written for.
+
+### Changed
+
+- A conversation past 80 % of the model's context is summarised before the next request,
+  instead of losing its oldest messages to the context optimizer without a trace.
+- A step still running after 20 seconds says that the ERP is taking longer than usual.
+- Grid cells are written straight into the cell and committed by leaving it, instead of
+  through the cell editor, which cost the ERP about 3 seconds per cell: an Explorador filter
+  went from 3.5 s to under 0.1 s. Each cell is checked (the value read back; for the article
+  of a new line, the line filling in), and a cell that refuses goes through the editor from
+  then on.
+- A notice the ERP opens during a write (a client with advance payments, the dimensions
+  of an article) is reported within about 2 seconds instead of after 15.
+- A recipe offered as a hint goes to the model as a short reference that erp_steps resolves,
+  instead of a JSON batch to copy (a small model truncated one), and counts as a use only
+  when the model followed it.
+- The fill cards show the value written next to each field and column.
+- The confirmation card for a click names the window it lands on instead of "Janela ativa".
+- Sales analyses (top customers, top articles, by period, by family) show as a live table
+  under the answer, as query results do; the model had been pointing at a table nobody
+  could see.
+- A window's field list fits what the model can read: one short line per field, editable
+  first. The settlement editor listed 150 fields in 19 842 characters, more than a tool result
+  carries, and the assistant could not say what was on screen.
+- "Editor de liquidações", "recibos" and similar open the settlement editor (Pagamentos e
+  Recebimentos, Operações) instead of the settlement or pending queries.
+- The audit trail names the type and series the ERP got when the tool chose them, and says
+  documento de compra, recibo, pagamento or encontro de contas instead of documento.
+- A field asked for as "Label (Tab)", the way the field list shows it, is found by its label;
+  a caption that appears twice in view takes the visible one highest on screen instead of
+  asking which.
+- Requests to OpenRouter go to the model's lowest-latency provider instead of the cheapest
+  one: at night a provider took 25 s for a 27-token answer and missed the prompt cache on
+  every call.
+- `analyze_sales` returns the dates the company's invoicing covers when a period has few
+  rows, so the model says so instead of running three more queries to find out.
+- Setting a client in a document reads the window once afterwards instead of twice (about
+  1 s less per document).
+- The direct write of a new line's article is kept to the sales editor, where it is proven;
+  other editors use the cell editor.
+- The assistant says when it learns a request and when it starts doing it in one go, and
+  the step of a learned request reads "A repetir o que aprendi".
+- A model that thinks and stops without an answer is asked again with reasoning off
+  (OpenAI-compatible providers; Anthropic refuses a change of effort mid-turn).
+- A function whose window is already open is brought to the front instead of being opened
+  a second time.
+- The model may now issue several tool calls in one reply; the addon still runs them in
+  order.
+- Buttons that only read (Atualizar, Pesquisar, Filtrar, Fechar…) no longer go to the
+  second opinion on clicks, so a refresh in a batch never ends in a confirmation card.
+- Native web search (OpenRouter's `:online`) goes only with messages that ask for something
+  from the web. On most providers it was billed on every request, about 0.007 USD each, and
+  pasted pages from other software vendors into ERP questions.
+- Tools that create, change, mail, print, search the web or manage series are sent once the
+  conversation asks for them; reading and window automation always go. With the shorter
+  tool list in the system prompt, a request went from about 22 thousand input tokens to
+  about 12 thousand, and the provider's prompt cache now holds across the conversation.
+- The usage line in the log shows the cached prompt tokens.
+- The model in the chat header carries "sem ferramentas" or "contexto curto" when that
+  applies, and a question about the ERP sent to a model without tools gets a note in the
+  chat that the answer does not come from the company data.
+- A form fill that the model completes with a second write updates the card already on
+  screen instead of leaving a field marked as missing.
+- "Not found" answers show as completed steps, not as failures.
+- The shipped automation knowledge knows "telemóvel", "preço", "preço unitário",
+  "desconto" and "quantidade" in the sales editor and the client record.
+
 ## [2.17.6] - 2026-10-15
 
 ### Added

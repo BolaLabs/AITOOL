@@ -89,6 +89,19 @@ which tool answers each step, what to do with the result, where to stop and ask.
 | `prospecao-de-leads` | Web search for target companies → existing customer check → customer record (preview, card) → CRM sales opportunity (preview, card) → e-mail draft for review |
 | `_modelo` | The template behind "Nova skill" (and the one to copy by hand); not listed as a skill, never offered to the assistant |
 
+## Skills from what the assistant learned
+
+A request that ran ERP tools and ended with no error and no confirmation card is kept as a
+recipe: the request with its values replaced by `{v1}`, `{v2}`… and the steps that solved
+it. `/receitas` in the chat lists them with their uses; after three clean uses the steps run
+before the model is asked anything. `/receitas skill N nome` writes recipe N as a `SKILL.md`
+in your own skills folder, with the request as the trigger and the steps as one `erp_steps`
+call, so you can edit it like any other skill and share it. Recipes live in the company
+database (`AI_Recipes`), so every workstation learns from every other.
+
+A skill whose trigger words appear in the request is handed to the assistant with the first
+request, so it does not spend a round trip asking for it with `use_skill`.
+
 ## Sharing skills
 
 A skill is a folder: zip it, mail it, or publish it in a Git repository. A public collection

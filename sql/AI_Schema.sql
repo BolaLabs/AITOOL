@@ -87,6 +87,19 @@ BEGIN
     );
 END
 
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'AI_Recipes')
+BEGIN
+    CREATE TABLE AI_Recipes (
+        RecipeKey NVARCHAR(300) NOT NULL,
+        Template NVARCHAR(500) NOT NULL,
+        Steps NVARCHAR(MAX) NOT NULL,
+        Uses INT NOT NULL DEFAULT 1,
+        LastUsed DATETIME2 NOT NULL DEFAULT GETDATE(),
+        UpdatedBy NVARCHAR(100) NULL,
+        CONSTRAINT PK_AI_Recipes PRIMARY KEY (RecipeKey)
+    );
+END
+
 -- Upgrade guards: a table created by an earlier version of this script gains the columns a
 -- newer addon build writes. Idempotent; only nullable/defaulted columns are ever listed.
 IF COL_LENGTH('dbo.AI_ChatSessions','UpdatedAt') IS NULL
@@ -110,5 +123,6 @@ GO
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON dbo.AI_ChatSessions TO [<erp_login>];
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON dbo.AI_ChatMessages TO [<erp_login>];
 -- GRANT SELECT, INSERT                 ON dbo.AI_AuditLog     TO [<erp_login>];
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON dbo.AI_Recipes      TO [<erp_login>];
 -- GRANT SELECT, INSERT, UPDATE         ON dbo.AI_AutomationKnowledge TO [<erp_login>];
 GO
