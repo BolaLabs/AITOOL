@@ -121,12 +121,12 @@ Measured gaps, not preferences.
   pays dozens of catalog round trips through the DSO; on a server with slow compiles it
   took 60-125 s where the SQL itself took under a second.
 - **Prompt caching that works.** Every request carries a fixed ~11k-token prefix
-  (16 KB system prompt + ~20 KB of schemas for 26 tools) re-sent on every tool
+  (16 KB system prompt + the schemas of the 29 tools, ~20 KB when measured at 26) re-sent on every tool
   continuation. Only 1 of Anthropic's 4 cache breakpoints is used, and because
   the order is tools → system → messages, changing the open ERP window
   invalidates the cached tool schemas. Published measurements: 41-80% cost,
   13-31% TTFT.
-- **Fewer tools in the prefix.** 24 is above OpenAI's recommended ceiling and above
+- **Fewer tools in the prefix.** 29 is above OpenAI's recommended ceiling and above
   Anthropic's tool-search threshold. Either consolidate related tools behind an
   `action` parameter, or defer the rare ones. Do it once, not incrementally —
   it changes the observable tool names the golden set asserts on.
