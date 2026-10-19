@@ -8,6 +8,72 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.20.0] - 2026-10-20
+
+### Added
+
+- OpenAI Responses API for reasoning models with ERP tools. On OpenAI direct, gpt-6.1-sol and
+  gpt-6-astra failed every chat turn ("reasoning_effort does not support 'none'"), and every
+  other reasoning model from gpt-5.4 on answered ERP requests
+  with reasoning switched off whatever the effort chip said: Chat Completions takes function
+  tools only with reasoning off. A reasoning model with tools now runs on OpenAI's Responses
+  API, with the effort the user picked (`max` where the model has it), the reasoning summary
+  streamed into the thinking block and the encrypted reasoning carried between tool rounds.
+  OpenRouter is unchanged, and models it reports as always reasoning ("Reasoning is
+  mandatory") fall back from Off to the lowest effort instead of failing.
+- `set_grid_row` changes an existing line with a `{"coluna":"Linha","valor":"2"}` entry; before,
+  the value went to whichever line was selected.
+- Articles are read before they go into a line. An article with dimensions written into an editor line opened the ERP's modal variant grid,
+  which also locked the chat; a parent article is now kept out of the line (and out of
+  `create_sales_document` / `create_purchase_document`) with its variants listed, so the
+  assistant writes the variant or asks which one. A variant written in the editor, which the
+  ERP shows under an aggregator line with the parent's code, is no longer reported as refused.
+- An article whose quantity comes from a formula (m², m³) opened the modal "Fórmula" in the
+  editor; the tool now says which measures the formula takes and points to the document tools
+  with the quantity already computed. An article with serial numbers carries a note that the
+  ERP asks for them in its own window.
+
+### Fixed
+
+- With the effort at Profundo or Máximo, a model that reasons in silence for more than 30 s
+  before its first token is no longer cut and sent again; the first-token wait is 90 s there.
+- A request the model refused twice in contradictory ways (no "none", and "none" required
+  next to tools) looped once more before failing; the second refusal now fails at once.
+- The effort ceilings and "off" values for OpenAI models without a published effort list are
+  the measured ones: `minimal` only on gpt-5, `none` from gpt-5.1, `xhigh` from gpt-5.2.
+- The session panel priced gpt-6 models at zero and assumed a 128k context; the GPT-6 and
+  GPT-5.4 to 5.6 families have their context and list prices, gpt-5.6-sol its current price,
+  and cached input is priced at the cached rate (an ERP turn's cost came out about eight times
+  too high on OpenAI direct). "gpt-5-mini-…" dated ids no longer match the gpt-5 row.
+- A turn whose last round ended with no text after the tools had run (gpt-6-luna, an order
+  already filled in the editor) showed an "empty answer" error; the model is asked once more
+  for the answer.
+- OpenRouter's "can only afford N tokens" (HTTP 402) read as a rejected request in English; it
+  is now the balance message, in Portuguese.
+- A write tool the ERP refused left only "erro" in a customer log; it is now a warning, so the
+  log carries the flight recorder with the ERP's reason.
+- After a confirmed click in an ERP window, a one-button notice was closed and reported as
+  "nothing was saved", even when the notice said the document was saved; it now stays on
+  screen and the card says the ERP is waiting for an answer.
+- A native message box whose buttons could not be read let non-committing captions through
+  the modal gate; only the settlement editor's managed loading form is exempt.
+- Approving invoices that were already approved suggested approving them again; the hint now
+  points to the payment. The audit trail recorded approvals as receipts.
+- `AI/Tools/README.md` counted 24 tools and five that change state (29 and nine).
+- A code the company does not have, typed into the Entidade or Artigo field of an editor,
+  made the ERP answer "O Cliente 'JMF' não existe." once the field was validated, after the
+  tool had already reported it filled: the notice froze the chat and the model said the field
+  was set. The code is now checked against the tables first and nothing is typed. A
+  one-button notice a write still raises is closed by the tool and its text returned.
+- Documents saved through the BSO (sales and purchases) carried no user; the user whose card
+  click saved them is now on the record, as in the editor.
+- Asked to set "Documento" in an editor, the tool wrote the type into the series combo beside
+  it; the document type is now reported as chosen from its list, and `set_entity` returns the
+  type the editor is on, so an order is no longer filled into an invoice.
+- A series that refuses new documents because older ones carry no signature (imported or demo
+  data) is explained with how many and from when, and the way out is another series, an
+  expired one extended, or a new one; the assistant had been sending the user to sign them.
+
 ## [2.19.0] - 2026-10-18
 
 ### Added

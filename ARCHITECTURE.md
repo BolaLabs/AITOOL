@@ -36,6 +36,8 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
 ## OpenAI usage
 
 - Provider abstraction (OpenAI / OpenRouter / native Anthropic / OpenAI-compatible) with streaming
+- On api.openai.com a reasoning model with tools goes to `/v1/responses` (OpenAiResponsesClient), not Chat Completions: from gpt-5.4 on Chat Completions takes tools only with reasoning off, and gpt-6.1-sol and gpt-6-astra cannot turn it off. Stateless (`store: false`); the encrypted reasoning travels back with each tool round. OpenRouter converts on its side and keeps Chat Completions
+- A 400 that names a refused parameter or value (`max_tokens`, an effort the model does not take, a Responses field) is learned once per process by ModelRequestQuirks and the request is sent again before anything reaches the chat
 - Temperature defaults to 0.7 (configurable in-app; gated off for reasoning models)
 - Context window optimization with a sliding window and a token safety margin
 - ERP context is consolidated into a single System message with explicit validation rules and JSON fences
@@ -123,6 +125,8 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
 ## Uso do OpenAI
 
 - Abstração de fornecedores (OpenAI / OpenRouter / Anthropic nativo / compatível) com streaming
+- Em api.openai.com, um modelo de raciocínio com ferramentas vai para `/v1/responses` (OpenAiResponsesClient) e não para Chat Completions: a partir do gpt-5.4 o Chat Completions só aceita ferramentas com o raciocínio desligado, e o gpt-6.1-sol e o gpt-6-astra não o deixam desligar. Sem estado (`store: false`); o raciocínio cifrado volta com cada ronda de ferramentas. O OpenRouter faz a conversão do lado dele e fica em Chat Completions
+- Um 400 que nomeia um parâmetro ou valor recusado (`max_tokens`, um esforço que o modelo não aceita, um campo da Responses) é aprendido uma vez por processo pelo ModelRequestQuirks e o pedido volta a sair antes de chegar alguma coisa ao chat
 - Temperature por defeito 0.7 (configurável na app; desativada em modelos de raciocínio)
 - Otimização da janela de contexto com sliding window e margem de segurança de tokens
 - Contexto ERP consolidado numa única System message com regras explícitas de validação e fences JSON

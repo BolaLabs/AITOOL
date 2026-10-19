@@ -445,7 +445,7 @@ fez todas por cerca de um centésimo do que custou um modelo de topo. O contador
 abre o painel de sessão: contexto ocupado, mensagens dentro e fora do contexto, pedidos,
 tokens enviados e recebidos desde que o ERP abriu, o custo (o OpenRouter devolve o valor
 faturado de cada pedido e o painel mostra-o como tal; nos outros casos o addon avalia os
-tokens com a lista de preços do fornecedor ou uma tabela interna para OpenAI e Anthropic),
+tokens com a lista de preços do fornecedor ou uma tabela interna para OpenAI e Anthropic, com a entrada em cache ao preço de cache),
 os últimos pedidos um a um e o peso do próximo pedido. O tamanho do contexto é o que o
 fornecedor publica para o modelo. Quando o modelo raciocina, um chip ao lado da caixa de
 escrita muda o esforço (Ctrl+Shift+E): "Desligado" responde mais depressa, "Profundo" pensa mais
@@ -598,7 +598,7 @@ listadas família a família em [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
 | `Provider:Active` | Fornecedor ativo: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | `openrouter` |
 | `Provider:<id>:Model` | Id do modelo por fornecedor (seletor pesquisável com badges de capacidades) | `openai/gpt-5.6-sol` no OpenRouter, `gpt-5.6-sol` na OpenAI direta |
 | `Provider:<id>:BaseUrl` | Endpoint, editável para fornecedores compatíveis com OpenAI | preset |
-| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max` — Desligado, Rápido, Equilibrado, Profundo, Máximo na interface — onde o modelo o suporta. O que cada nível envia é lido do catálogo do fornecedor para aquele modelo (`none`, `minimal`, `xhigh`, `max` quando existem), e a escolha é lembrada por modelo. Também se muda no chip ao lado da caixa de escrita | `Off` |
+| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max` — Desligado, Rápido, Equilibrado, Profundo, Máximo na interface — onde o modelo o suporta. O que cada nível envia é lido do catálogo do fornecedor para aquele modelo (`none`, `minimal`, `xhigh`, `max` quando existem), e a escolha é lembrada por modelo. Na OpenAI direta, um modelo de raciocínio com as ferramentas do ERP corre na API Responses, por isso o esforço vale também nesses pedidos. Também se muda no chip ao lado da caixa de escrita | `Off` |
 | Chaves de API | Definidas na aplicação; cifradas com DPAPI por utilizador. Fallbacks de ambiente: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | — |
 | `Assistant:MaxTokens` | Máximo de tokens por resposta (256-128000) | `4096` |
 | `Assistant:Temperature` | 0-2; desativada para modelos de raciocínio | `0.7` |

@@ -430,7 +430,7 @@ all for about a hundredth of what a flagship model cost. The counter at the bott
 window in use, messages in and out of context, requests, tokens sent and received since the
 ERP opened, the cost (OpenRouter reports the billed amount of each request and the panel
 shows it as such; otherwise the addon prices the tokens with the provider's published list
-or a built-in table for OpenAI and Anthropic), the last requests one by one, and what the
+or a built-in table for OpenAI and Anthropic, cached input at the cached rate), the last requests one by one, and what the
 next request will weigh. The context size is the one the provider publishes for the model.
 When the model reasons, a chip beside the message box switches the effort (Ctrl+Shift+E):
 "Desligado" answers fastest, "Profundo" thinks longer on multi-step requests.
@@ -574,7 +574,7 @@ overrides. The variables the code reads are listed family by family in
 | `Provider:Active` | Active provider: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | `openrouter` |
 | `Provider:<id>:Model` | Model id per provider (searchable picker with capability badges) | `openai/gpt-5.6-sol` on OpenRouter, `gpt-5.6-sol` on OpenAI direct |
 | `Provider:<id>:BaseUrl` | Endpoint, editable for OpenAI-compatible providers | preset |
-| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max` — Desligado, Rápido, Equilibrado, Profundo, Máximo in the interface — where the model supports it. What each level sends is read from the provider's catalogue for that model (`none`, `minimal`, `xhigh`, `max` where they exist), and the choice is remembered per model. Also changed from the chip beside the message box | `Off` |
+| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max` — Desligado, Rápido, Equilibrado, Profundo, Máximo in the interface — where the model supports it. What each level sends is read from the provider's catalogue for that model (`none`, `minimal`, `xhigh`, `max` where they exist), and the choice is remembered per model. On OpenAI direct a reasoning model with ERP tools runs on the Responses API, so the effort applies to those requests too. Also changed from the chip beside the message box | `Off` |
 | API keys | Set in-app; DPAPI-encrypted per user. Env fallbacks: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | — |
 | `Assistant:MaxTokens` | Max tokens per response (256-128000) | `4096` |
 | `Assistant:Temperature` | 0-2; gated off for reasoning models | `0.7` |
