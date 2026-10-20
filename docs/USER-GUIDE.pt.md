@@ -7,6 +7,22 @@ compras, back office. A instalação está no [INSTALL.pt.md](../INSTALL.pt.md);
 Todos os exemplos foram feitos na DEMOV10, a empresa de demonstração da Cegid, na versão que
 acompanha este manual. Códigos como `SOFRIO`, `F0003` ou `A0001` são dessa empresa.
 
+**Os pedidos mais usados**
+
+| Para | Escreva, por exemplo | Secção |
+| --- | --- | --- |
+| Uma fatura ou proposta | *Faz uma fatura à SOFRIO com 2 A0002* | [5](#5-criar-documentos-e-fichas-sem-abrir-o-editor) |
+| Uma linha no editor aberto | *Põe uma linha de 3 A0002 a 250 €* | [4](#4-preencher-um-ecrã-por-escrito) |
+| Um artigo com variantes | *Põe 2 do I0001 com DDR2-1024 e MT2200* | [4](#4-preencher-um-ecrã-por-escrito) |
+| Um artigo com fórmula | *Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento* | [4](#4-preencher-um-ecrã-por-escrito) |
+| Um recibo, pagamento ou encontro de contas | *Faz um recibo ao cliente SOFRIO de 100 euros* | [5](#recibos-pagamentos-e-encontros-de-contas) |
+| Aprovar faturas para pagamento | *Aprova para pagamento as faturas do fornecedor F0003* | [5](#recibos-pagamentos-e-encontros-de-contas) |
+| Distribuir um valor no editor de liquidações | *Põe 500 em valor a liquidar e distribui* | [5](#recibos-pagamentos-e-encontros-de-contas) |
+| Saber o que se passa | *Quais os pendentes da SOFRIO?* | [2](#2-perguntar-pelos-seus-dados) |
+| O PDF oficial de um documento | *Imprime a fatura FA C/4* | [2](#2-perguntar-pelos-seus-dados) |
+
+O que grava espera sempre pelo seu clique no cartão ([secção 6](#6-o-cartão-de-confirmação)).
+
 ---
 
 ## 1. Abrir
@@ -15,8 +31,8 @@ O friso tem um separador **BOLA LABS** com o botão **Assistente AI**. O chat ab
 direita do ERP; o botão no topo do painel solta-o numa janela própria. `Ctrl+N` começa uma
 conversa nova, `Ctrl+B` abre a lista de conversas, `Ctrl+,` as definições.
 
-Da primeira vez, as definições pedem uma chave de IA (OpenAI, Anthropic, OpenRouter ou um
-servidor local). Não há mais nada para configurar.
+Da primeira vez, as definições pedem uma chave de IA (OpenAI, Anthropic, OpenRouter, um
+endpoint compatível ou um servidor local). Não há mais nada para configurar.
 
 ## 2. Perguntar pelos seus dados
 
@@ -32,7 +48,8 @@ quando o ERP tem uma consulta sua (os pendentes, por exemplo), dessa consulta.
 | *Quais os 10 melhores clientes do ano passado?* | Um ranking com os totais |
 
 Cada linha de uma tabela tem um menu: abrir a ficha no ERP, gerar o PDF, ver os pendentes.
-**Copiar** copia a tabela para colar no Excel.
+**Copiar** copia a tabela para colar no Excel. *Imprime a fatura FA C/4* gera o PDF com o mapa
+da série, ATCUD e QR, e o cartão tem Ver, Imprimir e Guardar como.
 
 ### Sabe o que tem aberto
 
@@ -53,7 +70,7 @@ isto** / **Não era isto**. A resposta fica guardada para todos os postos da emp
 
 ## 4. Preencher um ecrã por escrito
 
-Esta é a parte pensada para a acessibilidade: quem não pode usar o rato, ou prefere não o
+Reduz o esforço motor: quem não pode usar o rato, ou prefere não o
 usar, conduz as janelas do ERP por texto.
 
 - *"Que campos tem esta janela?"* lista os campos da janela da frente, separador a
@@ -202,7 +219,7 @@ estimado de cada pedido.
 | `/receitas` | Os pedidos que aprendeu a fazer diretamente |
 | `/ajuda` | Ajuda |
 
-`Ctrl+N` conversa nova · `Ctrl+B` conversas · `Ctrl+,` definições · `Enter` envia ·
+`Ctrl+N` conversa nova · `Ctrl+B` conversas · `Ctrl+E` exportar · `Ctrl+,` definições · `Enter` envia ·
 `Shift+Enter` nova linha.
 
 ## 10. Quando alguma coisa corre mal
@@ -219,7 +236,7 @@ estimado de cada pedido.
 ## 11. Limites que convém saber
 
 - Não aplica as permissões por utilizador do Primavera ao que lê; ver
-  [SECURITY.md](../SECURITY.md).
+  [Segurança e privacidade](SECURITY-AND-PRIVACY.pt.md).
 - Nunca anula nem apaga documentos sozinho, e não tem ferramenta para isso.
 - O Explorador de vendas não tem restrição por artigo: as vendas de um artigo são
   respondidas a partir dos dados, não nessa janela.

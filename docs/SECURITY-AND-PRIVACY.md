@@ -141,7 +141,7 @@ the Windows profile. A non-persistent profile means the key is re-entered every 
 
 ## 6. What is stored in your database
 
-Four tables are created **automatically, in the ERP company database** (`PRI<CodEmp>`) on
+Five tables are created **automatically, in the ERP company database** (`PRI<CodEmp>`) on
 first use. There is no separate database and no migration step.
 
 | Table | Contents |
@@ -150,12 +150,13 @@ first use. There is no separate database and no migration step.
 | `AI_ChatMessages` | Message content, plain text, including ERP data returned by tools |
 | `AI_AuditLog` | Timestamp, user, company, tool, summary, success flag, and the serialized tool arguments with key/token/secret/password values redacted, truncated at 2000 characters |
 | `AI_AutomationKnowledge` | What the window automation learned, shared by the workstations: the wording of a request, the window, the caption and control name of the field, column or ERP function it meant, the captions a user rejected, a use count, the date and the user who last changed it. Names and captions only, never the values typed |
+| `AI_Recipes` | Learned request templates shared by the workstations: the wording with placeholders for the values, the steps to run, a use count, the date and the user who last changed it |
 
 **There is no retention policy and no purge job.** Sessions can be deleted individually from
 the UI; nothing expires, and the data survives uninstalling the addon. For a deployment
 subject to GDPR retention or erasure obligations, that is a policy you have to add — a
 scheduled delete against the first three tables is the whole of it. `AI_AutomationKnowledge`
-holds no personal data beyond the user code of whoever last changed a row.
+and `AI_Recipes` hold no personal data beyond the user code of whoever last changed a row.
 
 Required permissions: whatever the ERP connection already has, plus `CREATE TABLE` on the
 database and `ALTER` on the `dbo` schema the first time the addon runs.
@@ -176,7 +177,8 @@ left two warnings in a local file as the only trace.
 ### What the audit trail covers
 
 **Covered**: commits through the object model (create/update entity, create article, create
-sales document, create sales opportunity, update sales series),
+sales document, create purchase document, receipts, payments, payment approvals and encontros de
+contas through `create_settlement`, create sales opportunity, update sales series),
 refused commits, failures, and the mutating window actions (field write, one or several;
 grid write, a cell or a row; button click, window close, close-all-windows, and their
 refusals).

@@ -1,4 +1,4 @@
-[English](INSTALL.md) | **Português**
+﻿[English](INSTALL.md) | **Português**
 
 # Instalar o AITOOL
 
@@ -115,8 +115,8 @@ instaladores.
 4. Começar a conversar. As definições (fornecedor, modelo, chave) persistem entre
    reinícios.
 
-Na primeira execução o addon cria três tabelas `AI_*` na base de dados do ERP, para o
-histórico de conversas e o trilho de auditoria. O que guardam, e o script pronto para
+Na primeira execução o addon cria cinco tabelas `AI_*` na base de dados do ERP, para o
+histórico de conversas, o trilho de auditoria e o que o assistente aprendeu. O que guardam, e o script pronto para
 instalações onde o addon não pode fazer `CREATE TABLE`, estão em
 [docs/SECURITY-AND-PRIVACY.pt.md, secção 6](docs/SECURITY-AND-PRIVACY.pt.md#6-o-que-fica-guardado-na-sua-base-de-dados).
 

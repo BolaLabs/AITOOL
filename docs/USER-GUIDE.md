@@ -7,6 +7,22 @@ is and how it is built is in the [README](../README.md).
 Every example below was run on DEMOV10, the Cegid demo company, on the version this guide
 ships with. Codes such as `SOFRIO`, `F0003` or `A0001` are that company's.
 
+**The requests used most**
+
+| To get | Type, for example | Section |
+| --- | --- | --- |
+| An invoice or a quote | *Faz uma fatura à SOFRIO com 2 A0002* | [5](#5-create-documents-and-records-without-opening-the-editor) |
+| A line in the open editor | *Põe uma linha de 3 A0002 a 250 €* | [4](#4-fill-a-screen-by-writing) |
+| An article with variants | *Põe 2 do I0001 com DDR2-1024 e MT2200* | [4](#4-fill-a-screen-by-writing) |
+| A formula article | *Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento* | [4](#4-fill-a-screen-by-writing) |
+| A receipt, payment or settlement | *Faz um recibo ao cliente SOFRIO de 100 euros* | [5](#receipts-payments-and-encontros-de-contas) |
+| Invoices approved for payment | *Aprova para pagamento as faturas do fornecedor F0003* | [5](#receipts-payments-and-encontros-de-contas) |
+| An amount distributed in the settlement editor | *Põe 500 em valor a liquidar e distribui* | [5](#receipts-payments-and-encontros-de-contas) |
+| What is going on | *Quais os pendentes da SOFRIO?* | [2](#2-ask-about-your-data) |
+| The official PDF of a document | *Imprime a fatura FA C/4* | [2](#2-ask-about-your-data) |
+
+Anything that saves waits for your click on the card ([section 6](#6-the-confirmation-card)).
+
 ---
 
 ## 1. Open it
@@ -16,8 +32,8 @@ the right of the ERP; the button at the top of the panel pops it out into its ow
 `Ctrl+N` starts a new conversation, `Ctrl+B` opens the list of conversations, `Ctrl+,` the
 settings.
 
-The first time, the settings ask for an AI key (OpenAI, Anthropic, OpenRouter, or a local
-server). Nothing else needs configuring.
+The first time, the settings ask for an AI key (OpenAI, Anthropic, OpenRouter, a compatible
+endpoint, or a local server). Nothing else needs configuring.
 
 ## 2. Ask about your data
 
@@ -33,7 +49,9 @@ and, where the ERP has a query of its own (pending items, for instance), from th
 | *Quais os 10 melhores clientes do ano passado?* | A ranking with the totals |
 
 Each row of a table has a menu: open the record in the ERP, generate the PDF, show the
-pending items. **Copiar** copies the table so it pastes into Excel.
+pending items. **Copiar** copies the table so it pastes into Excel. *Imprime a fatura FA C/4*
+makes the PDF from the series' report, with ATCUD and QR, and the card offers Ver, Imprimir
+and Guardar como.
 
 ### It knows what you have open
 
@@ -54,7 +72,7 @@ The first time a wording is used, the card shows where it went and asks **Era is
 
 ## 4. Fill a screen by writing
 
-This is the part built for accessibility: a person who cannot use the mouse, or prefers not
+It reduces the motor effort: a person who cannot use the mouse, or prefers not
 to, drives the ERP windows by text.
 
 - *"Que campos tem esta janela?"* lists the fields of the window in front, tab by tab, with
@@ -102,7 +120,7 @@ numbering is the ERP's.
 | *Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros* | A purchase document |
 | *Faz um recibo ao cliente SOFRIO de 100 euros* | A customer receipt |
 | *Paga 200 euros ao fornecedor F0001* | A supplier payment |
-| *Faz um encontro de contas do cliente SOFRIO de 150 euros* | A customer and supplier compensation |
+| *Faz um encontro de contas do cliente SOFRIO de 150 euros* | Account offsetting (encontro de contas) between the customer and its supplier |
 | *Recebe tudo o que o cliente MICROSOFTPOR deve* | A receipt for the whole balance |
 
 ### Receipts, payments and encontros de contas
@@ -118,11 +136,11 @@ numbering is the ERP's.
 - A document that is pending but in a state the settlement type does not take (a supplier
   invoice still waiting for payment approval, for example) is explained with the ERP's own
   state name and the document that changes that state. It is not called "not pending".
-- "Approve supplier X's invoices for payment" saves the approval (the ERP's APR document)
+- *"Aprova para pagamento as faturas do fornecedor X"* saves the approval (the ERP's APR document)
   from the card: the invoices move from "Aguarda Aprovação" to "Aprovada" and nothing is
   paid; the payment is the next step, with its own card.
-- In the settlement editor (Contas Correntes), "put 500 in the amount to settle and
-  distribute" fills Valor Entregue on the Distribuição Automática tab and presses
+- In the settlement editor (Contas Correntes), *"põe 500 em valor a liquidar e distribui"*
+  fills Valor Entregue on the Distribuição Automática tab and presses
   Distribuir: the ERP spreads the amount over the oldest pending items without saving;
   only Confirmar saves, and that goes through the card.
 - When the customer's record has no payment method and the settlement type reports to
@@ -199,7 +217,7 @@ each request.
 | `/receitas` | The requests it learned to run directly |
 | `/ajuda` | Help |
 
-`Ctrl+N` new chat · `Ctrl+B` conversations · `Ctrl+,` settings · `Enter` sends ·
+`Ctrl+N` new chat · `Ctrl+B` conversations · `Ctrl+E` export · `Ctrl+,` settings · `Enter` sends ·
 `Shift+Enter` new line.
 
 ## 10. When something goes wrong

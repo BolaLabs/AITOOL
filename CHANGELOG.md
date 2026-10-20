@@ -8,6 +8,58 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+### Changed
+
+- The first request of a conversation is up to about 1,000 tokens lighter: the rules for receipts, purchases, documents,
+  records, articles, series and printing now travel with their own tools instead of in every
+  request, and the window tool's description lost its list of actions.
+- "Põe 1 A0007 branco", "o I0001 com DDR2-1024 e MT2200": when the dimension values in the
+  request name exactly one variant, the line is written through the variant grid without
+  asking which one.
+- "jmf" finds the customer J.M.F.: customer, supplier and other-party codes and names are also
+  compared without dots, spaces and hyphens, in the entity search and in set_entity.
+- After the user saves from a card, the one-sentence summary reuses the conversation's tools
+  instead of pulling new ones from the words of the saved document (a cache miss each time).
+- The welcome screen of the chat offers "Recibos e aprovações" (it starts the request in the
+  box, ready for the customer's name and the amount, without sending it), and "Preencher
+  janelas" names what it covers: lines, variants and formulas.
+
+### Fixed
+
+- Asked for the document type the editor already shows ("FA" in an FA editor), the window tool
+  refused and the turn stopped before the customer; it now reports there is nothing to change.
+- A dimension parent sent to a line that already held it (left by a cancelled grid) waited 8 s
+  for a grid the ERP never opens; it now goes to a new line.
+- Learned requests replayed article and customer codes in lowercase and without their dots
+  ("a0002"); they keep what the user typed.
+- "Muda o tipo de documento para FA" opened the list of the Documento field, which is the
+  document types maintenance and chooses nothing, and the window was left open; the assistant
+  now says which type the editor is in and leaves the choice to the user.
+- A line code the company does not have ("A0002 a 250" in the Artigo cell) raised the ERP's
+  "O Artigo não existe!" notice; the line tool now checks the code first, as the field tool
+  already did.
+- "Põe o cliente jmf" wrote J.M.F. but reported it could not confirm it: the customer name
+  beside the code had not refreshed yet. The name is read again before deciding.
+- "Faz uma proposta ao SOFRIO…", "Prepara um orçamento…", "Faz uma nota de crédito…" and "Faz
+  uma guia…" did not reach the document tool, and "Quais os pendentes da SOFRIO?" never got the
+  pending-items tool: the model answered from SQL or drove the Consulta de Pendentes screen. The
+  user guide's own requests now get the right tool, and pending items are always available.
+- After opening a screen by name the assistant often said "a janela já estava aberta": it had
+  opened it a moment before. It now says it opened it.
+- A failed line or field write was recorded as "A ferramenta devolveu success=false" in the
+  log, the audit and the step list; the ERP's reason or the failing column is shown instead.
+- The instructions the model reads still said the chat takes no clicks while an ERP dialog is
+  open, and asked the user to answer it in the ERP; they now follow the 2.21 rules (the answer
+  goes through the card when the chat is in its own window). The receipt tool described credit
+  notes as settled first, the opposite of what it does; the pending-items tool said empty dates
+  meant no date filter (it is the last 24 months).
+- The model could ask "confirmas?" in text before showing the save card; the card is now the
+  only confirmation it asks for.
+- In the narrow panel the field card squeezed a field name to one letter per line when the
+  "sugestão rápida" chip and its buttons were beside it.
+- With the chat docked, the window automation's accessibility walk also walked the chat page
+  itself and spent its time budget there.
+
 ## [2.21.0] - 2026-10-20
 
 ### Highlights

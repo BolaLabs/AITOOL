@@ -15,7 +15,7 @@ Sem conta no fabricante, sem licença por posto, sem créditos a contar.
 [![PRIMAVERA v10.20+](https://img.shields.io/badge/PRIMAVERA%20v10.20%2B-Evolution%20%C2%B7%20Executive-1E3A5F)](#instalar)
 
 **[Descarregar](https://github.com/BolaLabs/AITOOL/releases/latest)** ·
-[Ver o filme](https://bolalabs.pt/aitool/) ·
+[Ver o filme](https://bolalabs.pt/pt/aitool/#filme) ·
 [Guia do utilizador](docs/USER-GUIDE.pt.md) ·
 [Segurança](docs/SECURITY-AND-PRIVACY.pt.md) ·
 [English](README.md)
@@ -51,16 +51,45 @@ e cada gravação, recusa e falha fica numa tabela de auditoria na sua base de d
 
 ## O que pode pedir
 
-| Escreve | O que acontece |
-| --- | --- |
-| *"Quais os pendentes da SOFRIO?"* | A consulta de pendentes do próprio ERP, em cartões e numa tabela viva |
-| *"Abre o explorador de vendas"* | O ecrã abre a partir do friso, seja qual for o módulo |
-| *"Põe no editor uma linha de 3 A0002 a 250 €"* | A linha é escrita pelos eventos do próprio editor, como se fosse digitada |
-| *"Faz uma fatura à J.M.F. com 2 monitores"* | Uma pré-visualização com os totais do ERP e um cartão com **Gravar documento** |
-| *"Faz um recibo de 100 € à SOFRIO"* | Liquida primeiro as dívidas mais antigas; cada documento e valor está no cartão |
-| *"Imprime a fatura FA C/4"* | O PDF oficial do relatório da série, com ATCUD e QR |
+Um pedido por área do ERP. O que está marcado com **grava** fica à espera do seu clique no cartão.
 
-Mais, com as palavras exatas: o [guia do utilizador](docs/USER-GUIDE.pt.md).
+| Área | Escreve | O que acontece |
+| --- | --- | --- |
+| **Documentos** | *"Faz uma fatura à SOFRIO com 2 A0002"* · **grava** | Uma pré-visualização com os totais do ERP e um cartão com **Gravar documento** |
+| **Linhas no editor** | *"Põe uma linha de 3 A0002 a 250 €"* | A linha é escrita pelos eventos do próprio editor; quem a calcula é o ERP |
+| **Variantes** | *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"* | A grelha de variantes do ERP é preenchida e confirmada: uma linha por variante sob o artigo |
+| **Fórmulas** | *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"* | As medidas vão para a janela «Fórmula» do ERP; a linha fica com a quantidade que ele calcula |
+| **Recibos e pagamentos** | *"Faz um recibo ao cliente SOFRIO de 100 euros"* · **grava** | Liquida primeiro as dívidas mais antigas, a última em parte; cada documento e valor está no cartão |
+| **Aprovações** | *"Aprova para pagamento as faturas do fornecedor F0003"* · **grava** | O documento APR do ERP: as faturas passam a Aprovada, nada é pago |
+| **Perguntas e ecrãs** | *"Quais os pendentes da SOFRIO?"* | A consulta de pendentes do próprio ERP, em cartões e numa tabela viva |
+| **PDF oficial** | *"Imprime a fatura FA C/4"* | O mapa da série com ATCUD e QR; o cartão tem Ver, Imprimir e Guardar como |
+
+<details>
+<summary><b>Mais exemplos, por área</b></summary>
+
+**Documentos e fichas** · **grava**
+- *"Faz uma proposta ao SOFRIO com 2 A0001"*: um documento de venda com os preços e totais do ERP
+- *"Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros"*: um documento de compra
+- *"Cria o artigo AIT1018 "Cabo HDMI 2 m", unidade UN, IVA 23"*: uma ficha de artigo; o código de IVA nunca é adivinhado
+
+**Preencher o editor**
+- *"Muda a quantidade da linha 2 para 5"*: muda essa linha, as outras ficam
+- *"Põe o cliente SOFRIO"*: o cliente entra no documento e o nome que o ERP mostra é confirmado
+- *"Põe um I0001, que eu escolho as variantes na grelha"*: a grelha abre para si, e o chat continua a responder na sua própria janela
+
+**Recibos, pagamentos e encontros de contas** · **grava**
+- *"Paga 200 euros ao fornecedor F0001"*: um pagamento a fornecedor
+- *"Faz um encontro de contas do cliente SOFRIO de 150 euros"*: compensa o saldo do cliente com o do fornecedor
+- *"Recebe tudo o que o cliente MICROSOFTPOR deve"*: um recibo do saldo todo, notas de crédito incluídas
+- No editor de liquidações, *"Põe 500 em valor a liquidar e distribui"*: a Distribuição Automática reparte o valor pelos pendentes mais antigos; só o Confirmar grava, e passa pelo cartão
+
+**Ecrãs e documentos**
+- *"Abre o explorador de vendas"*: o ecrã abre a partir do friso, seja qual for o módulo
+- *"O que tenho aberto no ERP?"*: as janelas abertas e qualquer diálogo do ERP à espera de resposta
+
+</details>
+
+As palavras exatas para tudo o resto: o [guia do utilizador](docs/USER-GUIDE.pt.md).
 
 ## Veja
 
@@ -81,7 +110,7 @@ Mais, com as palavras exatas: o [guia do utilizador](docs/USER-GUIDE.pt.md).
 </tr>
 </table>
 
-A [página do produto](https://bolalabs.pt/aitool/) tem o filme completo, gravado na versão publicada.
+A [página do produto](https://bolalabs.pt/pt/aitool/#filme) tem o filme completo, gravado no ERP real com a v2.12 (setembro de 2026).
 
 ## Nada é gravado sem o seu clique
 

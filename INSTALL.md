@@ -1,4 +1,4 @@
-**English** | [Português](INSTALL.pt.md)
+﻿**English** | [Português](INSTALL.pt.md)
 
 # Installing AITOOL
 
@@ -108,8 +108,8 @@ Useful when the setup cannot run — an unusual topology, or a policy against in
    sent anywhere except the provider you chose. See [SECURITY.md](SECURITY.md).
 4. Start chatting. Settings (provider, model, key) persist across restarts.
 
-On the first run the addon creates three `AI_*` tables in the ERP database for chat history
-and the audit trail. What they hold, and the pre-built script for sites where the addon may
+On the first run the addon creates five `AI_*` tables in the ERP database for chat history,
+the audit trail and what the assistant learned. What they hold, and the pre-built script for sites where the addon may
 not `CREATE TABLE`, are in
 [docs/SECURITY-AND-PRIVACY.md, section 6](docs/SECURITY-AND-PRIVACY.md#6-what-is-stored-in-your-database).
 

@@ -15,7 +15,7 @@ No vendor account, no per-seat licence, no metered credits.
 [![PRIMAVERA v10.20+](https://img.shields.io/badge/PRIMAVERA%20v10.20%2B-Evolution%20%C2%B7%20Executive-1E3A5F)](#install)
 
 **[Download](https://github.com/BolaLabs/AITOOL/releases/latest)** ·
-[Watch the film](https://bolalabs.pt/en/aitool/) ·
+[Watch the film](https://bolalabs.pt/en/aitool/#filme) ·
 [User guide](docs/USER-GUIDE.md) ·
 [Security](docs/SECURITY-AND-PRIVACY.md) ·
 [Português](README.pt.md)
@@ -51,16 +51,45 @@ every save, refusal and failure goes to an audit table in your database.
 
 ## What you can ask
 
-| You type | What happens |
-| --- | --- |
-| *"Quais os pendentes da SOFRIO?"* | The ERP's own pending-items query, as KPI cards and a live table |
-| *"Abre o explorador de vendas"* | The screen opens from the ribbon, in whatever module it lives |
-| *"Põe no editor uma linha de 3 A0002 a 250 €"* | The line is written through the editor's own events, as if typed |
-| *"Faz uma fatura à J.M.F. com 2 monitores"* | A preview with the ERP's totals, then a card with **Gravar documento** |
-| *"Faz um recibo de 100 € à SOFRIO"* | The oldest debts are settled first; every document and amount is on the card |
-| *"Imprime a fatura FA C/4"* | The official PDF from the series' report, ATCUD and QR included |
+One request per area of the ERP. Those marked **saves** wait for your click on the card.
 
-More, with the exact words to type: the [user guide](docs/USER-GUIDE.md).
+| Area | You type | What happens |
+| --- | --- | --- |
+| **Documents** | *"Faz uma fatura à SOFRIO com 2 A0002"* · **saves** | A preview with the ERP's totals, then a card with **Gravar documento** |
+| **Editor lines** | *"Põe uma linha de 3 A0002 a 250 €"* | The line is written through the editor's own events; the ERP computes it |
+| **Variants** | *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"* | The ERP's variant grid is filled and confirmed: one line per variant under the article |
+| **Formulas** | *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"* | The measures go into the ERP's "Fórmula" dialog; the line takes the quantity it computes |
+| **Receipts and payments** | *"Faz um recibo ao cliente SOFRIO de 100 euros"* · **saves** | Oldest debts first, the last one in part; every document and amount is on the card |
+| **Approvals** | *"Aprova para pagamento as faturas do fornecedor F0003"* · **saves** | The ERP's APR document: the invoices move to Aprovada, nothing is paid |
+| **Questions and screens** | *"Quais os pendentes da SOFRIO?"* | The ERP's own pending-items query, as KPI cards and a live table |
+| **Official PDF** | *"Imprime a fatura FA C/4"* | The series' report with ATCUD and QR; the card offers Ver, Imprimir and Guardar como |
+
+<details>
+<summary><b>More examples, by area</b></summary>
+
+**Documents and records** · **saves**
+- *"Faz uma proposta ao SOFRIO com 2 A0001"*: a sales document with the ERP's prices and totals
+- *"Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros"*: a purchase document
+- *"Cria o artigo AIT1018 "Cabo HDMI 2 m", unidade UN, IVA 23"*: an article record; the VAT code is never guessed
+
+**Filling the editor**
+- *"Muda a quantidade da linha 2 para 5"*: that line changes, the others stay
+- *"Põe o cliente SOFRIO"*: the customer goes into the document and the ERP's name is read back
+- *"Põe um I0001, que eu escolho as variantes na grelha"*: the grid opens for you, and the chat keeps answering in its own window
+
+**Receipts, payments and settlement** · **saves**
+- *"Paga 200 euros ao fornecedor F0001"*: a supplier payment
+- *"Faz um encontro de contas do cliente SOFRIO de 150 euros"*: account offsetting (encontro de contas) between the customer and its supplier
+- *"Recebe tudo o que o cliente MICROSOFTPOR deve"*: a receipt for the whole balance, credit notes included
+- In the settlement editor, *"Põe 500 em valor a liquidar e distribui"*: Distribuição Automática spreads the amount over the oldest pending items; only Confirmar saves, through the card
+
+**Screens and documents**
+- *"Abre o explorador de vendas"*: the screen opens from the ribbon, in whatever module it lives
+- *"O que tenho aberto no ERP?"*: the open windows and any ERP dialog waiting for an answer
+
+</details>
+
+The exact words for everything else: the [user guide](docs/USER-GUIDE.md).
 
 ## See it
 
@@ -81,7 +110,7 @@ More, with the exact words to type: the [user guide](docs/USER-GUIDE.md).
 </tr>
 </table>
 
-The [product page](https://bolalabs.pt/en/aitool/) has the full film, recorded on the published version.
+The [product page](https://bolalabs.pt/en/aitool/#filme) has the full film, recorded on the real ERP with v2.12 (September 2026).
 
 ## Nothing is saved without your click
 

@@ -150,7 +150,7 @@ sessão.
 
 ## 6. O que fica guardado na sua base de dados
 
-Quatro tabelas são criadas **automaticamente, na base de dados de empresa do ERP**
+Cinco tabelas são criadas **automaticamente, na base de dados de empresa do ERP**
 (`PRI<CodEmp>`) na primeira utilização. Não há base de dados separada nem passo de
 migração.
 
@@ -160,13 +160,14 @@ migração.
 | `AI_ChatMessages` | Conteúdo das mensagens, em texto simples, incluindo dados do ERP devolvidos pelas tools |
 | `AI_AuditLog` | Timestamp, utilizador, empresa, tool, resumo, flag de sucesso, e os argumentos serializados da tool com os valores de key/token/secret/password ocultados, truncados a 2000 caracteres |
 | `AI_AutomationKnowledge` | O que a automação das janelas aprendeu, partilhado pelos postos: o texto do pedido, a janela, a etiqueta e o nome do controlo do campo, coluna ou funcionalidade do ERP que ele quis dizer, as etiquetas que um utilizador rejeitou, um contador de utilizações, a data e o utilizador que alterou por último. Só nomes e etiquetas, nunca os valores escritos |
+| `AI_Recipes` | Os modelos de pedido aprendidos, partilhados pelos postos: o texto com marcadores no lugar dos valores, os passos a executar, um contador de utilizações, a data e o utilizador que alterou por último |
 
 **Não há política de retenção nem job de purga.** As sessões podem ser apagadas
 individualmente na UI; nada expira, e os dados sobrevivem à desinstalação do addon. Para
 uma implementação sujeita a obrigações de retenção ou apagamento do RGPD, essa é uma
 política que tem de ser acrescentada por si — um delete agendado contra as três primeiras
-tabelas é tudo o que é preciso. A `AI_AutomationKnowledge` não guarda dados pessoais além
-do código do utilizador que alterou a linha por último.
+tabelas é tudo o que é preciso. A `AI_AutomationKnowledge` e a `AI_Recipes` não guardam dados
+pessoais além do código do utilizador que alterou a linha por último.
 
 Permissões necessárias: as que a ligação do ERP já tem, mais `CREATE TABLE` na base de dados
 e `ALTER` no esquema `dbo` na primeira execução do addon.
@@ -188,7 +189,9 @@ bloqueasse as tabelas deixava a escrita passar e ficavam dois avisos num ficheir
 ### O que o trilho de auditoria cobre
 
 **Coberto**: commits através do modelo de objetos (criar/atualizar entidade, criar artigo,
-criar documento de venda, criar oportunidade de venda, alterar série de vendas), commits recusados, falhas, e as
+criar documento de venda, criar documento de compra, recibos, pagamentos, aprovações para
+pagamento e encontros de contas através de `create_settlement`, criar oportunidade de venda,
+alterar série de vendas), commits recusados, falhas, e as
 ações de janela que alteram estado (escrita em campo, um ou vários; escrita em grelha, uma
 célula ou uma linha; clique em botão, fecho de janela, fecho de todas as janelas, e as
 respetivas recusas).

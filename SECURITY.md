@@ -101,9 +101,10 @@ This project follows these security practices:
 
 ### What is stored in your database
 
-Four tables are created automatically in the ERP company database on first use:
-`AI_ChatSessions`, `AI_ChatMessages`, `AI_AuditLog` and `AI_AutomationKnowledge` (what the
-window automation learned: names and captions, never values). Message content is stored in plain
+Five tables are created automatically in the ERP company database on first use:
+`AI_ChatSessions`, `AI_ChatMessages`, `AI_AuditLog`, `AI_AutomationKnowledge` (what the
+window automation learned: names and captions, never values) and `AI_Recipes` (learned request
+templates, with placeholders instead of values). Message content is stored in plain
 text and contains whatever the conversation contained, including ERP data returned by tools.
 The audit detail holds the serialized tool arguments with key/token/secret/password values
 redacted, truncated at 2000 characters. **There is no retention policy and no purge job** —
