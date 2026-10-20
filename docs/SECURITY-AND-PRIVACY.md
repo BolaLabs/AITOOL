@@ -1,4 +1,4 @@
-**English** | [Português](SECURITY-AND-PRIVACY.pt.md)
+﻿**English** | [Português](SECURITY-AND-PRIVACY.pt.md)
 
 # Security and privacy — what an IT approver needs to know
 
@@ -67,8 +67,10 @@ gated on a token the application issues while it draws the confirmation card, de
 detail below. Commit and destroy buttons in the window automation (gravar, guardar, anular,
 apagar, eliminar, remover, confirmar) go through the same gate — judged on the button
 the ERP resolved, not on the caption requested, because the resolver matches by substring.
-Inside a modal dialog only refusals and single-button acknowledgements pass; every other
-answer is left to the user, in the ERP itself. One window interaction at a time;
+Inside a modal dialog, refusals and single-button acknowledgements pass, and so do Confirmar
+and OK in the dialogs that only complete an unsaved editor line (the variant grid, "Fórmula",
+"Números de Série"). Every other answer goes through the same card while the chat is in its own
+window; with the chat docked, it is left to the user, in the ERP itself. One window interaction at a time;
 commits are single-flight. Web-search endpoints are HTTPS with redirects disabled. The chat
 page's CSP confines script, style, framing and form-action sources to the page's own origin,
 and every library is vendored with SRI. Two limits are worth stating plainly: inline script

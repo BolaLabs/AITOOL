@@ -1,4 +1,4 @@
-# AITOOL user guide
+﻿# AITOOL user guide
 
 For the people who use the assistant inside Primavera v10 every day: accounts, sales,
 purchasing, the back office. Installation is in [INSTALL.md](../INSTALL.md); what the product
@@ -68,13 +68,25 @@ to, drives the ERP windows by text.
   purchase and internal-document editors the article goes into the grid and quantity, price,
   discount, description and warehouse go into the document line through the editor's own
   events, so the ERP computes the line as if you had typed it.
+- *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"*: for an article with
+  dimensions the assistant fills the ERP's variant grid and confirms it; the document gets the
+  article's aggregator line and one line per variant, as if you had picked them. Without saying
+  which, it asks; *"abre a grelha que eu escolho"* leaves the grid open for you.
+- *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"*: for a formula article the
+  measures go into the ERP's "Fórmula" dialog and the line carries the quantity the ERP computes.
 - *"Lê o diálogo"* reads a message box the ERP opened, and says what each answer does.
+
+When the ERP opens a window that blocks the rest (the variant grid, "Fórmula", "Números de
+Série", a warning), the assistant moves to a window of its own in the same place and keeps
+answering; it goes back to the panel when that window closes. Turn it off in Settings →
+Avançado → Comportamento.
 
 Fields on tabs that are not in view are reached without changing tab by hand.
 
 **What it never does on its own:** press a button that saves, cancels or deletes. Gravar,
-Confirmar, Anular, Apagar and the like go through the confirmation card (section 6); inside
-an ERP dialog that asks "save changes?", the answer is yours, in the ERP.
+Confirmar, Anular, Apagar and the like go through the confirmation card (section 6), and so
+does answering "Sim" to an ERP dialog such as "save changes?". With the assistant docked in the
+panel, that answer is yours, in the ERP.
 
 ## 5. Create documents and records without opening the editor
 

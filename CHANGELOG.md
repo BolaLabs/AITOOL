@@ -8,6 +8,64 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.21.0] - 2026-10-20
+
+### Highlights
+
+- The chat keeps working while an ERP window blocks the rest: it moves to a window of its own
+  and comes back when that window closes.
+- "Põe 2 do I0001 com DDR2-1024 e MT2200": the assistant fills the ERP's variant grid and the
+  ERP adds the lines, as if you had picked them.
+- "Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento": the measures go into the ERP's
+  "Fórmula" dialog and the line carries the quantity the ERP computes.
+- A line written by the assistant opens the ERP's dialogs at once instead of after 5 seconds.
+
+### Added
+
+- The chat moves to a window of its own when an ERP modal opens (the variant grid of an article
+  with dimensions, "Fórmula", "Números de Série", an error) and goes back to the panel when it
+  closes. The modal disabled the docked panel with the rest of the ERP, so nobody could answer
+  in the chat or read it. The window takes the panel's place on screen, stays behind the
+  dialog and does not take the keyboard from it. Settings → Avançado → Comportamento →
+  "Destacar o chat nas janelas modais do ERP" turns it off. The manual pop-out uses the same
+  window and keeps working during modals.
+- Quantities per variant in `set_grid_row` (`{"coluna":"I0001.DDR2-1024.MT2200","valor":"2"}`
+  next to the parent article): the tool writes the parent, fills the ERP's variant grid and
+  confirms it, so the document gets one aggregator line and one line per variant, the ERP's
+  own structure. With the grid already open (typed by hand), the same call fills it and leaves
+  Confirmar to the assistant or the user. `{"coluna":"Grelha","valor":"abrir"}` opens it for the
+  user to fill by hand.
+- A formula article (m², `A*B`) with its measures in the same `set_grid_row` (Largura,
+  Comprimento, and Qtd. for several pieces) is written into the line, the ERP's "Fórmula"
+  dialog is filled and confirmed, and the line carries the quantity the ERP computes (2 pieces
+  of 1,5 × 2 gave 6,00). Without the measures it is still refused with the ones it needs.
+- While an ERP dialog is open, the context sent with each message names it, so the assistant
+  reads the dialog before answering instead of describing the editor behind it.
+- Inside the ERP's line dialogs (variant grid, "Fórmula", "Números de Série") Confirmar and OK
+  are clicked; with the chat in its own window, any other affirmative answer to a dialog goes
+  through the confirmation card instead of being left to the user in the ERP.
+
+### Fixed
+
+- A variant code written into an editor line with a quantity (`I0001.DDR2-1024.MT2200`, 2) put
+  the quantity on the aggregator line the ERP inserts above it, and the variant kept 1. With
+  only a quantity it now goes through the ERP's variant grid; with other columns (price,
+  discount) they are written on the variant's own line.
+- Asked to fill the variant grid, the model wrote into its unnamed columns by letter and picked
+  the wrong one (MT3000 for MT2800). `set_grid_cell` refuses that grid and points to the variant
+  codes, and `list_grid` on it says how the grid is laid out.
+- A one-button notice in the middle of a line ("preço abaixo do custo") made the line read as not
+  filled while the ERP had written it; the line is read again after the notice and the answer
+  says what it holds.
+- A dimension parent written over a line that already held it (left by a cancelled grid) opened
+  nothing and failed after 8 s; it now starts a new line.
+- The chat no longer leaves the panel and comes back for the sub-second dialogs the assistant
+  raises and answers itself.
+- With the chat docked and focused, an ERP dialog raised by the assistant's write took 4.6 to
+  5 s to appear (0.15 s with the chat floating): the ERP's activation waited on the chat's
+  browser process. The keyboard focus now moves into the ERP window before every write, click
+  and close, as the drill-downs already did.
+
 ## [2.20.0] - 2026-10-20
 
 ### Added

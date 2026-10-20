@@ -85,6 +85,59 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
 - Costura.Fody (6.2) embeds most NuGet dependencies into AITOOL.dll (~17 MB) and removes their loose copies from the output; DevExpress*, Shared.Config, ReportEngine and a few runtime libraries are excluded and ship loose
 - Deploys must mirror the FULL build output folder into `…\SG100\Config\<EV|LE|LP>\Extensions\AITOOL` (one folder per installed edition, including `UI\Resources\Chat`), removing files that are no longer produced — a stale loose DLL shadows its embedded replacement because the CLR probes the app-base folder first
 
+## Anatomy of a turn
+
+<div align="center">
+<img src="docs/assets/turn-flow.svg" alt="Anatomy of a turn: user message, model streaming, tool calls, human confirmation for writes, ERP" width="920">
+</div>
+
+The addon is hosted in-process by the ERP. The chat surface is a WebView2 page served from a
+virtual host (`https://aitool.local`) with a CSP that allows no CDN — marked, DOMPurify,
+highlight.js and Mermaid are vendored with pinned versions and SRI hashes, so rendering works
+fully offline. JS and C# talk over `PostWebMessageAsJson` / `ExecuteScriptAsync`, abstracted
+behind an `IChatView` interface.
+
+A turn runs through the `ToolCallOrchestrator`: it streams from the active provider, executes
+tool calls up to the configured iteration cap (1-15), replays the tool transcript on
+continuations, and owns per-turn cancellation. Providers sit behind an `IAiProvider`
+abstraction — one implementation for OpenAI-compatible endpoints and a native Anthropic
+adapter (`/v1/messages`, thinking with effort levels, prompt caching). Tools implement
+`IErpTool`, are marked with `[Tool]`, and are discovered by reflection at startup.
+
+Five projects make up the solution: **AITOOL** (the addon), **OpenAI.SDK** (vendored
+Betalgo-based client — streaming and tool calling, no dependency on AITOOL),
+**Shared.Config** (unified configuration + telemetry), **ReportEngine** (Crystal Reports
+wrapper used for the official document PDFs) and **Installer** (drives the Inno Setup
+build).
+
+## Design trade-offs
+
+Choices that look odd from the outside and are deliberate:
+
+- **.NET Framework 4.8.** The addon runs in-process inside the Primavera v10 client, which is
+  a .NET Framework host. The runtime is imposed, not chosen — no .NET 5+ APIs anywhere.
+- **WinForms + WebView2.** The host is WinForms/DevExpress; rebuilding the shell was never on
+  the table. The chat needed a modern surface, so it is a WebView2 page with all rendering
+  libraries vendored — no CDN, works offline, and the CSP enforces it.
+- **UIA fallback for window automation.** Primavera still ships classic VB6-era editors that
+  the .NET object model cannot see. Automation tries the in-process object model first and
+  falls back to UI Automation (FlaUI/UIA3) on a dedicated worker thread — slower, but it makes
+  native windows scriptable too.
+- **No test projects.** Verification is a clean build plus a run inside the ERP. Nearly every
+  meaningful behavior depends on a licensed live host — BSO/PSO objects, DevExpress editors,
+  WebView2 — so unit tests here would mostly exercise mocks of exactly the parts that break.
+  A trade-off, not a virtue.
+- **Vendored OpenAI SDK.** A Betalgo-based client lives in-repo (`OpenAI.SDK`) instead of a
+  NuGet dependency: it needed .NET Framework 4.8 compatibility, native Anthropic support and
+  streaming/tool-calling behavior tuned for this addon, without upstream drift. It stays
+  standalone — no reference back to AITOOL.
+
+## Repository layout
+
+<div align="center">
+<img src="docs/assets/repo-layout.svg" alt="Repository layout: the AITOOL addon folders (AI, Chat, ERP, Common, UI, Infrastructure), sibling projects (OpenAI.SDK, Shared.Config, ReportEngine) and support folders (Installer, docs, sql, Lib)" width="920">
+</div>
+
 ---
 
 # Arquitetura (PT)
@@ -174,3 +227,58 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
 - O Costura.Fody (6.2) embebe a maioria das dependências NuGet no AITOOL.dll (~17 MB) e remove as cópias soltas do output; DevExpress*, Shared.Config, ReportEngine e algumas bibliotecas de runtime estão excluídos e seguem soltos
 - O deploy tem de espelhar a pasta de output COMPLETA para `…\SG100\Config\<EV|LE|LP>\Extensions\AITOOL` (uma pasta por edição instalada, incluindo `UI\Resources\Chat`), removendo ficheiros que já não são produzidos — um DLL solto obsoleto faz shadowing da cópia embebida porque o CLR sonda primeiro a pasta base
 
+## Anatomia de um turno
+
+<div align="center">
+<img src="docs/assets/turn-flow.svg" alt="Anatomia de um turno: mensagem do utilizador, streaming do modelo, tool calls, confirmação humana nas escritas, ERP" width="920">
+</div>
+
+O addon é alojado in-process pelo ERP. A superfície de chat é uma página WebView2 servida a
+partir de um host virtual (`https://aitool.local`) com uma CSP que não permite nenhum CDN —
+marked, DOMPurify, highlight.js e Mermaid são vendored com versões fixas e hashes SRI, pelo
+que a renderização funciona totalmente offline. JS e C# comunicam por `PostWebMessageAsJson`
+/ `ExecuteScriptAsync`, abstraídos atrás de uma interface `IChatView`.
+
+Um turno corre através do `ToolCallOrchestrator`: faz streaming do fornecedor ativo, executa
+tool calls até ao limite de iterações configurado (1-15), reproduz o transcript de tools nas
+continuações e é dono do cancelamento por turno. Os fornecedores estão atrás de uma
+abstração `IAiProvider` — uma implementação para endpoints compatíveis com OpenAI e um
+adaptador Anthropic nativo (`/v1/messages`, thinking com níveis de esforço, prompt caching).
+As tools implementam `IErpTool`, são marcadas com `[Tool]` e são descobertas por reflexão no
+arranque.
+
+Cinco projetos compõem a solução: **AITOOL** (o addon), **OpenAI.SDK** (cliente vendored
+baseado no Betalgo — streaming e tool calling, sem dependência do AITOOL), **Shared.Config**
+(configuração unificada + telemetria), **ReportEngine** (wrapper de Crystal Reports usado
+para os PDFs oficiais de documentos) e **Installer** (conduz a construção do Inno Setup).
+
+
+## Trade-offs de design
+
+Escolhas que parecem estranhas vistas de fora e são deliberadas:
+
+- **.NET Framework 4.8.** O addon corre in-process dentro do cliente Primavera v10, que é um
+  host .NET Framework. O runtime é imposto, não escolhido — nenhuma API .NET 5+ em lado
+  nenhum.
+- **WinForms + WebView2.** O host é WinForms/DevExpress; reconstruir a shell nunca esteve em
+  cima da mesa. O chat precisava de uma superfície moderna, por isso é uma página WebView2
+  com todas as bibliotecas de renderização vendored — sem CDN, funciona offline, e a CSP
+  obriga a isso.
+- **Fallback UIA para a automação de janelas.** O Primavera ainda traz editores clássicos da
+  era VB6 que o modelo de objetos .NET não vê. A automação tenta primeiro o modelo de
+  objetos in-process e recorre a UI Automation (FlaUI/UIA3) numa worker thread dedicada —
+  mais lento, mas torna as janelas nativas automatizáveis também.
+- **Sem projetos de teste.** A verificação é um build limpo mais uma execução dentro do ERP.
+  Quase todos os comportamentos relevantes dependem de um host vivo licenciado — objetos
+  BSO/PSO, editores DevExpress, WebView2 — pelo que testes unitários aqui exercitariam
+  sobretudo mocks exatamente das partes que se partem. Um trade-off, não uma virtude.
+- **OpenAI SDK vendored.** Um cliente baseado no Betalgo vive no repositório (`OpenAI.SDK`)
+  em vez de uma dependência NuGet: precisava de compatibilidade com .NET Framework 4.8, de
+  suporte Anthropic nativo e de comportamento de streaming/tool calling afinado para este
+  addon, sem deriva do upstream. Mantém-se independente — sem referência de volta ao AITOOL.
+
+## Estrutura do repositório
+
+<div align="center">
+<img src="docs/assets/repo-layout.svg" alt="Estrutura do repositório: as pastas do addon AITOOL (AI, Chat, ERP, Common, UI, Infrastructure), projetos irmãos (OpenAI.SDK, Shared.Config, ReportEngine) e pastas de suporte (Installer, docs, sql, Lib)" width="920">
+</div>

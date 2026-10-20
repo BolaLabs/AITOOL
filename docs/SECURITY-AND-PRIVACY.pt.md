@@ -1,4 +1,4 @@
-[English](SECURITY-AND-PRIVACY.md) | **Português**
+﻿[English](SECURITY-AND-PRIVACY.md) | **Português**
 
 # Segurança e privacidade — o que um responsável de TI precisa de saber
 
@@ -70,8 +70,10 @@ autorização que a aplicação emite ao desenhar o cartão de confirmação, de
 Os botões de commit e de destruição na automação de janelas (gravar, guardar, anular, apagar,
 eliminar, remover, confirmar) passam pelo mesmo portão — avaliado sobre o
 botão que o ERP resolveu, e não sobre a legenda pedida, porque a resolução é por substring.
-Dentro de um diálogo modal só passam recusas e diálogos de um só botão; qualquer outra
-resposta fica para o utilizador, no próprio ERP. Uma interação de janela de
+Dentro de um diálogo modal passam recusas e diálogos de um só botão, e também Confirmar e OK
+nos diálogos que só completam uma linha do editor ainda por gravar (a grelha de variantes,
+"Fórmula", "Números de Série"). Qualquer outra resposta passa pelo mesmo cartão enquanto o chat
+está numa janela própria; com o chat ancorado, fica para o utilizador, no próprio ERP. Uma interação de janela de
 cada vez; os commits são single-flight. Os endpoints de pesquisa web são HTTPS com
 redirects desativados. A CSP da página de chat confina as origens de script, estilo, framing
 e ações de formulário à origem da própria página, e todas as bibliotecas são vendorizadas com

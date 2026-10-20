@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" role="img" aria-label="Works inside the ERP">
+  <rect width="48" height="48" rx="12" fill="#F4F6F9"/>
+  <rect x="9" y="11" width="30" height="24" rx="3.5" fill="none" stroke="#1E3A5F" stroke-width="2.5"/>
+  <path d="M9 17.5 L39 17.5 M15 23 L27 23 M15 28.5 L23 28.5" stroke="#1E3A5F" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M29 25 L37 33 L33.5 33.6 L35.6 38 L33.4 39 L31.3 34.6 L29 37 Z" fill="#D9A441" stroke="#1E3A5F" stroke-width="1.2" stroke-linejoin="round"/>
+</svg>

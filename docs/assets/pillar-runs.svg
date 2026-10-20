@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" role="img" aria-label="Runs where you decide">
+  <rect width="48" height="48" rx="12" fill="#F4F6F9"/>
+  <path d="M10 22 L24 11 L38 22 L38 37 L10 37 Z" fill="none" stroke="#1E3A5F" stroke-width="2.5" stroke-linejoin="round"/>
+  <rect x="17" y="24" width="14" height="9" rx="2" fill="none" stroke="#1E3A5F" stroke-width="2.5"/>
+  <circle cx="24" cy="28.5" r="2.6" fill="#D9A441"/>
+</svg>

@@ -1,4 +1,4 @@
-# AITOOL Configuration
+﻿# AITOOL Configuration
 
 All projects read configuration through `Shared.Config` (`AITOOL.SharedConfig.UnifiedConfig`), which merges JSON files and resolves each value with a strict precedence order:
 
@@ -7,6 +7,37 @@ All projects read configuration through `Shared.Config` (`AITOOL.SharedConfig.Un
 3. `appsettings.{Environment}.json` — placed in the addon folder (overrides the base file)
 4. `appsettings.json` — placed in the addon folder (base)
 5. Built-in defaults (provider presets and code defaults)
+
+
+## Settings at a glance
+
+Everything day-to-day is configured in the settings modal and persisted to a per-user file
+(`%LocalAppData%\Cegid\Extensions\AITOOL\appsettings.User.json`) — deploys never overwrite it.
+Resolution order: environment variable → user file → `appsettings.{Environment}.json` →
+`appsettings.json` → built-in defaults. The environment layer covers `Provider:*`,
+`ErpTools:*`, `Sql:*` and `Sentry:*`; the `Assistant:*` settings below are read from the
+files only, except the web-search and entity-enrichment keys, which do accept environment
+overrides. The variables the code reads are listed family by family in
+the sections below.
+
+| Setting | What it controls | Default |
+| --- | --- | --- |
+| `Provider:Active` | Active provider: `openai`, `openrouter`, `anthropic`, `lmstudio`, `custom` | `openrouter` |
+| `Provider:<id>:Model` | Model id per provider (searchable picker with capability badges) | `openai/gpt-5.6-sol` on OpenRouter, `gpt-5.6-sol` on OpenAI direct |
+| `Provider:<id>:BaseUrl` | Endpoint, editable for OpenAI-compatible providers | preset |
+| `Provider:<id>:ReasoningEffort` | `Off` / `Low` / `Medium` / `High` / `Max` — Desligado, Rápido, Equilibrado, Profundo, Máximo in the interface — where the model supports it. What each level sends is read from the provider's catalogue for that model (`none`, `minimal`, `xhigh`, `max` where they exist), and the choice is remembered per model. On OpenAI direct a reasoning model with ERP tools runs on the Responses API, so the effort applies to those requests too. Also changed from the chip beside the message box | `Off` |
+| API keys | Set in-app; DPAPI-encrypted per user. Env fallbacks: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY` | — |
+| `Assistant:MaxTokens` | Max tokens per response (256-128000) | `4096` |
+| `Assistant:Temperature` | 0-2; gated off for reasoning models | `0.7` |
+| `Assistant:MaxToolIterations` | Tool-call rounds per turn (1-15) | `15` |
+| `Assistant:StreamingEnabled` | Server-sent streaming | on |
+| Per-tool toggles | Enable/disable each of the 29 tools (`Assistant:DisabledTools`) | all on |
+| `ErpTools:Enabled` | Kill switch for the entire tool layer | on |
+| Web search | Providers (`tavily`, `brave`, `serper`, `exa`, self-hosted `searxng`) + keys in the encrypted store; fan-out or fallback mode | `tavily` |
+| Fast decisions (Jev) | `Jev:Enabled`, `Jev:Route` (`openrouter` uses the OpenRouter key, `typesafe` its own key in the encrypted store), `Jev:MinConfidence` (0.50-0.95) | off, `openrouter`, `0.60` |
+| Custom system prompt | Extra instructions appended to the built-in prompt | empty |
+| Theme | Light / dark / system, toggle in the chat header | system |
+| Export | Folder, default format (`md`/`html`/`txt`), auto-open | `md` |
 
 ## Where the files live
 

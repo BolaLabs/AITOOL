@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="t">
+  <title id="t">AITOOL, the AI assistant inside Cegid PRIMAVERA v10</title>
+  <defs>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#24466E"/>
+      <stop offset="1" stop-color="#16304F"/>
+    </linearGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2B5383"/>
+      <stop offset="1" stop-color="#1A3A60"/>
+    </linearGradient>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#D9A441"/>
+      <stop offset="1" stop-color="#D9A441" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D9A441" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#D9A441" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .label { font: 600 15px 'Segoe UI', system-ui, Arial, sans-serif; fill: #DCE4EE; letter-spacing: .4px; }
+      .chip { fill: #FFFFFF; fill-opacity: .07; stroke: #FFFFFF; stroke-opacity: .16; }
+      @media (prefers-reduced-motion: no-preference) {
+        .orbit { animation: spin 90s linear infinite; transform-origin: 980px 180px; }
+        .pulse { animation: pulse 4s ease-in-out infinite; transform-origin: 980px 180px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 50% { transform: scale(1.12); } }
+      }
+    </style>
+  </defs>
+
+  <rect width="1280" height="360" rx="28" fill="url(#card)"/>
+  <rect x="1" y="1" width="1278" height="358" rx="27" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="2"/>
+
+  <!-- Mark and wordmark -->
+  <g transform="translate(84 112)">
+    <rect width="136" height="136" rx="32" fill="url(#tile)"/>
+    <rect x="1.5" y="1.5" width="133" height="133" rx="30.5" fill="none" stroke="#FFFFFF" stroke-opacity=".12" stroke-width="2"/>
+    <path d="M38 101 L68 41 L98 101" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="68" cy="100" r="10.5" fill="#D9A441"/>
+  </g>
+  <text x="258" y="196" font-family="'Segoe UI', system-ui, Arial, sans-serif" font-size="78" font-weight="700" letter-spacing="7"><tspan fill="#D9A441">AI</tspan><tspan fill="#FFFFFF">TOOL</tspan></text>
+  <rect x="262" y="218" width="300" height="3" rx="1.5" fill="url(#rule)"/>
+  <text x="262" y="256" font-family="'Segoe UI', system-ui, Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="5" fill="#AFC0D4">CEGID PRIMAVERA v10</text>
+
+  <!-- Orbital core: the agent at the centre of the ERP -->
+  <circle cx="980" cy="180" r="150" fill="url(#glow)"/>
+  <circle cx="980" cy="180" r="128" fill="none" stroke="#FFFFFF" stroke-opacity=".12" stroke-width="1.5"/>
+  <g class="orbit">
+    <circle cx="980" cy="180" r="128" fill="none" stroke="#D9A441" stroke-opacity=".55" stroke-width="2" stroke-dasharray="2 14" stroke-linecap="round"/>
+    <circle cx="1108" cy="180" r="5" fill="#D9A441"/>
+    <circle cx="852" cy="180" r="4" fill="#FFFFFF" fill-opacity=".6"/>
+  </g>
+  <path d="M922 180 A58 58 0 0 1 980 122" fill="none" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="12" stroke-linecap="round"/>
+  <path d="M1038 180 A58 58 0 0 1 980 238" fill="none" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="12" stroke-linecap="round"/>
+  <circle class="pulse" cx="980" cy="180" r="20" fill="#D9A441"/>
+
+  <!-- What the agent works on -->
+  <g>
+    <rect class="chip" x="1060" y="62" width="128" height="34" rx="17"/>
+    <text class="label" x="1124" y="84" text-anchor="middle">Pendentes</text>
+    <rect class="chip" x="1112" y="164" width="112" height="34" rx="17"/>
+    <text class="label" x="1168" y="186" text-anchor="middle">Faturas</text>
+    <rect class="chip" x="1050" y="268" width="138" height="34" rx="17"/>
+    <text class="label" x="1119" y="290" text-anchor="middle">PDF oficial</text>
+    <rect class="chip" x="772" y="62" width="112" height="34" rx="17"/>
+    <text class="label" x="828" y="84" text-anchor="middle">Recibos</text>
+    <rect class="chip" x="752" y="268" width="122" height="34" rx="17"/>
+    <text class="label" x="813" y="290" text-anchor="middle">Auditoria</text>
+  </g>
+</svg>

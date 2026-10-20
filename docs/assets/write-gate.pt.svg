@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="312" viewBox="0 0 1024 312" role="img" aria-labelledby="t">
+  <title id="t">Nada é gravado sem o seu clique</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5B6B80"/>
+    </marker>
+    <marker id="arrowg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#A9B3C1"/>
+    </marker>
+    <style>
+      .h { font: 700 17px 'Segoe UI', system-ui, Arial, sans-serif; fill: #1A2433; }
+      .s { font: 400 14px 'Segoe UI', system-ui, Arial, sans-serif; fill: #5B6B80; }
+      .n { font: 700 13px 'Segoe UI', system-ui, Arial, sans-serif; fill: #FFFFFF; }
+      .b { font: 600 14px 'Segoe UI', system-ui, Arial, sans-serif; fill: #1A2433; }
+      .w { font: 600 14px 'Segoe UI', system-ui, Arial, sans-serif; fill: #FFFFFF; }
+      .m { font: 400 13px 'Segoe UI', system-ui, Arial, sans-serif; fill: #8A96A6; }
+    </style>
+  </defs>
+  <rect width="1024" height="312" rx="22" fill="#F4F6F9"/>
+  <rect x="1" y="1" width="1022" height="310" rx="21" fill="none" stroke="#1E3A5F" stroke-opacity=".10" stroke-width="2"/>
+  <g transform="translate(40 0)">
+    <circle cx="20" cy="46" r="13" fill="#1E3A5F"/><text class="n" x="20" y="51" text-anchor="middle">1</text>
+    <text class="h" x="42" y="52">Pede</text>
+    <rect x="0" y="86" width="196" height="64" rx="14" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".18" stroke-width="1.5"/>
+    <path d="M24 150 L24 166 L42 150 z" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".18" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="23" y="146" width="20" height="5" fill="#FFFFFF"/>
+    <text class="b" x="16" y="124">“Fatura à Sofrio 2 monitores”</text>
+    <text class="s" x="0" y="204">em linguagem corrente</text>
+  </g>
+  <g transform="translate(288 0)">
+    <circle cx="20" cy="46" r="13" fill="#1E3A5F"/><text class="n" x="20" y="51" text-anchor="middle">2</text>
+    <text class="h" x="42" y="52">O ERP valida</text>
+    <rect x="0" y="80" width="196" height="96" rx="14" fill="#1E3A5F"/>
+    <text class="w" x="18" y="108">Pré-visualização</text>
+    <rect x="18" y="122" width="160" height="1" fill="#FFFFFF" fill-opacity=".2"/>
+    <text class="m" x="18" y="144" style="fill:#AFC0D4">Totais</text><text class="w" x="178" y="144" text-anchor="end">470,40 €</text>
+    <text class="m" x="18" y="164" style="fill:#AFC0D4">IVA</text><text class="w" x="178" y="164" text-anchor="end">78,40 €</text>
+    <text class="s" x="0" y="204">com as regras do próprio ERP</text>
+  </g>
+  <g transform="translate(536 0)">
+    <circle cx="20" cy="46" r="13" fill="#1E3A5F"/><text class="n" x="20" y="51" text-anchor="middle">3</text>
+    <text class="h" x="42" y="52">O seu clique</text>
+    <rect x="0" y="80" width="196" height="96" rx="14" fill="#FFFFFF" stroke="#D9A441" stroke-width="2.5"/>
+    <rect x="18" y="100" width="70" height="8" rx="4" fill="#1E3A5F" fill-opacity=".14"/>
+    <rect x="18" y="114" width="110" height="8" rx="4" fill="#1E3A5F" fill-opacity=".10"/>
+    <rect x="18" y="134" width="160" height="30" rx="9" fill="#1E3A5F"/>
+    <circle cx="36" cy="149" r="4" fill="#D9A441"/>
+    <text class="w" x="110" y="154" text-anchor="middle">Gravar documento</text>
+    <text class="s" x="0" y="204">confirmação de uso único</text>
+  </g>
+  <g transform="translate(784 0)">
+    <circle cx="20" cy="46" r="13" fill="#1E3A5F"/><text class="n" x="20" y="51" text-anchor="middle">4</text>
+    <text class="h" x="42" y="52">Gravado e auditado</text>
+    <ellipse cx="98" cy="92" rx="62" ry="14" fill="#1E3A5F"/>
+    <path d="M36 92 L36 160 A62 14 0 0 0 160 160 L160 92" fill="#16304F"/>
+    <ellipse cx="98" cy="92" rx="62" ry="14" fill="#2B5383"/>
+    <path d="M36 118 A62 14 0 0 0 160 118" fill="none" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="2"/>
+    <path d="M36 140 A62 14 0 0 0 160 140" fill="none" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="2"/>
+    <text class="w" x="98" y="134" text-anchor="middle">AI_AuditLog</text>
+    <circle cx="160" cy="96" r="13" fill="#D9A441"/>
+    <path d="M154 96 L158.5 100.5 L166 92" fill="none" stroke="#16304F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="s" x="0" y="204">na sua base de dados</text>
+  </g>
+  <path d="M244 128 L280 128" stroke="#5B6B80" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M492 128 L528 128" stroke="#5B6B80" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M740 128 L776 128" stroke="#5B6B80" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M634 214 L634 254" stroke="#A9B3C1" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arrowg)"/>
+  <rect x="300" y="258" width="668" height="34" rx="17" fill="#FFFFFF" stroke="#A9B3C1" stroke-dasharray="5 5"/>
+  <text class="m" x="634" y="280" text-anchor="middle">Escrever “sim” no chat não grava nada: é recusado e registado</text>
+</svg>

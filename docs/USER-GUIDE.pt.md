@@ -1,4 +1,4 @@
-# Manual do AITOOL
+﻿# Manual do AITOOL
 
 Para quem usa o assistente dentro do Primavera v10 todos os dias: contabilidade, vendas,
 compras, back office. A instalação está no [INSTALL.pt.md](../INSTALL.pt.md); o que o produto
@@ -67,13 +67,25 @@ usar, conduz as janelas do ERP por texto.
   Nos editores de vendas, compras e documentos internos, o artigo entra na grelha e a
   quantidade, o preço, o desconto, a descrição e o armazém entram na linha do documento
   pelos eventos do próprio editor, para o ERP calcular a linha como se a tivesse escrito.
+- *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"*: num artigo com
+  dimensões, o assistente preenche a grelha de variantes do ERP e confirma-a; o documento fica
+  com a linha agregadora do artigo e uma linha por variante, como se as escolhesse. Sem dizer
+  quais, pergunta; *"abre a grelha que eu escolho"* deixa-a aberta para si.
+- *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"*: num artigo com fórmula, as
+  medidas vão para a janela "Fórmula" do ERP e a linha fica com a quantidade que o ERP calcula.
 - *"Lê o diálogo"* lê uma mensagem que o ERP abriu e diz o que faz cada resposta.
+
+Quando o ERP abre uma janela que bloqueia o resto (a grelha de variantes, "Fórmula", "Números
+de Série", um aviso), o assistente passa para uma janela própria no mesmo lugar e continua a
+responder; volta ao painel quando essa janela fecha. Desliga-se em Definições → Avançado →
+Comportamento.
 
 Os campos de separadores que não estão à vista são alcançados sem mudar de separador à mão.
 
 **O que nunca faz sozinho:** carregar num botão que grava, anula ou apaga. Gravar,
-Confirmar, Anular, Apagar e afins passam pelo cartão de confirmação (secção 6); dentro de um
-diálogo do ERP que pergunta "gravar as alterações?", a resposta é sua, no ERP.
+Confirmar, Anular, Apagar e afins passam pelo cartão de confirmação (secção 6), e o mesmo vale
+para responder "Sim" a um diálogo do ERP como "gravar as alterações?". Com o assistente ancorado
+no painel, essa resposta é sua, no ERP.
 
 ## 5. Criar documentos e fichas sem abrir o editor
 

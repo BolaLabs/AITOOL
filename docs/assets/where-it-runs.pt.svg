@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="376" viewBox="0 0 1024 376" role="img" aria-labelledby="t">
+  <title id="t">Onde o AITOOL corre</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5B6B80"/>
+    </marker>
+    <marker id="arrowg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#A9B3C1"/>
+    </marker>
+    <style>
+      .h { font: 700 17px 'Segoe UI', system-ui, Arial, sans-serif; fill: #1A2433; }
+      .s { font: 400 14px 'Segoe UI', system-ui, Arial, sans-serif; fill: #5B6B80; }
+      .n { font: 700 13px 'Segoe UI', system-ui, Arial, sans-serif; fill: #FFFFFF; }
+      .b { font: 600 14px 'Segoe UI', system-ui, Arial, sans-serif; fill: #1A2433; }
+      .w { font: 600 14px 'Segoe UI', system-ui, Arial, sans-serif; fill: #FFFFFF; }
+      .m { font: 400 13px 'Segoe UI', system-ui, Arial, sans-serif; fill: #8A96A6; }
+    </style>
+  </defs>
+  <rect width="1024" height="376" rx="22" fill="#F4F6F9"/>
+  <rect x="1" y="1" width="1022" height="374" rx="21" fill="none" stroke="#1E3A5F" stroke-opacity=".10" stroke-width="2"/>
+  <rect x="32" y="32" width="560" height="296" rx="18" fill="#1E3A5F" fill-opacity=".05" stroke="#1E3A5F" stroke-opacity=".35" stroke-width="2"/>
+  <text class="h" x="56" y="66">A sua rede</text>
+  <rect x="72" y="86" width="372" height="70" rx="12" fill="#1E3A5F"/>
+  <text class="w" x="92" y="114">Servidor do ERP (SG100)</text>
+  <text class="m" x="92" y="136" style="fill:#AFC0D4">SQL Server · histórico e auditoria</text>
+  <ellipse cx="404" cy="104" rx="22" ry="6" fill="#2B5383"/><path d="M382 104 L382 132 A22 6 0 0 0 426 132 L426 104" fill="#2B5383"/><ellipse cx="404" cy="104" rx="22" ry="6" fill="#3B6596"/>
+  <path d="M136 170 L432 170" stroke="#1E3A5F" stroke-opacity=".35" stroke-width="2"/>
+  <path d="M258 156 L258 170" stroke="#1E3A5F" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="72" y="196" width="128" height="84" rx="10" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".22" stroke-width="1.5"/>
+  <rect x="80" y="204" width="112" height="56" rx="5" fill="#1E3A5F" fill-opacity=".06"/>
+  <g transform="translate(118 214) scale(0.56)"><rect width="64" height="64" rx="15" fill="#1E3A5F"/><path d="M19 45 L32 19 L45 45" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="44.5" r="4.6" fill="#D9A441"/></g>
+  <rect x="116" y="280" width="40" height="8" rx="2" fill="#1E3A5F" fill-opacity=".25"/>
+  <path d="M136 196 L136 170" stroke="#1E3A5F" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="220" y="196" width="128" height="84" rx="10" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".22" stroke-width="1.5"/>
+  <rect x="228" y="204" width="112" height="56" rx="5" fill="#1E3A5F" fill-opacity=".06"/>
+  <g transform="translate(266 214) scale(0.56)"><rect width="64" height="64" rx="15" fill="#1E3A5F"/><path d="M19 45 L32 19 L45 45" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="44.5" r="4.6" fill="#D9A441"/></g>
+  <rect x="264" y="280" width="40" height="8" rx="2" fill="#1E3A5F" fill-opacity=".25"/>
+  <path d="M284 196 L284 170" stroke="#1E3A5F" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="368" y="196" width="128" height="84" rx="10" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".22" stroke-width="1.5"/>
+  <rect x="376" y="204" width="112" height="56" rx="5" fill="#1E3A5F" fill-opacity=".06"/>
+  <g transform="translate(414 214) scale(0.56)"><rect width="64" height="64" rx="15" fill="#1E3A5F"/><path d="M19 45 L32 19 L45 45" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="44.5" r="4.6" fill="#D9A441"/></g>
+  <rect x="412" y="280" width="40" height="8" rx="2" fill="#1E3A5F" fill-opacity=".25"/>
+  <path d="M432 196 L432 170" stroke="#1E3A5F" stroke-opacity=".35" stroke-width="2"/>
+  <text class="s" x="56" y="312">Postos de trabalho · AITOOL dentro do ERP</text>
+  <rect x="460" y="86" width="116" height="70" rx="12" fill="#FFFFFF" stroke="#D9A441" stroke-width="2" stroke-dasharray="6 5"/>
+  <text class="b" x="518" y="115" text-anchor="middle">Modelo local</text>
+  <text class="m" x="518" y="136" text-anchor="middle" style="fill:#8A6414">nada sai da rede</text>
+  <path d="M592 150 L700 150" stroke="#D9A441" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="704" y="104" width="292" height="96" rx="16" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".22" stroke-width="1.5"/>
+  <text class="h" x="724" y="138">O fornecedor de IA que escolher</text>
+  <text class="m" x="724" y="162">OpenAI · Anthropic · OpenRouter</text>
+  <text class="m" x="724" y="182">ou qualquer endpoint compatível</text>
+  <text class="m" x="32" y="356">Nenhum servidor da BolaLabs no caminho. Sem conta, sem licença por posto, sem créditos a contar.</text>
+</svg>

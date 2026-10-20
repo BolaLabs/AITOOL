@@ -6,7 +6,7 @@
 
     <rect x="20" y="62" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
     <text x="34" y="82" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">AI/</text>
-    <text x="205" y="82" font-size="12" fill="#8b98a5">provider abstraction, the 19 tools, view-models</text>
+    <text x="205" y="82" font-size="12" fill="#8b98a5">provider abstraction, the 29 tools, view-models</text>
 
     <rect x="20" y="108" width="170" height="30" rx="7" fill="#8b98a5" fill-opacity="0.08" stroke="#8b98a5" stroke-width="1.2"/>
     <text x="34" y="128" font-size="12.5" font-weight="600" fill="#768390" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">Chat/</text>
