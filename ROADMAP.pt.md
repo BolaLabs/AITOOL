@@ -35,12 +35,15 @@ IVA, lê as linhas que o QR não traz, confirma que tudo bate certo e prepara o 
 compra com o ficheiro original anexado no arquivo do próprio ERP. Se alguma coisa não bater
 certo, para e diz o que falta. Cada documento é confirmado por si; nada é lançado sozinho.
 
-### Compras conferidas com o e-Fatura
+### Compras e vendas conferidas com o e-Fatura
 
-*"Que compras estão no e-Fatura e não estão no ERP?"* O assistente compara as faturas que os
-seus fornecedores comunicaram à AT com os documentos de compra do ERP, por NIF, número e ATCUD,
-e lista o que falta, o que difere no valor e o que está duas vezes no ERP. Parte do ficheiro que
-o portal do e-Fatura exporta; o que faltar pode depois passar pelo leitor de faturas acima.
+*"Que compras estão no e-Fatura e não estão no ERP?"* O assistente lê o e-Fatura pelo serviço de
+consulta da própria AT e compara as faturas que os seus fornecedores comunicaram com os
+documentos de compra do ERP, por NIF, número e ATCUD: o que falta, o que difere no valor, o que
+está duas vezes no ERP. A mesma conferência corre no outro sentido, *"A AT recebeu todas as
+faturas de outubro?"*, para as faturas que o ERP emitiu. O que faltar pode depois passar pelo
+leitor de faturas acima. Entra com um subutilizador da sua empresa, criado no Portal das
+Finanças só para consulta.
 
 ### Cobranças por MB WAY e Multibanco, liquidadas em recibos
 
@@ -112,8 +115,6 @@ fornecedor de IA, por isso é dinheiro que fica consigo.
 - **Um browser que trabalha na sua sessão.** Portais como o e-Fatura, a Segurança Social Direta
   ou o site de um fornecedor abertos numa janela do assistente onde entra você; ele lê e
   descarrega, e qualquer botão que submete fica consigo.
-- **Faturas recebidas pela AT.** Confirmar que todas as faturas que o ERP emitiu chegaram ao
-  e-Fatura.
 
 ## Direção
 
@@ -137,8 +138,9 @@ fornecedor de IA, por isso é dinheiro que fica consigo.
 - **Nada fiscal ou financeiro é submetido em seu nome.** O SAF-T, as declarações e as comunicações à
   AT continuam no ERP ou na sua sessão do portal, e os pagamentos no seu banco. O assistente
   confere, reconcilia e prepara.
-- **As suas palavras-passe ficam consigo.** O assistente nunca guarda palavras-passe da AT, da
-  Segurança Social ou do banco; entra você nesses portais, e a chave do fornecedor de pagamentos fica
-  cifrada na sua máquina.
+- **As suas palavras-passe ficam consigo.** O assistente nunca guarda as suas palavras-passe do
+  Portal das Finanças, da Segurança Social ou do banco; entra você nesses portais. O que guarda,
+  o subutilizador de consulta do e-Fatura e a chave do fornecedor de pagamentos, fica cifrado
+  na sua máquina e nunca chega à Bola Labs.
 - **As skills nunca trazem código.** São instruções em texto, revistas, que combinam as
   ferramentas do próprio assistente, com o mesmo cartão e a mesma auditoria.

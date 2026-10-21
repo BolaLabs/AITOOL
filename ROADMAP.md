@@ -36,13 +36,15 @@ purchase document with the original file attached in the ERP's own archive. If s
 does not reconcile it stops and says what is missing. You confirm every document; nothing is
 posted on its own.
 
-### Purchases checked against e-Fatura
+### Purchases and sales checked against e-Fatura
 
-*"Que compras estão no e-Fatura e não estão no ERP?"* The assistant compares the invoices
-your suppliers reported to the AT with the purchase documents in the ERP, by tax id, number
-and ATCUD, and lists what is missing, what differs in amount and what is in the ERP twice.
-It starts from the file the e-Fatura portal exports; anything missing can then go through
-the invoice reader above.
+*"Que compras estão no e-Fatura e não estão no ERP?"* The assistant reads e-Fatura through the
+AT's own consultation service and compares the invoices your suppliers reported with the
+purchase documents in the ERP, by tax id, number and ATCUD: what is missing, what differs in
+amount, what is in the ERP twice. The same check runs the other way, *"A AT recebeu todas as
+faturas de outubro?"*, for the invoices the ERP issued. Anything missing can then go through
+the invoice reader above. It signs in with a sub-user of your company created in the Portal
+das Finanças for consultation only.
 
 ### Collections by MB WAY and Multibanco, settled as receipts
 
@@ -114,7 +116,6 @@ provider, so this is money you keep.
 - **A browser that works in your session.** Portals such as e-Fatura, Segurança Social Direta
   or a supplier's site opened in a window of the assistant where you sign in yourself; it
   reads and downloads, and any button that submits stays yours.
-- **Invoices received by the AT.** A check that every invoice the ERP issued reached e-Fatura.
 
 ## Direction
 
@@ -138,8 +139,9 @@ provider, so this is money you keep.
 - **Nothing fiscal or financial is submitted for you.** SAF-T, declarations and communications
   to the AT stay with the ERP or your portal session, and payments with your bank. The
   assistant checks, reconciles and prepares.
-- **Your passwords stay yours.** The assistant never stores AT, Segurança Social or bank
-  passwords; you sign in to those portals yourself, and a payment provider key stays encrypted on your
-  machine.
+- **Your passwords stay yours.** The assistant never stores your Portal das Finanças,
+  Segurança Social or bank passwords; you sign in to those portals yourself. What it does keep,
+  the e-Fatura consultation sub-user and a payment provider key, stays encrypted on your
+  machine and never reaches Bola Labs.
 - **Skills never carry code.** They are reviewed text instructions that combine the assistant's
   own tools, with the same card and the same audit.
