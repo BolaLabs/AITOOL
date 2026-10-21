@@ -4,7 +4,8 @@
 
 O AITOOL já responde a partir do PRIMAVERA, preenche as janelas e grava documentos, recibos e
 pagamentos a partir de um cartão em que carrega. A seguir, lê a papelada que chega: faturas de
-fornecedor a partir de uma foto ou de um PDF. Cada ponto só sai depois de funcionar num ERP
+fornecedor a partir de uma foto ou de um PDF, conferidas com o e-Fatura, e cobranças por MB WAY
+que voltam como recibos. Cada ponto só sai depois de funcionar num ERP
 PRIMAVERA real, e nada aqui é uma data prometida: o [README](README.pt.md) descreve o que já
 existe, e o [CHANGELOG](CHANGELOG.md) o que cada versão acrescentou.
 
@@ -33,6 +34,32 @@ que as faturas portuguesas trazem como fonte de verdade do emitente, da data e d
 IVA, lê as linhas que o QR não traz, confirma que tudo bate certo e prepara o documento de
 compra com o ficheiro original anexado no arquivo do próprio ERP. Se alguma coisa não bater
 certo, para e diz o que falta. Cada documento é confirmado por si; nada é lançado sozinho.
+
+### Compras conferidas com o e-Fatura
+
+*"Que compras estão no e-Fatura e não estão no ERP?"* O assistente compara as faturas que os
+seus fornecedores comunicaram à AT com os documentos de compra do ERP, por NIF, número e ATCUD,
+e lista o que falta, o que difere no valor e o que está duas vezes no ERP. Parte do ficheiro que
+o portal do e-Fatura exporta; o que faltar pode depois passar pelo leitor de faturas acima.
+
+### Cobranças por MB WAY e Multibanco, liquidadas em recibos
+
+*"Cobra os vencidos da SOFRIO por MB WAY."* Com a sua própria conta de um fornecedor de
+pagamentos (EasyPay, ifthenpay, SIBS ou Stripe), o assistente cria o pedido MB WAY ou a
+referência Multibanco das faturas pendentes, verifica quais foram pagas e prepara o recibo de
+cada uma num cartão de confirmação. A chave dessa conta fica cifrada na sua máquina.
+
+### Relatórios e apresentações com os dados vivos do ERP
+
+*"Faz a apresentação do mês para a administração."* Ficheiros PowerPoint, Excel e Word, ou
+OpenDocument para o LibreOffice, feitos na sua máquina a partir dos valores que o assistente
+leu no ERP, com a consulta por trás de cada gráfico. Nada é enviado para os fazer.
+
+### SAF-T conferido antes de ser enviado
+
+*"Verifica o SAF-T de setembro."* O ficheiro que o ERP exportou é conferido com o esquema da AT
+e com o próprio ERP: falhas na numeração, ATCUD, códigos de isenção, NIF, totais. O envio
+continua a ser feito pelo ERP ou no Portal das Finanças.
 
 ### "Como chegou a este número?"
 
@@ -65,8 +92,6 @@ fornecedor de IA, por isso é dinheiro que fica consigo.
 
 - **Resumo da manhã.** Quando o ERP abre: pendentes vencidos, vendas de ontem, artigos abaixo do
   stock mínimo e documentos à espera de aprovação, num só cartão.
-- **Cobranças com referências Multibanco e MB WAY.** Uma skill revista que cria referências de
-  pagamento para faturas pendentes e verifica quais foram pagas.
 - **Da oportunidade à venda.** Avançar uma oportunidade do CRM para a fase seguinte, registar o
   primeiro contacto e abri-la pelo código, com o ciclo de vendas da empresa.
 - **Vistas guardadas.** Guardar uma resposta como uma vista que se atualiza com os dados do ERP.
@@ -75,11 +100,30 @@ fornecedor de IA, por isso é dinheiro que fica consigo.
 - **Uma coleção pública de skills.** Skills revistas publicamente, por pull request, e
   instaladas a partir das Definições.
 - **Conversas longas.** A conversa resumida automaticamente antes do limite do modelo.
+- **Reconciliação bancária.** Extratos bancários (primeiro ficheiros ISO 20022 camt.053, depois
+  open banking, com o seu próprio contrato) cruzados com os pendentes, com cada recibo num cartão.
+- **Ficheiros de pagamento a fornecedores.** Os pagamentos aprovados num ficheiro SEPA para
+  carregar no seu homebanking, com um aviso quando o IBAN de um fornecedor mudou há pouco.
+- **Microsoft 365 e Google Workspace.** Relatórios guardados no OneDrive, SharePoint ou Google
+  Drive, rascunhos do Outlook com o PDF oficial em anexo, um resumo publicado num canal do Teams.
+- **Encomendas da loja online.** As encomendas do dia da WooCommerce, PrestaShop ou Shopify
+  preparadas como documentos do ERP, cada uma no seu cartão.
+- **Etiquetas de envio CTT.** A etiqueta de uma guia de remessa, com a sua própria conta CTT.
+- **Um browser que trabalha na sua sessão.** Portais como o e-Fatura, a Segurança Social Direta
+  ou o site de um fornecedor abertos numa janela do assistente onde entra você; ele lê e
+  descarrega, e qualquer botão que submete fica consigo.
+- **Faturas recebidas pela AT.** Confirmar que todas as faturas que o ERP emitiu chegaram ao
+  e-Fatura.
 
 ## Direção
 
-- **Ferramentas de outros sistemas.** Um cliente MCP para o assistente usar ferramentas que
+- **Conectores a outros sistemas.** Um cliente MCP para o assistente usar ferramentas que
   outros sistemas exponham, com os mesmos interruptores por ferramenta e a mesma auditoria.
+- **Faturação a entidades públicas.** As referências de contrato e de compromisso que uma
+  fatura eletrónica ao Estado exige, conferidas antes de o ERP a emitir.
+- **Assinar propostas e contratos** com a Chave Móvel Digital.
+- **WhatsApp.** Um lembrete ou um documento enviado do chat pelo WhatsApp, redigido pelo
+  assistente e enviado por si.
 
 ## O que não muda
 
@@ -90,5 +134,11 @@ fornecedor de IA, por isso é dinheiro que fica consigo.
 - **Cada gravação fica auditada** na base de dados da sua empresa.
 - **Sem lançamentos automáticos** de movimentos contabilísticos, e nenhum documento fiscal
   emitido fora do ERP certificado.
+- **Nada fiscal ou financeiro é submetido em seu nome.** O SAF-T, as declarações e as comunicações à
+  AT continuam no ERP ou na sua sessão do portal, e os pagamentos no seu banco. O assistente
+  confere, reconcilia e prepara.
+- **As suas palavras-passe ficam consigo.** O assistente nunca guarda palavras-passe da AT, da
+  Segurança Social ou do banco; entra você nesses portais, e a chave do fornecedor de pagamentos fica
+  cifrada na sua máquina.
 - **As skills nunca trazem código.** São instruções em texto, revistas, que combinam as
   ferramentas do próprio assistente, com o mesmo cartão e a mesma auditoria.

@@ -4,7 +4,8 @@
 
 AITOOL already answers from PRIMAVERA, fills its windows and saves documents, receipts and
 payments from a card you click. Next, it reads the paperwork that arrives: supplier invoices
-from a photo or a PDF. Every item ships only after it works in a real PRIMAVERA ERP, and
+from a photo or a PDF, checked against e-Fatura, and collections by MB WAY that come back as
+receipts. Every item ships only after it works in a real PRIMAVERA ERP, and
 nothing here is a promise of a date: the [README](README.md) describes what exists today, and
 the [CHANGELOG](CHANGELOG.md) what each version added.
 
@@ -34,6 +35,33 @@ VAT totals, reads the lines the QR does not carry, checks that both add up, and 
 purchase document with the original file attached in the ERP's own archive. If something
 does not reconcile it stops and says what is missing. You confirm every document; nothing is
 posted on its own.
+
+### Purchases checked against e-Fatura
+
+*"Que compras estão no e-Fatura e não estão no ERP?"* The assistant compares the invoices
+your suppliers reported to the AT with the purchase documents in the ERP, by tax id, number
+and ATCUD, and lists what is missing, what differs in amount and what is in the ERP twice.
+It starts from the file the e-Fatura portal exports; anything missing can then go through
+the invoice reader above.
+
+### Collections by MB WAY and Multibanco, settled as receipts
+
+*"Cobra os vencidos da SOFRIO por MB WAY."* With your own payment provider account (EasyPay,
+ifthenpay, SIBS or Stripe), the assistant creates the MB WAY request or the Multibanco
+reference for the pending invoices, checks which were paid, and prepares the receipt for each
+one on a confirmation card. Your provider key stays encrypted on your machine.
+
+### Reports and presentations from live ERP data
+
+*"Faz a apresentação do mês para a administração."* PowerPoint, Excel and Word files, or
+OpenDocument for LibreOffice, built on your own machine from the figures the assistant read in
+the ERP, with the query behind each chart. Nothing is uploaded to make them.
+
+### SAF-T checked before it is sent
+
+*"Verifica o SAF-T de setembro."* The file the ERP exported is checked against the AT schema and
+against the ERP itself: gaps in numbering, ATCUD, exemption codes, tax ids, totals. Sending it
+stays with the ERP or the AT portal.
 
 ### "How did it get this number?"
 
@@ -66,8 +94,6 @@ provider, so this is money you keep.
 
 - **Morning briefing.** When the ERP opens: overdue items, yesterday's sales, articles below
   minimum stock and documents waiting for approval, in one card.
-- **Collections with Multibanco references and MB WAY.** A reviewed skill that creates payment
-  references for pending invoices and checks which were paid.
 - **From opportunity to sale.** Move a CRM opportunity to its next stage, log the first contact
   and open it by its code, with the company's own sales cycle.
 - **Saved views.** Keep an answer as a view that refreshes with the ERP's data.
@@ -76,11 +102,29 @@ provider, so this is money you keep.
 - **A public skills collection.** Skills reviewed publicly, by pull request, and installed from
   Settings.
 - **Long conversations.** The conversation summarised automatically before the model's limit.
+- **Bank reconciliation.** Bank statements (ISO 20022 camt.053 files first, open banking later,
+  under your own contract) matched against pending items, with each receipt on a card.
+- **Supplier payment files.** The approved payments as a SEPA file for you to upload to your
+  homebanking, with a warning when a supplier's IBAN changed recently.
+- **Microsoft 365 and Google Workspace.** Reports saved to OneDrive, SharePoint or Google Drive,
+  Outlook drafts with the official PDF attached, a summary posted to a Teams channel.
+- **Online shop orders.** Today's WooCommerce, PrestaShop or Shopify orders prepared as ERP
+  documents, each one on its card.
+- **CTT shipping labels.** The label for a delivery note, from your own CTT account.
+- **A browser that works in your session.** Portals such as e-Fatura, Segurança Social Direta
+  or a supplier's site opened in a window of the assistant where you sign in yourself; it
+  reads and downloads, and any button that submits stays yours.
+- **Invoices received by the AT.** A check that every invoice the ERP issued reached e-Fatura.
 
 ## Direction
 
-- **Tools from other systems.** An MCP client so the assistant can use tools other systems
+- **Connectors to other systems.** An MCP client so the assistant can use tools other systems
   expose, with the same per-tool switches and audit.
+- **Invoicing public entities.** The contract and commitment references an electronic invoice
+  to the State needs, checked before the ERP issues it.
+- **Signing proposals and contracts** with the Chave Móvel Digital.
+- **WhatsApp.** A reminder or a document sent from the chat through WhatsApp, drafted by the
+  assistant and sent by you.
 
 ## What does not change
 
@@ -91,5 +135,11 @@ provider, so this is money you keep.
 - **Every write is audited** in your company's own database.
 - **No automatic posting** of accounting movements, and no fiscal document issued outside the
   certified ERP.
+- **Nothing fiscal or financial is submitted for you.** SAF-T, declarations and communications
+  to the AT stay with the ERP or your portal session, and payments with your bank. The
+  assistant checks, reconciles and prepares.
+- **Your passwords stay yours.** The assistant never stores AT, Segurança Social or bank
+  passwords; you sign in to those portals yourself, and a payment provider key stays encrypted on your
+  machine.
 - **Skills never carry code.** They are reviewed text instructions that combine the assistant's
   own tools, with the same card and the same audit.

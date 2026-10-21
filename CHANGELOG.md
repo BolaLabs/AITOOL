@@ -8,6 +8,32 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.22.2] - 2026-10-21
+
+### Highlights
+
+- A request typed while the assistant answers waits above the message box, "Em fila: segue
+  quando a resposta acabar", and goes by itself when the answer ends; "Não enviar" drops it.
+- After "Não gravar", the text written for the preview folds away under the cancelled card.
+- The roadmap now covers what comes next for the back office: purchases checked against
+  e-Fatura, MB WAY and Multibanco collections settled as receipts, Word, Excel and PowerPoint
+  reports from live ERP data, and a SAF-T check before it is sent.
+
+### Changed
+
+- A request sent while the assistant is still answering now shows above the message box as
+  "Em fila: segue quando a resposta acabar", with "Não enviar" to drop it; clearing the box
+  drops it too. Before, only a short notice said it was waiting.
+- After "Não gravar", the answer's text written for the preview ("só será criada quando
+  carregar no botão…") folds away under the cancelled card, as it already did after a save.
+- The roadmap adds what comes after reading supplier invoices: purchases checked against
+  e-Fatura, MB WAY and Multibanco collections that come back as receipts, Word, Excel and
+  PowerPoint reports from live ERP data, a SAF-T check before it is sent, and, under study,
+  bank reconciliation, Microsoft 365 and Google Workspace, online shops, CTT labels and a
+  browser that works in your own session. It also says what will not change: nothing fiscal
+  or financial is submitted for you, and AT, Segurança Social and bank passwords are never
+  stored.
+
 ## [2.22.1] - 2026-10-21
 
 ### Highlights
