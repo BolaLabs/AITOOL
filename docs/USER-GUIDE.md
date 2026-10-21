@@ -89,7 +89,9 @@ to, drives the ERP windows by text.
 - *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"*: for an article with
   dimensions the assistant fills the ERP's variant grid and confirms it; the document gets the
   article's aggregator line and one line per variant, as if you had picked them. Without saying
-  which, it asks; *"abre a grelha que eu escolho"* leaves the grid open for you.
+  which, it asks; *"abre a grelha que eu escolho"* leaves the grid open for you. If you cancel
+  the grid, the ERP leaves the article's line with no variants (quantity 0): remove it with a
+  right click on that line, "Remove Linha".
 - *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"*: for a formula article the
   measures go into the ERP's "Fórmula" dialog and the line carries the quantity the ERP computes.
 - *"Lê o diálogo"* reads a message box the ERP opened, and says what each answer does.
@@ -239,3 +241,7 @@ each request.
   data, not in that window.
 - Bills of exchange and bank remittances are done in the ERP; the assistant explains when
   a document is waiting for one of them.
+- Articles with serial numbers (such as A0004): an invoice, delivery note or credit note made by
+  the assistant cannot carry them and the ERP refuses to save it, so the assistant does not
+  prepare it and offers to write the line in the editor, where the ERP asks for the numbers.
+  Quotations and orders, which do not move stock, go through as usual.

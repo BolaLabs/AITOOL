@@ -87,7 +87,9 @@ usar, conduz as janelas do ERP por texto.
 - *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"*: num artigo com
   dimensões, o assistente preenche a grelha de variantes do ERP e confirma-a; o documento fica
   com a linha agregadora do artigo e uma linha por variante, como se as escolhesse. Sem dizer
-  quais, pergunta; *"abre a grelha que eu escolho"* deixa-a aberta para si.
+  quais, pergunta; *"abre a grelha que eu escolho"* deixa-a aberta para si. Se cancelar a
+  grelha, o ERP deixa a linha do artigo sem variantes (quantidade 0): apaga-se com o botão
+  direito nessa linha, em "Remove Linha".
 - *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"*: num artigo com fórmula, as
   medidas vão para a janela "Fórmula" do ERP e a linha fica com a quantidade que o ERP calcula.
 - *"Lê o diálogo"* lê uma mensagem que o ERP abriu e diz o que faz cada resposta.
@@ -242,3 +244,7 @@ estimado de cada pedido.
   respondidas a partir dos dados, não nessa janela.
 - Letras e remessas bancárias fazem-se no ERP; o assistente explica quando um documento
   está à espera de uma delas.
+- Artigos com números de série (como o A0004): uma fatura, guia ou nota de crédito criada pelo
+  assistente não os pode indicar e o ERP recusa gravá-la, por isso o assistente não a prepara e
+  propõe fazer a linha no editor, onde o ERP pede os números. Orçamentos e encomendas, que não
+  mexem no stock, fazem-se normalmente.

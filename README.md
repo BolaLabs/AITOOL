@@ -134,15 +134,16 @@ read-only SQL login. Details: [Security and privacy](docs/SECURITY-AND-PRIVACY.m
 - You pay your provider directly. The session panel shows tokens and cost per request; a low-cost
   model such as `gpt-6-luna` handles day-to-day ERP work for a fraction of a flagship model.
 
-## New in 2.21
+## New in 2.22
 
-<img src="docs/assets/release-2-21.png" alt="The ERP's variant grid for I0001 open over a sales invoice; the panel says the assistant moved to its own window, and that window answers what is open in the ERP" width="920">
+<img src="docs/assets/release-2-22.png" alt="The docked assistant after 'Faz uma fatura à SOFRIO com 2 A0002': the customer and article it found, then the save card with the ERP's totals and a gold Gravar documento button" width="560">
 
 | | |
 | --- | --- |
-| **The chat survives ERP dialogs** | When the ERP opens a window that blocks the rest, the chat moves to its own window and keeps answering; it returns when the window closes |
-| **Articles with variants, by sentence** | "2 of I0001 with DDR2-1024 and MT2200": the assistant fills the ERP's variant grid and the ERP adds the lines, as if you had picked them |
-| **Formula articles** | Width and length go into the ERP's "Fórmula" dialog and the line carries the quantity the ERP computes |
+| **Requests from the guide reach the right tool** | "Faz uma proposta ao SOFRIO…", "Prepara um orçamento…" and "Quais os pendentes da SOFRIO?" go to the document and pending-items tools, not to SQL |
+| **Fewer questions back** | "Põe 1 A0007 branco" picks the variant, "jmf" finds J.M.F., and an article code the company does not have is caught before the ERP's notice |
+| **A clearer save card** | A larger Gravar that stands apart from "Não gravar", and the focus on the card when an answer leaves one; the card is the only confirmation |
+| **The docked panel reads better** | A refusal or a corrected step no longer shows as a failure, tables keep their amounts in view, and settings speak plain Portuguese |
 
 Every release: [CHANGELOG.md](CHANGELOG.md).
 

@@ -8,6 +8,21 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.22.0] - 2026-10-21
+
+### Highlights
+
+- "Faz uma proposta ao SOFRIO…", "Prepara um orçamento…", "Quais os pendentes da SOFRIO?": the
+  requests in the user guide reach the document and pending-items tools instead of SQL.
+- "Põe 1 A0007 branco", "põe o cliente jmf": the variant named by its value and a customer typed
+  without its dots are found without asking back.
+- A clearer save card: a larger Gravar that stands apart from "Não gravar", and the card is the
+  only confirmation the assistant asks for.
+- The steps say what happened in plain words: a refusal, or a step the assistant corrected in
+  the next call, no longer shows as a failure.
+- An article code the company does not have, and an article with serial numbers in an invoice,
+  are stopped before the ERP's error dialogs, with what to do instead.
+
 ### Changed
 
 - The first request of a conversation is up to about 1,000 tokens lighter: the rules for receipts, purchases, documents,
@@ -23,6 +38,34 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 - The welcome screen of the chat offers "Recibos e aprovações" (it starts the request in the
   box, ready for the customer's name and the amount, without sending it), and "Preencher
   janelas" names what it covers: lines, variants and formulas.
+- The save card: the Gravar button is larger, and gold in the dark theme so it no longer looks
+  like "Não gravar"; while the ERP saves, the card says "A gravar" instead of "Aguarda o seu
+  clique"; once saved it shows the number the ERP gave the document ("Documento FA C/12 criado
+  no ERP") and drops the "Ao carregar em Gravar…" notice.
+- The steps line names what happened in words a user reads: a step the assistant corrected in
+  the next call counts as "1 repetido" and a deliberate refusal that wrote nothing as "1
+  recusado", both grey; "falhou" in red is left for real failures. An opened step shows the
+  first sentence of what the tool reported; tool names, arguments, raw results and the
+  instructions meant for the model stay in the technical mode.
+- The text after a card is open when it is short or follows a save card, so a caveat such as
+  "o campo vendedor não existe" is not hidden behind "Mostrar texto da resposta".
+- Narrow panel: table names and descriptions wrap so the amounts stay in view; the error card's
+  buttons wrap instead of being cut, and a key or model error offers "Abrir definições" first;
+  the welcome screen opens at the greeting, not at the last cards; the reasoning chip says "Sem
+  raciocínio" instead of a lone "Desligado".
+- Screen readers: the closed conversation list is out of the Tab order, a finished answer is
+  read once (it was read by the message log and again by the announcement), and after an
+  answer that left a save card the focus goes to the card; typing moves on to the message box.
+- Asking to dock the chat while an ERP dialog is open keeps it in its own window, with a note,
+  and it docks by itself when the dialog closes; before, it went back into the blocked panel.
+- Settings in plain words: "Decisões rápidas" (was "Jev"), "Tamanho máximo da resposta",
+  "Resposta em tempo real", "Mostrar as instruções do assistente", and each tool listed by what
+  it does, with its internal name beside it.
+- Adding an article that has an associated article (G0001 brings H0001) to an editor line: the
+  assistant is told the ERP adds that line by itself, so it reports it instead of correcting it.
+- Recipes learned by another version of the assistant are no longer replayed without the
+  model: a 2.21 recipe kept answering "Quais os pendentes da SOFRIO?" with account totals after
+  the pending-items list became available. Relearned with the same steps, a recipe keeps its uses.
 
 ### Fixed
 
@@ -59,6 +102,18 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
   "sugestão rápida" chip and its buttons were beside it.
 - With the chat docked, the window automation's accessibility walk also walked the chat page
   itself and spent its time budget there.
+- The pending-items table was titled "Pendentes de C: SOFRIO" (the internal kind letter) and
+  showed the series 2019 as "2019,00"; it now reads "Pendentes de cliente SOFRIO" and "2019".
+- After the user cancels a variant grid, the ERP leaves the parent's line at quantity 0; the
+  window tool now marks a parent line with no variants under it, and the assistant tells the
+  user to remove it with a right click on that line, "Remove Linha".
+- "Faz uma fatura à SOFRIO com 1 A0004": an article with serial numbers in a document that
+  moves stock passed the preview and failed on Gravar behind the ERP's own error dialog ("A
+  quantidade de números de série preenchidos [0] … é diferente da quantidade movimentada [1]").
+  It is now refused before the card, with the way to do it in the editor, where the ERP asks
+  for the numbers; quotations and orders, which move no stock, still go through.
+- A save the ERP refused showed only "A gravação falhou" on the card; the ERP's reason follows.
+- "Abre uma fatura" could open an existing invoice instead of a new one in the editor.
 
 ## [2.21.0] - 2026-10-20
 

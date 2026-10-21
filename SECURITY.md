@@ -4,9 +4,9 @@
 
 | Version | Supported |
 | ------- | --------- |
+| 2.22.x  | Yes       |
 | 2.21.x  | Yes       |
-| 2.20.x  | Yes       |
-| < 2.20  | No        |
+| < 2.21  | No        |
 
 This table is verified by `scripts/checks/Test-VersionCoherence.ps1`, which fails when the
 version stamped in `Properties/AssemblyInfo.cs` is not listed here.

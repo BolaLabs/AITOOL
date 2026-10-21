@@ -134,15 +134,16 @@ o addon a um login SQL só de leitura. Detalhes: [Segurança e privacidade](docs
 - Paga ao fornecedor diretamente. O painel da sessão mostra tokens e custo por pedido; um modelo económico
   como o `gpt-6-luna` faz o trabalho do dia a dia no ERP por uma fração de um modelo topo de gama.
 
-## Novidades da 2.21
+## Novidades da 2.22
 
-<img src="docs/assets/release-2-21.png" alt="A grelha de variantes do I0001 aberta sobre uma fatura; o painel diz que o assistente passou para uma janela própria, e essa janela responde ao que está aberto no ERP" width="920">
+<img src="docs/assets/release-2-22.png" alt="O assistente ancorado depois de «Faz uma fatura à SOFRIO com 2 A0002»: o cliente e o artigo que encontrou e o cartão de gravação com os totais do ERP e o botão dourado Gravar documento" width="560">
 
 | | |
 | --- | --- |
-| **O chat resiste às janelas do ERP** | Quando o ERP abre uma janela que bloqueia o resto, o chat passa para uma janela própria e continua a responder; volta quando ela fecha |
-| **Artigos com variantes, por frase** | «2 do I0001 com DDR2-1024 e MT2200»: o assistente preenche a grelha de variantes do ERP e o ERP acrescenta as linhas, como se as escolhesse |
-| **Artigos com fórmula** | A largura e o comprimento vão para a janela «Fórmula» do ERP e a linha fica com a quantidade que o ERP calcula |
+| **Os pedidos do guia chegam à ferramenta certa** | «Faz uma proposta ao SOFRIO…», «Prepara um orçamento…» e «Quais os pendentes da SOFRIO?» vão às ferramentas de documentos e de pendentes, não ao SQL |
+| **Menos perguntas de volta** | «Põe 1 A0007 branco» escolhe a variante, «jmf» encontra a J.M.F. e um código de artigo que a empresa não tem é apanhado antes do aviso do ERP |
+| **Um cartão de gravação mais claro** | Gravar maior, bem distinto do «Não gravar», e o foco no cartão quando uma resposta o deixa; o cartão é a única confirmação |
+| **O painel ancorado lê-se melhor** | Uma recusa ou um passo corrigido já não aparecem como falha, as tabelas deixam os valores à vista e as definições falam português simples |
 
 Todas as versões: [CHANGELOG.md](CHANGELOG.md).
 
