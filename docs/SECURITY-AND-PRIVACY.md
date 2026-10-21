@@ -3,7 +3,7 @@
 # Security and privacy — what an IT approver needs to know
 
 This is the document to read before approving AITOOL on a company machine. It describes the
-addon as installed: not the AI provider's own security posture, not Primavera's, not your
+addon as installed: not the AI provider's own security posture, not PRIMAVERA's, not your
 SQL Server hardening.
 
 Vulnerability reporting is in [SECURITY.md](../SECURITY.md).
@@ -12,7 +12,7 @@ Vulnerability reporting is in [SECURITY.md](../SECURITY.md).
 
 ## 1. Where the software runs
 
-In-process inside the Primavera client (`Erp100EV.exe`, `Erp100LE.exe` or `Erp100LP.exe`,
+In-process inside the PRIMAVERA client (`Erp100EV.exe`, `Erp100LE.exe` or `Erp100LP.exe`,
 depending on the edition) on the user's workstation (.NET Framework 4.8), deployed to
 `<SG100>\Config\<EV|LE|LP>\Extensions\AITOOL\` and registered in the ERP's Extensibility
 table (`PRIEMPRE..ExtensibilityConfiguration`).
@@ -25,12 +25,12 @@ Extensibility row.
 
 | Destination | What | When | How to stop it |
 | --- | --- | --- | --- |
-| The AI provider **you** configure | The conversation, the system prompt (which carries the company code and the user), the code and name of the client, supplier and article records open in the ERP with the title of the active window, and every tool result — customer names, tax numbers, balances, sales figures, SQL result rows | Every turn | Configure a local OpenAI-compatible endpoint; nothing leaves the machine. The open-window block alone is switched off in the chat header ("Partilhar as janelas abertas") |
+| The AI provider **you** configure | The conversation, the system prompt (which carries the company code and the user), the code and name of the customer, supplier and article records open in the ERP with the title of the active window, and every tool result — customer names, tax numbers, balances, sales figures, SQL result rows | Every turn | Configure a local OpenAI-compatible endpoint; nothing leaves the machine. The open-window block alone is switched off in the chat header ("Partilhar as janelas abertas") |
 | Web-search provider (Tavily / Brave / Serper / Exa / self-hosted SearXNG) | The search query text only | Only when `web_search` runs | Disable the tool, or leave the key unset |
 | VIES and NIF.pt | A tax number | Only when `enrich_entity` runs | Disable the tool |
 | Jev (TypeSafe AI, hosted in the United States), directly or through OpenRouter | Window titles, menu names, field and column labels, button captions and dialog texts of the ERP window being automated, plus the name the user gave to what they asked for. Never the values written into fields, never table data | **Only if a user switches on "Decisões rápidas (Jev)" in settings. Off by default**; the settings panel shows a data-protection notice next to the switch | Leave the switch off |
 | Sentry | Error-level events, release-health sessions and a 10% sample of performance traces, sanitized; no chat content | **Only if an operator configures a DSN. No DSN ships.** | Leave `Sentry:Dsn` empty (the default) |
-| Whoever the user sends the support bundle to | A .zip with an installation report, the last 7 days of local logs, user preferences without credentials and the last installer reports; keys, passwords, connection strings and `C:\Users\<name>` paths are redacted. Logs can still name customers, items or tables that tools looked up | Only when a user clicks **Exportar pacote de apoio** (settings → Diagnóstico) and sends the file | Do not export it, or review it before sending |
+| Whoever the user sends the support bundle to | A .zip with an installation report, the last 7 days of local logs, user preferences without credentials and the last installer reports; keys, passwords, connection strings and `C:\Users\<name>` paths are redacted. Logs can still name customers, items or tables that tools looked up | Only when a user clicks **Exportar pacote de apoio** (Definições → Avançado → Diagnóstico) and sends the file | Do not export it, or review it before sending |
 | Bola Labs | Nothing, ever | — | — |
 
 What reaches the provider is what the assistant retrieved to answer that question — not a
@@ -43,15 +43,17 @@ bulk export. There is no data-residency control beyond the provider's own.
 - **Drive the ERP client**: open functions by navigating the ribbon, open records in their
   editors, list and fill fields and grid cells in open windows — including the classic VB6
   editors, via UI Automation.
-- **Write**: create and update customer/supplier files, create articles, create sales
-  documents, create CRM sales opportunities, and, for administrators and technicians only,
-  extend or reactivate a sales series — each one gated on the confirmation card described in section 4.
+- **Write**: create and update customer/supplier files, create articles, create sales and
+  purchase documents, customer receipts, supplier payments, payment approvals (APR) and
+  encontros de contas, create CRM sales opportunities, and, for administrators and
+  technicians only, extend or reactivate a sales series — each one gated on the confirmation
+  card described in section 4.
   E-mail drafts are handed to the default mail client for review and never sent by the addon.
 - **Generate** the official Crystal report PDF of a document and open it.
 - **Search the web**, with results marked as untrusted content.
 
-The ceiling: no purchase documents, no article creation, no accounting postings, no
-deletions, no direct writes to ERP tables.
+The ceiling: no accounting postings, no voiding or deleting documents, no direct writes to
+ERP tables.
 
 ## 4. What bounds it, and how strongly
 
@@ -112,12 +114,12 @@ save. It does nothing about anyone who can reach the ERP database with the same 
 the addon uses. If even the gated write surface is unacceptable for a given company, disable
 the write tools, or the tool layer entirely.
 
-### It does not enforce Primavera's per-user permissions
+### It does not enforce PRIMAVERA's per-user permissions
 
 Tools that go through the ERP object model act as the logged-in ERP user. **Tools that read
 through SQL do not**: `search_entities`, `query_documents`, `query_account_balance`,
 `analyze_sales`, `check_stock`, `render_document` and `run_query` use the ERP's own database
-connection, and Primavera's permissions are enforced by the application, not by the database.
+connection, and PRIMAVERA's permissions are enforced by the application, not by the database.
 A user who cannot see supplier balances in the ERP can still ask the assistant for them.
 
 Bound it by disabling those tools for the population that should not have them, or by
@@ -165,8 +167,9 @@ If your login is not allowed to create tables — and many are not — run
 [`sql/AI_Schema.sql`](../sql/AI_Schema.sql) once per company as `db_owner`. After that the
 addon needs no DDL rights at all: `SELECT, INSERT, UPDATE, DELETE` on `AI_ChatSessions` and
 `AI_ChatMessages`, `SELECT, INSERT` on `AI_AuditLog`, which is never updated or deleted, and
-`SELECT, INSERT, UPDATE` on `AI_AutomationKnowledge`. Without that last table nothing fails:
-each workstation keeps what it learned to itself.
+`SELECT, INSERT, UPDATE` on `AI_AutomationKnowledge` and `SELECT, INSERT, UPDATE, DELETE` on
+`AI_Recipes`. Without those two tables nothing fails: each workstation keeps what it learned
+to itself.
 
 **A commit is refused when the audit trail cannot be reached.** Creating or changing a record
 in the ERP from the confirmation card checks first that the log can be written, and stops
@@ -217,9 +220,10 @@ Web-search queries are never logged — they can embed names and tax ids.
 
 The same folder holds `automation-memory.json`: what the window automation learned, as plain
 JSON, with a backup of the previous version beside it. It records which field, grid column
-or ERP function a wording ended up meaning ("plafond" is "Limite" on the client record) and
+or ERP function a wording ended up meaning ("plafond" is "Limite" on the customer record) and
 which ones the user rejected. Names and captions only; the values typed are never written
-to it. It can be read, edited or deleted. Settings → Jev empties it on that workstation
+to it. It can be read, edited or deleted. Definições → Decisões rápidas → **Esquecer o que
+aprendeu** empties it on that workstation
 and, through the shared table, on the others; that is refused unless the user is an
 administrator, super administrator or technician in the ERP.
 
@@ -258,10 +262,10 @@ touches the network.
       confirmation card a person has to click)
 - [ ] Decide whether `run_query` is enabled, and whether to point the addon at a read-only
       SQL login
-- [ ] Accept that four tables are created in the company database, with no retention policy
+- [ ] Accept that five tables are created in the company database, with no retention policy
       (or schedule your own purge)
 - [ ] Decide the Sentry DSN (default: none)
-- [ ] Know the removal path: delete the folder, remove the Extensibility row; the four
+- [ ] Know the removal path: delete the folder, remove the Extensibility row; the five
       tables survive by design
 - [ ] Note that the installer is not code-signed today — SmartScreen will warn, and the
       SHA256 published with each release is how you verify the download

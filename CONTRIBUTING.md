@@ -14,7 +14,7 @@ product came from someone saying what did not work.
 
 Open an issue in [BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL/issues) with:
 
-- the AITOOL version (settings modal, bottom line) and the Primavera v10 build
+- the AITOOL version (settings modal, bottom line) and the PRIMAVERA v10 build
 - the prompt you typed and what the assistant answered or did
 - the relevant lines from `%LocalAppData%\Cegid\Extensions\AITOOL\Logs\` — keys are never
   written there, but check for customer names before pasting
@@ -31,7 +31,7 @@ on it.
 
 The rest of this document is for people who build from the source under a source licence —
 see [COMMERCIAL.md](COMMERCIAL.md). It targets .NET Framework 4.8, WinForms, DevExpress 21.2.3
-and ERP Primavera v10.
+and ERP PRIMAVERA v10.
 
 #### Development Setup
 
@@ -65,7 +65,7 @@ and ERP Primavera v10.
 
 There are no test projects, and that is deliberate: almost every code path either drives the
 ERP object model or the WinForms/WebView2 UI, neither of which is meaningfully testable
-outside a running Primavera. Verification is three steps instead:
+outside a running PRIMAVERA. Verification is three steps instead:
 
 - A clean build with 0 errors.
 - The static guards in `scripts/checks/`. Four reflect over a compiled assembly to assert the
@@ -106,7 +106,7 @@ produto veio de alguém a dizer o que não funcionou.
 
 Abra um issue em [BolaLabs/AITOOL](https://github.com/BolaLabs/AITOOL/issues) com:
 
-- a versão do AITOOL (janela de definições, última linha) e a build do Primavera v10
+- a versão do AITOOL (janela de definições, última linha) e a build do PRIMAVERA v10
 - o que escreveu e o que o assistente respondeu ou fez
 - as linhas relevantes de `%LocalAppData%\Cegid\Extensions\AITOOL\Logs\` — as chaves nunca
   são escritas lá, mas verifique nomes de clientes antes de colar
@@ -122,7 +122,7 @@ As GitHub Discussions são o sítio para ideias, dúvidas e "seria possível". O
 
 O resto deste documento é para quem compila a partir do código com uma licença de código —
 ver [COMMERCIAL.md](COMMERCIAL.md). Usa .NET Framework 4.8, WinForms, DevExpress 21.2.3 e ERP
-Primavera v10.
+PRIMAVERA v10.
 
 #### Ambiente de Desenvolvimento
 

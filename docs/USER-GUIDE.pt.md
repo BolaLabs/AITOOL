@@ -1,11 +1,11 @@
-﻿# Manual do AITOOL
+﻿# Guia do utilizador do AITOOL
 
-Para quem usa o assistente dentro do Primavera v10 todos os dias: contabilidade, vendas,
+Para quem usa o assistente dentro do PRIMAVERA v10 todos os dias: contabilidade, vendas,
 compras, back office. A instalação está no [INSTALL.pt.md](../INSTALL.pt.md); o que o produto
 é e como está construído, no [README](../README.pt.md).
 
 Todos os exemplos foram feitos na DEMOV10, a empresa de demonstração da Cegid, na versão que
-acompanha este manual. Códigos como `SOFRIO`, `F0003` ou `A0001` são dessa empresa.
+acompanha este guia. Códigos como `SOFRIO`, `F0003` ou `A0001` são dessa empresa.
 
 **Os pedidos mais usados**
 
@@ -27,7 +27,7 @@ O que grava espera sempre pelo seu clique no cartão ([secção 6](#6-o-cartão-
 
 ## 1. Abrir
 
-O friso tem um separador **BOLA LABS** com o botão **Assistente AI**. O chat abre encostado à
+O friso tem um separador **BOLA LABS** com o botão **Assistente de IA**. O chat abre ancorado à
 direita do ERP; o botão no topo do painel solta-o numa janela própria. `Ctrl+N` começa uma
 conversa nova, `Ctrl+B` abre a lista de conversas, `Ctrl+,` as definições.
 
@@ -77,13 +77,18 @@ usar, conduz as janelas do ERP por texto.
   separador, com os valores atuais.
 - *"Põe o cliente SOFRIO"* põe o cliente no campo de entidade do documento, confirma que o
   documento aceita esse tipo de entidade e lê o nome que o ERP mostra.
-- *"Data de hoje, condição de pagamento a 45 dias, armazém 2"* preenche vários campos de uma
-  vez. Expressões como "Fatura a 45 dias" ou "Armazém 2" passam aos códigos que as tabelas da
-  empresa têm para elas; quando servem dois códigos, pergunta qual.
+- *"Data de hoje e condição de pagamento a 45 dias"* preenche vários campos de uma vez.
+  Expressões como "Fatura a 45 dias" passam aos códigos que as tabelas da empresa têm para
+  elas; quando servem dois códigos, pergunta qual. Nos documentos, o armazém é uma coluna de
+  cada linha: *"põe a linha 2 no armazém A2"*; *"armazém 2"* passa a A2 quando a empresa o
+  tem, e quando servem vários armazéns pergunta qual.
 - *"Uma linha do artigo A0002, quantidade 3, preço 250"* acrescenta uma linha ao documento.
   Nos editores de vendas, compras e documentos internos, o artigo entra na grelha e a
   quantidade, o preço, o desconto, a descrição e o armazém entram na linha do documento
   pelos eventos do próprio editor, para o ERP calcular a linha como se a tivesse escrito.
+- *"Põe 2 do processador Intel"*: um artigo pode ser dito pelo nome em vez do código. O
+  assistente procura-o pela descrição e põe o código na linha; quando servem vários artigos,
+  lista-os e pergunta em vez de escrever.
 - *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"*: num artigo com
   dimensões, o assistente preenche a grelha de variantes do ERP e confirma-a; o documento fica
   com a linha agregadora do artigo e uma linha por variante, como se as escolhesse. Sem dizer
@@ -92,7 +97,8 @@ usar, conduz as janelas do ERP por texto.
   direito nessa linha, em "Remove Linha".
 - *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"*: num artigo com fórmula, as
   medidas vão para a janela "Fórmula" do ERP e a linha fica com a quantidade que o ERP calcula.
-- *"Lê o diálogo"* lê uma mensagem que o ERP abriu e diz o que faz cada resposta.
+- *"Lê o diálogo"* lê uma mensagem que o ERP abriu e diz o que faz cada resposta. Uma
+  resposta que grava, como "Sim" a "gravar as alterações?", vem num cartão de confirmação.
 
 Quando o ERP abre uma janela que bloqueia o resto (a grelha de variantes, "Fórmula", "Números
 de Série", um aviso), o assistente passa para uma janela própria no mesmo lugar e continua a
@@ -103,8 +109,7 @@ Os campos de separadores que não estão à vista são alcançados sem mudar de 
 
 **O que nunca faz sozinho:** carregar num botão que grava, anula ou apaga. Gravar,
 Confirmar, Anular, Apagar e afins passam pelo cartão de confirmação (secção 6), e o mesmo vale
-para responder "Sim" a um diálogo do ERP como "gravar as alterações?". Com o assistente ancorado
-no painel, essa resposta é sua, no ERP.
+para responder "Sim" a um diálogo do ERP como "gravar as alterações?".
 
 ## 5. Criar documentos e fichas sem abrir o editor
 
@@ -115,8 +120,8 @@ ERP.
 | Escreve | Prepara |
 | --- | --- |
 | *Cria o cliente Exemplo Lda, NIF 999999990* | Uma ficha de cliente |
-| *Cria o artigo AIT1018 "Cabo HDMI 2 m", unidade UN, IVA 23* | Uma ficha de artigo |
-| *Faz uma proposta ao SOFRIO com 2 A0001* | Um documento de venda, com os preços e totais do ERP |
+| *Cria o artigo AIT1018 'Cabo HDMI 2 m', unidade UN, IVA 23* | Uma ficha de artigo |
+| *Faz uma proposta à SOFRIO com 2 A0001* | Um documento de venda, com os preços e totais do ERP |
 | *Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros* | Um documento de compra |
 | *Faz um recibo ao cliente SOFRIO de 100 euros* | Um recibo de cliente |
 | *Paga 200 euros ao fornecedor F0001* | Um pagamento a fornecedor |
@@ -136,10 +141,10 @@ ERP.
 - Um documento que está pendente mas num estado que o tipo de liquidação não aceita (uma
   fatura de fornecedor à espera de aprovação de pagamento, por exemplo) é explicado com o
   nome do estado no ERP e o documento que muda esse estado. Não aparece como "não pendente".
-- "Aprova para pagamento as faturas do fornecedor X" grava a aprovação (o documento APR do
+- *"Aprova para pagamento as faturas do fornecedor X"* grava a aprovação (o documento APR do
   ERP) a partir do cartão: as faturas passam de "Aguarda Aprovação" a "Aprovada" e nada é
   pago; o pagamento é o passo seguinte, com o seu próprio cartão.
-- No editor de liquidações (Contas Correntes), "põe 500 em valor a liquidar e distribui"
+- No editor de liquidações (Contas Correntes), *"põe 500 em valor a liquidar e distribui"*
   preenche o Valor Entregue do separador Distribuição Automática e carrega em Distribuir:
   o ERP reparte o valor pelos pendentes mais antigos sem gravar nada; só o Confirmar grava,
   e esse passa pelo cartão.
@@ -155,20 +160,23 @@ Cada escrita é mostrada antes de acontecer, num cartão com:
 - os totais do próprio ERP: mercadoria, descontos, IVA, retenção na fonte, total, ou o valor
   compensado num encontro de contas;
 - os avisos, a âmbar: uma escolha por omissão da ferramenta, um crédito que ficou em aberto,
-  um campo que o ERP preencheu.
+  um campo que o ERP preencheu;
+- as linhas que o ERP acrescenta sozinho (um artigo associado, uma taxa), listadas antes de
+  gravar.
 
 A gravação corre quando carrega no botão do cartão e em mais nada. Escrever "sim" no chat
-não grava. Depois de gravar, o cartão diz **Gravado** com o número que o ERP deu; se o ERP
-parou num diálogo, o cartão diz o que falta responder lá.
+não grava. Enquanto o ERP grava, o cartão diz **A gravar**; depois **Gravado** com o número
+que o ERP deu. Se o ERP parou num diálogo, o cartão diz o que falta responder lá.
 
 Cada gravação, recusa e falha fica em `AI_AuditLog` na base de dados da empresa, com o
 utilizador, a ferramenta e o resultado. `/auditoria` mostra as suas; os supervisores
-(administradores e técnicos) veem as de todos com `/auditoria todos`.
+(administradores, superadministradores e técnicos do ERP) veem as de todos com
+`/auditoria todos`.
 
 ## 7. O que faz sozinho
 
-- **Vários passos de uma vez.** "Abre o editor de compras para o F0003 com uma linha do
-  A0002" é um pedido só: abrir o editor, pôr o fornecedor, acrescentar a linha. Os passos
+- **Vários passos de uma vez.** *"Abre o editor de compras para o F0003 com uma linha do
+  A0002"* é um pedido só: abrir o editor, pôr o fornecedor, acrescentar a linha. Os passos
   correm num lote e param no primeiro que falhe ou que precise da sua confirmação.
 - **Aprende os pedidos que se repetem.** Um pedido que correu limpo passa a receita. A partir
   da terceira vez corre diretamente, sem pedir o plano ao modelo de IA: o mesmo tipo de
@@ -222,14 +230,18 @@ estimado de cada pedido.
 | `/ajuda` | Ajuda |
 
 `Ctrl+N` conversa nova · `Ctrl+B` conversas · `Ctrl+E` exportar · `Ctrl+,` definições · `Enter` envia ·
-`Shift+Enter` nova linha.
+`Shift+Enter` nova linha · `Esc` para a resposta.
+
+A caixa de mensagem fica aberta enquanto o assistente responde: um pedido enviado durante
+uma resposta segue assim que essa resposta acaba.
 
 ## 10. Quando alguma coisa corre mal
 
-- Os cartões de erro trazem uma referência como **ref. T-1a2b**. Dê-a ao suporte: identifica
-  a volta no registo.
-- Definições → Diagnóstico gera um pacote de suporte (relatório e sete dias de registos,
-  sem dados sensíveis).
+- Os cartões de erro trazem uma referência como **ref. T-1a2b**. Indique-a ao apoio:
+  identifica o turno no registo.
+- Definições → Avançado → Diagnóstico → **Exportar pacote de apoio** gera um pacote de apoio:
+  o relatório e sete dias de registos, com chaves e palavras-passe ocultadas (nomes de
+  clientes e de artigos podem ficar).
 - Uma janela que não responde ao assistente tem normalmente um diálogo do ERP aberto por
   trás: responda-lhe no ERP e volte a pedir.
 - Uma expressão que foi parar ao sítio errado: responda **Não era isto** no cartão. Não volta
@@ -237,7 +249,7 @@ estimado de cada pedido.
 
 ## 11. Limites que convém saber
 
-- Não aplica as permissões por utilizador do Primavera ao que lê; ver
+- Não aplica as permissões por utilizador do PRIMAVERA ao que lê; ver
   [Segurança e privacidade](SECURITY-AND-PRIVACY.pt.md).
 - Nunca anula nem apaga documentos sozinho, e não tem ferramenta para isso.
 - O Explorador de vendas não tem restrição por artigo: as vendas de um artigo são

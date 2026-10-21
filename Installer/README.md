@@ -1,6 +1,6 @@
 ﻿# Instalador AITOOL (Inno Setup)
 
-Instalador Windows do AITOOL para o ERP Primavera v10, com branding Bola Labs,
+Instalador Windows do AITOOL para o ERP PRIMAVERA v10, com branding Bola Labs,
 seleção de instâncias do ERP e suporte a instalação silenciosa.
 
 ## Pré-requisitos
@@ -42,7 +42,7 @@ Parâmetros: `-Configuration` (default Release), `-IncludePdb` (inclui .pdb),
 `-OutputDir` (default `Installer\dist`), `-SkipDocsSync` (salta a verificação de
 sincronização dos espelhos PT, que por omissão corre antes de empacotar).
 
-## Deteção do Primavera e destino
+## Deteção do PRIMAVERA e destino
 
 Ordem de deteção da raiz SG100 (igual ao `Directory.Build.props`):
 
@@ -57,7 +57,7 @@ Ordem de deteção da raiz SG100 (igual ao `Directory.Build.props`):
 
 Destino por alvo: `<SG100>\Config[_Instância]\<EV|LE|LP>\Extensions\AITOOL\`.
 
-## Edições do Primavera
+## Edições do PRIMAVERA
 
 As edições partilham a raiz SG100 e o `Apl`; só a subpasta de configuração muda:
 `EV` = Evolution (`Erp100EV.exe`), `LE` = Executive (`Erp100LE.exe`), `LP` = Professional
@@ -97,7 +97,7 @@ relatório em texto, com a pré-verificação e o resultado, fica em
 `%ProgramData%\AITOOL\Install\AITOOL-Setup-<versão>-<data>.txt`; o AITOOL inclui-o no
 pacote de apoio.
 
-## Instâncias do Primavera
+## Instâncias do PRIMAVERA
 
 O ERP v10 pode ter várias instâncias (BD `PRIINSTANCIAS`, tabela
 `dbo.Instancias`). Cada instância além da `DEFAULT` sufixa as pastas da raiz
@@ -160,7 +160,7 @@ Extensibilidade, escrito diretamente na base `PRIEMPRE` de cada instância
 O instalador lê o servidor e as credenciais SQL do próprio ERP —
 `<SG100>\Config[_X]\<EV|LE|LP>\PRISECLE.BIN`, o primeiro legível entre as edições da
 instância, decifrado com o baralhamento reversível
-do Primavera — e liga-se sem perguntar nada: a lista de instâncias é
+do PRIMAVERA — e liga-se sem perguntar nada: a lista de instâncias é
 enriquecida com `PRIINSTANCIAS` (descrições, bloqueadas, `NomePriempre`) e as
 empresas carregam automaticamente ao entrar na página. O diálogo SQL manual
 (Windows ou SQL auth) fica como fallback/override. Credenciais nunca são
@@ -206,7 +206,7 @@ AITOOL-Setup-x.y.z.w.exe /VERYSILENT /DIR="C:\Program Files\PRIMAVERA\SG100\Conf
   ferramentas de distribuição (GPO, SCCM), por isso `/SQLPASSWORD` expõe a senha. Se
   tiver de o usar, use uma conta SQL com o mínimo para escrever em `ExtensibilityConfiguration`
   e mude a senha a seguir.
-- Em modo silencioso não há prompts: se o Primavera não for detetado nem houver
+- Em modo silencioso não há prompts: se o PRIMAVERA não for detetado nem houver
   `/DIR`, ou se o ERP estiver aberto, o setup aborta com exit code diferente de 0.
   Falhas só de registo não alteram o exit code (ficheiros instalados; aviso no log).
 
@@ -257,7 +257,7 @@ distribuir publicamente:
 | Caso | Comportamento |
 | --- | --- |
 | ERP aberto (`Erp100EV.exe`/`Erp100LE.exe`/`Erp100LP.exe`) | Bloqueante na pré-verificação e Repetir/Cancelar no install e uninstall; em silencioso aborta |
-| Primavera não instalado | Deteção falha → pede a pasta (valida `Config[_*]`); silencioso aborta |
+| PRIMAVERA não instalado | Deteção falha → pede a pasta (valida `Config[_*]`); silencioso aborta |
 | Raiz sem nenhuma edição reconhecida | Mensagem com as pastas encontradas; interativo deixa escolher outra raiz, silencioso aborta |
 | Só um alvo (uma instância, uma edição) | Sem página de seleção; comportamento clássico |
 | Evolution + Executive na mesma raiz | Dois alvos, ambos pré-selecionados; mesmos bytes, uma linha na BD |

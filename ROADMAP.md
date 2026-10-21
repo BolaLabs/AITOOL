@@ -1,269 +1,95 @@
 ﻿# Roadmap
 
-Where AITOOL is going, in order. Effort windows, not dates — this is a working
-document, revised as releases close. Anything listed here describes intent, not
-a shipped capability; the README documents only what exists today.
+**English** | [Português](ROADMAP.pt.md)
 
-## Before a public launch
+AITOOL already answers from PRIMAVERA, fills its windows and saves documents, receipts and
+payments from a card you click. Next, it reads the paperwork that arrives: supplier invoices
+from a photo or a PDF. Every item ships only after it works in a real PRIMAVERA ERP, and
+nothing here is a promise of a date: the [README](README.md) describes what exists today, and
+the [CHANGELOG](CHANGELOG.md) what each version added.
 
-Non-negotiable, in this order. (Status on 2026-08-21: the product launches as a free
-binary under the Community License from a public documentation repository; the items
-below that are still open are stated as limits in the README rather than hidden.)
+| Status | Meaning |
+| --- | --- |
+| **Next** | Designed and planned for the coming versions |
+| **Exploring** | Being studied before it is planned; tell us which one you need in [Discussions](https://github.com/BolaLabs/AITOOL/discussions) |
+| **Direction** | Where the product is heading after that |
 
-- **"How it worked this out."** Expose the tool calls, the SQL and the source
-  records behind every number, in the answer. IDC (Jul 2026) found 71% of finance
-  leaders would veto a 99%-accurate system that cannot show its reasoning; Sage
-  and NetSuite both ship this today.
-- **Machine-readable marking of generated content.** The other half of AI Act
-  Article 50: the disclosure to the reader now exists, but exported conversations
-  and generated documents carry no marker saying a model produced them.
-- **Settle the `Lib/` question in writing** with the Cegid partner agreement. The
-  position is stated in DISTRIBUTION.md. With the source repository private, no Cegid
-  binary leaves the building; the conversation is needed only before any source release.
+## Recently shipped
 
-Closed on this list: the confirmation gate on writes (2.12.1: the preview is rendered by the
-application as a card and issues a single-use token, 15 minutes, bound to a hash of tool and
-arguments; the commit requires it, the model never sees it, and a `confirm=true` without it is
-refused and audited — stale previews and double-confirms close with the same mechanism),
-print from the PDF card (2026-08-24: Imprimir opens the viewer with
-Chromium's print dialog; Ctrl+P in the viewer does the same), the README screenshots
-(2026-08-21), the capabilities-and-limits statement ("What it will not do" in
-the README), the minimum-model floor (~8B at q4, in the README's cost section), the
-Cegid Pulse comparison, and the Article 50 disclosure to the user — stated on the
-welcome screen and standing under the message box for the whole session, because a
-returning conversation never shows a welcome screen.
+| Version | What it brought |
+| --- | --- |
+| 2.22 | Requests from the user guide reach the right tool on the first message; articles found by name in editor lines and warehouses by the company's codes; keep typing while it answers; a clearer confirmation card; serial-number articles and unknown codes stopped before the ERP's own error dialogs |
+| 2.21 | The chat keeps working while an ERP window blocks the rest; variant grids and the "Fórmula" dialog filled from one sentence |
+| 2.19 | Approval of supplier invoices for payment (APR); the settlement editor filled and distributed |
+| 2.18 | Purchase documents, receipts, payments and account offsetting, each saved only from its card |
+| 2.16 | The assistant knows the record and the window you have open, with no selector |
 
-## Next up — reach
+## Next
 
-The gap between what the engine does and what the user can reach.
+### Supplier invoices from a photo or a PDF
 
-- **Export any result table to Excel.** Today tables offer copy to clipboard. 2.13: MiniExcel
-  (Apache-2.0) behind a button on every table card — the Xceed-based exporters were removed in
-  2.12.1 with their non-commercial dependency, so this starts from the library choice rather
-  than from the old code.
-- **E-mail attachments.** 2.13: `draft_email` hands the mail client a message with no
-  attachment, so the official PDF of a document cannot ride along with the draft.
-- **Charts and saved views from an answer.** Natural-language charting is table
-  stakes across the category; promoting an answer to a persistent widget is not.
+Drop the PDF or the photo of a supplier invoice into the chat. The assistant reads the AT QR
+code that Portuguese invoices carry as the source of truth for the issuer, the date and the
+VAT totals, reads the lines the QR does not carry, checks that both add up, and prepares the
+purchase document with the original file attached in the ERP's own archive. If something
+does not reconcile it stops and says what is missing. You confirm every document; nothing is
+posted on its own.
 
-## Trust
+### "How did it get this number?"
 
-What a customer hits in the first week of real use.
+Behind every figure, on request: the query, the filters and the records that produced it, so
+a total can be checked before it is used in a decision.
 
-- Accessibility pass: keyboard access to tool cards and dialogs, focus
-  return on modal close, semantic landmarks. The screen-reader streaming
-  blocker is already fixed; claims wait until the full list closes.
-- Friendly first-run and error surfaces with clear recovery steps, and honest
-  error mapping: provider 5xx, context-length-exceeded and "this model has no
-  tool support" currently all surface as "check your internet".
-- Token and cost figures that are fully correct. The session panel (2026-08-29)
-  prices every request with the model that answered it, reads OpenRouter's
-  published prices from its models endpoint and falls back to a built-in table
-  for OpenAI and Anthropic. Since 2.12.0 streams carry the provider's real usage
-  and OpenRouter's billed amount replaces the estimate ("Custo faturado"), cached
-  input tokens are kept per request, and the context size comes from the
-  provider's catalogue. Still open: cached tokens are recorded but not shown; the
-  table has no Claude 5 rows (OpenRouter covers them); totals cover the ERP
-  process, not one chat window.
-- `interact_erp_window` `list_fields` on a client record: the enrichment walk ran 12-15 s
-  against a 4 s budget and the worker was replaced after a timeout (2026-08-30, no
-  cancellation involved). The budget is not holding on that path; measure the
-  enrichment step and cap it.
-- "Tentar novamente" on an older failed turn regenerates the latest turn, not the one
-  whose card was clicked (2026-08-30). Retry should carry the turn it belongs to.
-- Small models at low effort (gpt-5-mini, `minimal`) sometimes ask a clarifying question
-  where the request was clear ("Quantos clientes temos?"), or narrate a call they never make.
-  2.12.1 nudges the narrated case once; the clarifying case is prompt work, and the default
-  model (`gpt-5.6-sol`) does not show it (2026-09-14).
-- A typed "sim" under a pending card is refused in prose by the model, so nothing reaches
-  `AI_AuditLog` for it; the audit row only appears when the model calls `confirm=true`
-  (2026-09-14). If the refusal itself must be auditable, the orchestrator has to log it
-  when a pending card exists and the user's message is an affirmative.
-- "Fecha as janelas todas" is answered with `list_windows` plus one `close_window` per
-  window (three model round-trips, ~10 s) instead of the single `close_all_windows`
-  action (2026-09-02). Steer the tool description, or accept the route and give the
-  single-window close the same Info log line as the bulk one.
-- Silent streams while a model thinks: two 100 s stalls on "Abre a ficha do cliente SOFRIO"
-  (2026-09-01, gpt-5-mini via OpenRouter, reasoning "Desl.") came from the model reasoning
-  at its default medium effort with nothing streamed. 2.11.1 sends `minimal` for "Desl."
-  on gpt-5; the general fix is to ask OpenRouter to stream the reasoning (so the UI shows
-  "A pensar" with a clock instead of silence) and to raise the no-token timeout only when
-  reasoning is on.
-- Skills, next: an `http_request` tool with an allow-list of domains and DPAPI-stored
-  credentials, which is what opens external APIs to skills — the first one planned is
-  `easypay-cobrancas` (MB references, MB WAY, payment lookups), sandbox first; a public
-  `BolaLabs/AITOOL-skills` collection reviewed by pull request and "install from the
-  collection" inside Settings → Skills; per-skill saved parameters (default seller,
-  origin) and per-company skills.
-- CRM opportunities beyond create: default sales cycle should be the company's (the
-  window uses CV_SOFT on DEMOV10; the tool takes the first cycle by code), campaign and
-  project as optional arguments, an `advance_opportunity` tool on
-  `CriaActividadeFaseCicloVenda`, an `open_record` route for opportunities (the ribbon
-  function opens a blank record; loading by code needs its own path), and the first
-  contact/activity in the prospecting skill. `list_fields` on that window: 36 fields,
-  enrichment 20 s, walks of 7-8 s against the 4 s budget (2026-08-30).
-- Automatic compaction: `/compactar` exists and the chat nudges at 80% of the
-  context; running it unattended before the limit is hit is the next step.
-- A retention policy for `AI_ChatMessages` and `AI_AuditLog`. Today nothing
-  expires and there is no purge — a GDPR question for a Portuguese market.
-- Approvals routing: a second-approver gate for writes above a threshold. (The ERP's
-  own payment approval, the APR document, is a write the assistant makes since 2.19;
-  this item is about who in the company may confirm it.)
+### A business memory you can see
 
-## Efficiency and reliability
+Default series, a customer's usual terms, house rules: the assistant remembers what you teach
+it, in your company's own SQL Server, with where each fact came from. A panel shows everything
+it learned, and anything there can be corrected or deleted.
 
-Measured gaps, not preferences.
+### Every table to Excel, every document by e-mail
 
-- **Pending-items date window.** `get_pending_items` passes a 24-month `DataInicial` to the
-  ERP's own query, and the tool description says so, yet a run without dates returned the
-  same 138 documents as a run from 2015 on the demo company. Establish what `TipoDataRef=0`
-  does with the dates, then either make the window real or drop the claim. The same query
-  pays dozens of catalog round trips through the DSO; on a server with slow compiles it
-  took 60-125 s where the SQL itself took under a second.
-- **Prompt caching that works.** Every request carries a fixed ~11k-token prefix
-  (16 KB system prompt + the schemas of the 29 tools, ~20 KB when measured at 26) re-sent on every tool
-  continuation. Only 1 of Anthropic's 4 cache breakpoints is used, and because
-  the order is tools → system → messages, changing the open ERP window
-  invalidates the cached tool schemas. Published measurements: 41-80% cost,
-  13-31% TTFT.
-- **Fewer tools in the prefix.** 29 is above OpenAI's recommended ceiling and above
-  Anthropic's tool-search threshold. Either consolidate related tools behind an
-  `action` parameter, or defer the rare ones. Do it once, not incrementally —
-  it changes the observable tool names the golden set asserts on.
-- **Model capability discovery instead of name-prefix guessing.** Half done in 2.12.1: the
-  reasoning effort sent to an OpenAI-compatible provider is chosen from the catalogue's
-  supported values for that model (`none`, `minimal`, `xhigh`, `max`), and the context size
-  comes from the catalogue too. Still guessed by name prefix: whether a model reasons at all,
-  and the Anthropic adapter's thinking types.
-- **Keep the partial answer when the idle watchdog fires.** The budget is now
-  inactivity rather than total call time, and the two keys with different units
-  are one. What is still lost on a cut is persistence: the text stays on screen
-  but never reaches the message chain, so it disappears on reload and is absent
-  from the next request's context. Fixing that means the providers returning
-  what they accumulated instead of throwing.
-- **Row caps on the three tools that have none** (`check_stock`,
-  `query_account_balance`, `analyze_sales` by-period) and an `EXISTS` check so a
-  non-existent code returns "not found" instead of a confident zero.
-- **Timing where the seconds go.** Tool durations are logged at Debug, which is
-  DEBUG-build only — the shipped build records no tool duration at all. Nothing
-  in the SQL layer is timed, and time-to-first-token is never measured.
+A button on every result table that saves it as an Excel file, and e-mails that carry the
+document's official PDF as an attachment, ready for you to review and send.
 
-## Evaluation
+### Your own retention rules
 
-No ERP vendor publishes accuracy numbers, and evaluation gaps are the most-cited
-reason agent pilots die. The golden set exists and has real pass criteria; what is
-missing is turning prose criteria into log assertions so a run produces a failure
-count, the way the `scripts/checks/` guards already do. Ground truth here is
-deterministic — SQL and `AI_AuditLog` rows — which is a stronger oracle than a
-judge model. This is the clearest open field in the category.
+Choose how long conversations and audit entries stay in your database; older ones are removed
+from AITOOL's own tables, company by company. Today nothing expires.
 
-## The other half of the ERP
+### Every answer cheaper and quicker
 
-- Purchase documents: creation with the same two-step preview/commit flow and
-  ERP-side validation used for sales.
-- Article creation.
-- Purchase document types and series discovery tools.
-- Per-line VAT override, pending live validation of how the ERP recalculates
-  totals.
+The assistant's fixed instructions and tool descriptions sent once and reused (prompt caching)
+instead of on every step, measured on the same requests in the real ERP. You pay your own AI
+provider, so this is money you keep.
 
-## Memory
+## Exploring
 
-Structured, scoped, visible. Facts the assistant learns (default series,
-customer terms, house rules) stored in the company's own SQL Server database
-alongside the existing chat history and audit tables — with provenance, and a
-panel where the user reviews, edits and deletes what was learned. No external
-services, no new dependencies.
+- **Morning briefing.** When the ERP opens: overdue items, yesterday's sales, articles below
+  minimum stock and documents waiting for approval, in one card.
+- **Collections with Multibanco references and MB WAY.** A reviewed skill that creates payment
+  references for pending invoices and checks which were paid.
+- **From opportunity to sale.** Move a CRM opportunity to its next stage, log the first contact
+  and open it by its code, with the company's own sales cycle.
+- **Saved views.** Keep an answer as a view that refreshes with the ERP's data.
+- **A second approver above a limit.** Writes above an amount wait for a person with the
+  authority to confirm them.
+- **A public skills collection.** Skills reviewed publicly, by pull request, and installed from
+  Settings.
+- **Long conversations.** The conversation summarised automatically before the model's limit.
 
-## Vision (read)
+## Direction
 
-Point the assistant at a document image or PDF and let it identify what it is,
-extract the identifiers, and resolve the current state from the ERP — the
-database is the source of truth for state, never the pixels. Provider-gated
-and off by default: images leave the machine only when the user's configured
-provider does.
+- **Tools from other systems.** An MCP client so the assistant can use tools other systems
+  expose, with the same per-tool switches and audit.
 
-## Skills by convention
+## What does not change
 
-Extensibility through reviewed instruction files (markdown), never through
-dropped binaries. A skill is approved before it becomes available; the
-assistant never writes its own.
-
-## Purchase invoice intake
-
-The case that pays first in Portugal: accounts payable. Photos and PDFs of supplier
-invoices, receipts and expense notes arrive by many paths and someone types them in;
-the assistant should receive them, read them, attach them to the right ERP document,
-notice what is missing and ask for it, leaving people the exceptions and the final
-confirmation.
-
-Assisted, end to end: the Portuguese invoice QR code is the signed source of
-truth for header and VAT totals; vision reads only what the QR does not carry (line
-items, due date, references, IBAN); a deterministic reconciliation in code must match
-the QR before anything is proposed; the human confirms every posting. If the numbers do
-not reconcile, it stops, with the request for the missing piece already written. Every
-ingested file is stored as an attachment of the ERP document, through the ERP's own
-attachment service, so the company's archive stays in one place.
-
-Portuguese constraint that shapes the design: AI must never *issue* fiscal
-documents — invoicing goes through AT-certified software with ATCUD and SAF-T.
-The input side (read, extract, classify, propose) is safe territory, and
-proposing inside the certified ERP for a human to commit is already the shape
-this product has.
-
-Planned in steps, each proven against the live ERP before the next:
-
-1. **Foundations (2.20).** Drag and paste of PDFs and photos into the chat; the QR code
-   decoded in code; the page sent to the model with a strict schema and a confidence per
-   field; totals reconciled with the QR; the purchase document card completed with
-   supplier date, due date, payment terms and withholding; the original file attached
-   to the saved document. Duplicates refused by ATCUD and file hash.
-2. **Rules and the queue (2.21).** The gap rules as data (unknown supplier, invalid tax
-   id, bank details that differ from the file, VAT that does not add up, missing order,
-   amount over a limit, foreign document); an `/entrada` queue with state, owner and
-   age; purchases searchable by supplier number; association to pending items and orders.
-3. **Automatic requests (2.22).** A dedicated mailbox read by the assistant; templated
-   requests to the supplier or the employee for what is missing, sent through the ERP's
-   mail profile; the reply threaded back to the same document and re-checked; a daily
-   digest of what still waits. Nothing is sent twice without a person.
-4. **Channels and learning (2.23).** A watched folder; per-supplier hints learned from
-   saved documents (usual article, payment terms, where the IBAN is); a "save all" card
-   for clean documents under a limit. Messaging channels and structured e-invoices (CIUS-PT)
-   after that.
-
-## Further out — beyond one ERP
-
-Stated as direction, not commitment; nothing here ships before the launch list closes.
-
-- **Other ERPs, then ERP-agnostic.** The provider abstraction, chat surface, tool
-  contract (`IErpTool`) and audit model already do not know about Primavera; the ERP
-  specifics live behind those seams. The direction is to extract the Primavera layer
-  into a pluggable integration so the same assistant — same trust model: on-premise,
-  your AI provider, preview-then-save, audited writes — can serve other ERPs.
-- **MCP client.** The current MCP spec (Streamable HTTP transport, which supports
-  stateless servers) fits this addon's in-process, per-turn model. An MCP client in
-  AITOOL would let the assistant consume third-party tool servers beyond the built-in
-  tools, with the same per-tool toggles and audit treatment. On .NET Framework 4.8 this
-  means either the official C# SDK's netstandard2.0 surface or a thin JSON-RPC client in
-  the vendored SDK project — decided when the work starts, not before.
-
-## Design lines that do not change
-
-These are decisions, not gaps:
-
-- **No autonomous long-running workflows.** Tool chains are capped per turn
-  and every destructive step requires explicit confirmation.
-- **No automatic posting.** Accounting movements are proposed, never posted
-  without a human.
-- **No binary plugin loading.** Nothing gets to run inside the ERP process by
-  being dropped into a folder.
-- **Writes are audited.** Every mutating action lands in `AI_AuditLog` in the
-  company's own database.
-- **No multi-agent orchestration.** One user, one ERP session, UI-thread-bound
-  window automation. Sub-agents solve context exhaustion in long autonomous runs;
-  this product caps tool chains per turn by design.
-- **No embedding store for memory.** Memory is structured, visible and editable in
-  the company's own SQL Server. For a relational ERP, semantic recall over chat
-  history is worse than a query and adds a heavy dependency to an in-process addon.
-- **No LLM-as-judge gating a build.** What this assistant asserts is checkable
-  against the ERP's own numbers and the audit table; a judge model would be weaker
-  evidence than the check that already exists.
+- **Nothing is saved without your click.** Every document, record and payment is shown as a
+  card first; only the card's button saves.
+- **It runs where you decide.** On your ERP, with your AI provider or a model on your own
+  network. No Bola Labs server in the path.
+- **Every write is audited** in your company's own database.
+- **No automatic posting** of accounting movements, and no fiscal document issued outside the
+  certified ERP.
+- **Skills never carry code.** They are reviewed text instructions that combine the assistant's
+  own tools, with the same card and the same audit.

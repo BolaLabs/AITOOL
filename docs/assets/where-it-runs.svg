@@ -50,5 +50,5 @@
   <text class="h" x="724" y="138">The AI provider you choose</text>
   <text class="m" x="724" y="162">OpenAI · Anthropic · OpenRouter</text>
   <text class="m" x="724" y="182">or any compatible endpoint</text>
-  <text class="m" x="32" y="356">No BolaLabs server in the path. No account, no per-seat licence, no metered credits.</text>
+  <text class="m" x="32" y="356">No Bola Labs server in the path. No account, no per-seat licence, no metered credits.</text>
 </svg>

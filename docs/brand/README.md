@@ -1,12 +1,24 @@
-# AI Tool — Brand Guide
+# AITOOL — Brand Guide
 
-Identidade visual do AI Tool. Fonte de verdade para qualquer uso da marca:
+Identidade visual do AITOOL. Fonte de verdade para qualquer uso da marca:
 produto, instalador, site, vídeo, documentação.
 
 Referência visual (símbolo às várias escalas, friso do ERP, paleta, wordmark,
 regras e exemplos de má utilização): abrir [`index.html`](index.html) neste
 diretório. A página carrega os SVG reais do repositório, por isso serve também
 de verificação — se algo aparecer partido, o asset está partido.
+
+## Nome
+
+- **AITOOL**, sempre numa palavra e em maiúsculas, no texto como no logótipo. Nunca "AI Tool",
+  "AiTool" nem "AI-TOOL".
+- **Bola Labs** é a empresa, com espaço, em texto corrido e em legendas. **BolaLabs**, junto,
+  só onde é um identificador: a organização e os repositórios do GitHub (`BolaLabs/AITOOL`).
+  **BOLA LABS**, em maiúsculas, é o nome do separador no friso do ERP.
+- O ERP é **Cegid PRIMAVERA v10** na primeira menção de um texto e **PRIMAVERA** daí em
+  diante, sempre em maiúsculas.
+- O botão no friso é **Assistente de IA**; o cartão onde se grava é o **cartão de
+  confirmação**.
 
 ## A marca
 

@@ -8,6 +8,102 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
 
 ## [Unreleased]
 
+## [2.22.1] - 2026-10-21
+
+### Highlights
+
+- Every request published in the README and the user guide was run against a real PRIMAVERA
+  ERP, and what did not work on the first message now does: the settlement editor's
+  "distribui", dictated variant grids, date ranges, clearing a field; and closing all windows
+  while a report is still opening no longer breaks it.
+- "Põe 2 do processador Intel", "armazém 2": articles are found by name and warehouses by the
+  company's own codes; when more than one fits, the assistant asks instead of writing.
+- You can keep typing while the assistant answers, and saving from a card shows its progress
+  on the card itself.
+- The confirmation card lists the lines the ERP adds by itself (associated articles), and
+  stopping an answer or an empty result no longer looks like an error.
+- A public roadmap: what comes next, in English and Portuguese.
+
+### Changed
+
+- "Põe 2 do processador Intel" in an editor line: a name in the Artigo column is looked up; one
+  article by that name goes on the line and the assistant says which, several come back as a
+  list to choose from, and none is refused as before.
+- The message box stays writable while the assistant answers, so the next request can be
+  drafted; pressing Enter queues it and it is sent once the answer ends (Esc stops the answer).
+- The ribbon button and the record toolbars say "Assistente de IA" instead of "Assistente AI".
+- The confirmation card says what its button does: "o ERP grava" on a save, "o assistente
+  carrega nesse botão no ERP" on a click card. Click cards that did not run say "Não
+  executado", and a cancelled one "Cancelado. Nada foi feito no ERP.".
+- The welcome cards that start a request ("Faz um recibo ao cliente…", "Cria um orçamento…") leave the
+  request in the message box for you to complete, and say so.
+- Error notices stay on screen for at least 10 seconds; the notice that the chat moved to its
+  own window explains why and that it comes back; "no provider" offers "Abrir definições".
+- Empty results read "Nenhum registo encontrado."; a step the assistant corrected shows as
+  "corrigido", and a step it asked twice as "Passo duplicado, não executado".
+- Saving from a card no longer covers the whole panel with a "Gravado no ERP" overlay: the
+  card shows the progress and the outcome. Once saved, the text written for the preview
+  ("ainda não foi gravada…") folds away as "texto de antes da gravação".
+- While a step runs, the status line says "A trabalhar no ERP" instead of repeating the step
+  already named in the steps bar; the session cost in the tooltip uses the same format as the
+  counter; notices appear below the header instead of over the model and dock buttons; the
+  detached window is titled like the panel, "AITOOL - Assistente de IA", with the company and
+  the user.
+
+### Fixed
+
+- "Fecha as janelas todas" while the ERP was still building a report window failed the whole
+  request and made the ERP show its "Ocorreu um erro inesperado" dialog; closing the Consulta
+  that asked for the report also broke the report ("Erro ao abrir o mapa"). Now nothing is
+  closed while a window is still being built, and the assistant says to ask again.
+- Document and sales queries up to a date left out that day's documents when they carried a
+  time (today's FP A/5 was missing from "os orçamentos dos últimos 3 meses"); the end day is now
+  whole. The document list also showed an empty Data column.
+- "Completa a ficha do cliente 0031 a partir do NIF dele" passed the code as the NIF and came
+  back "tem de ter 9 dígitos"; the tool now says it is a record code and where its NIF is.
+- An empty sales period ("o total faturado no ano passado") came back as "não consigo apurar";
+  it is now 0 documents and 0, with the dates the invoicing covers.
+- "Deixa o nome do cliente em branco", "limpa o telefone": requests to clear a field reached the
+  record window, and the record update tool dropped an empty value before the ERP saw it. The
+  tool now takes the fields to clear by name, and its preview shows what the ERP says.
+- A window opened from a request the assistant had learned lost its "aprendido" card when the
+  window was already opened ahead of the model's own call.
+- After "Não era isto", the rejected window could still be opened when the model sent its full
+  path on the next call; the tool now refuses it for a few minutes and asks for another.
+- An empty query beside one with rows (FP found, CBA and ORC empty) left "Sem documentos para
+  apresentar" next to the table that answered.
+- "Faz uma fatura à SOFRIO com 1 G0001": the card listed only G0001 while its totals counted
+  the H0001 line the ERP adds; the card now names every line the ERP added.
+- Stopping an answer showed a red error card; it is now a neutral note.
+- After "Não era isto" the assistant could still offer the rejected window again ("Queres que
+  o abra?").
+- /receitas showed "0001-01-01" as the last use of a recipe learned in the same session.
+- "Põe 500 em valor a liquidar e distribui": clicking the Distribuição Automática tab of the
+  settlement editor asked for a confirmation card, as if it saved.
+- "Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500" into a variant grid that
+  was already open filled it and stopped; the grid is now confirmed in the same step.
+- "Armazém 2" sent to a document header came back "campo não encontrado"; the assistant now
+  says the warehouse is a column of each line and how to set it. The user guide's example
+  changed with it. Written into a line as the code 2, it raised the ERP's "O armazém 2 não
+  existe" and left the cell blank: a value that is not a warehouse code is now resolved
+  against the company's warehouses first (2 → A2, said in the answer) or asked about.
+- Changing an existing line by its number when the ERP re-checked the price and raised "O
+  preço de venda … é inferior ao seu custo" was reported as failed, and the model repeated
+  it; the line is now read again after the notice closes.
+- The cards for a new customer and a new article showed bare codes ("Condição de pagamento 1",
+  "Tipo de artigo 3"); they now carry the description. Previews in the audit trail read
+  "Pré-visualizou: documento …" instead of "Pré-visualizou: Criou documento …".
+- A recipe learned while an editor was already open (it only filled the window) was offered the
+  next time with no editor open and failed; recipes that work on a window now have to open it
+  themselves, and stored ones that do not are no longer offered.
+- With that ERP error dialog up, the chat could not move to its own window ("não arrancou em 5
+  s") and stayed in the blocked panel; the window is now prepared when the panel loads.
+- In the settlement editor, "põe 500 em valor a liquidar e distribui" stopped after Atualizar:
+  the empty "Form1" the ERP shows while it loads the pending items was taken for a dialog. The
+  tool now waits for it to close and never treats a window with nothing to click as a dialog.
+- "Procura o cliente Google" turned on web search because of the word Google; only searching
+  on Google ("no Google", "pelo Google") does now.
+
 ## [2.22.0] - 2026-10-21
 
 ### Highlights
@@ -53,8 +149,8 @@ Unreleased work is tracked under **Unreleased** until it is tagged.
   buttons wrap instead of being cut, and a key or model error offers "Abrir definições" first;
   the welcome screen opens at the greeting, not at the last cards; the reasoning chip says "Sem
   raciocínio" instead of a lone "Desligado".
-- Screen readers: the closed conversation list is out of the Tab order, a finished answer is
-  read once (it was read by the message log and again by the announcement), and after an
+- Keyboard and focus: the closed conversation list is out of the Tab order, a finished answer
+  is read once (it was read by the message log and again by the announcement), and after an
   answer that left a save card the focus goes to the card; typing moves on to the message box.
 - Asking to dock the chat while an ERP dialog is open keeps it in its own window, with a note,
   and it docks by itself when the dialog closes; before, it went back into the blocked panel.

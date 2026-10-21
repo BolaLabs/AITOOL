@@ -1,4 +1,4 @@
-# Skills
+﻿# Skills
 
 Uma skill é um fluxo de trabalho escrito para o assistente em Markdown simples: que
 ferramentas usar, por que ordem, o que confirmar, o que nunca fazer. O assistente lê-a
@@ -21,12 +21,12 @@ substitui ambas. Uma pasta ou `name` a começar por `_` é um modelo: aparece na
 é oferecida ao assistente. As skills que desligar ficam registadas em
 `%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json` — um ficheiro por
 utilizador, pelo que desligar uma skill partilhada só o afeta a si. Definições → Skills mostra
-quantas skills foram encontradas e, para cada uma, uma pill Incluída / Partilhada / Minha, a
+quantas skills foram encontradas e, para cada uma, uma etiqueta Incluída / Partilhada / Minha, a
 descrição, as frases que a ativam, o interruptor e um botão "Editar SKILL.md" ("Ver
 SKILL.md" nas incluídas, que cada atualização substitui, e nas partilhadas se não for
 supervisor). Um ficheiro que o catálogo não consegue usar (sem `description:`, cabeçalho por
 fechar, corpo demasiado longo) aparece com o motivo e fica desligado até ser corrigido. O
-botão "Abrir pasta partilhada" só aparece a um supervisor (administrador, super administrador
+botão "Abrir pasta partilhada" só aparece a um supervisor (administrador, superadministrador
 ou técnico do ERP), porque o que lá for posto corre para toda a gente na máquina. `/skills` no chat lista-as; `/skills recarregar`
 relê as pastas e reconstrói o system prompt da conversa aberta, pelo que a mensagem seguinte
 já vê a alteração.
@@ -42,7 +42,7 @@ triggers: leads, prospeção, empresas-alvo, oportunidade de venda
 tools: web_search, search_entities, enrich_entity, create_entity,
   create_opportunity, draft_email
 version: 1.0
-author: BolaLabs
+author: Bola Labs
 ---
 
 # Prospeção de leads
@@ -61,9 +61,10 @@ Chaves do cabeçalho:
 - `description` (obrigatório): uma frase; o assistente lê-a para decidir se a skill se aplica.
 - `triggers`: palavras que costumam aparecer no pedido, separadas por vírgulas.
 - `tools`: ferramentas que a skill conta usar, separadas por vírgulas. A lista orienta o
-  assistente; não o restringe. O que o assistente pode chamar decide-se nas Definições, e
+  assistente; não o restringe. O que o assistente pode chamar decide-se em Definições →
+  Ferramentas, e
   uma ferramenta desligada lá continua desligada diga a skill o que disser.
-- `version`, `author`: texto livre, mostrado nas Definições.
+- `version`, `author`: texto livre, mostrado em Definições → Skills.
 
 O corpo é Markdown livre. Mantenha as instruções abaixo de 12 000 caracteres (o cabeçalho
 não conta); um corpo maior é listado com um problema e nunca é usado. Escreva-o como escreveria para um colega novo: o que
@@ -72,9 +73,10 @@ parar e perguntar.
 
 ## O que uma skill não pode fazer
 
-- Saltar a confirmação de uma gravação. `create_entity`, `update_entity`,
-  `create_sales_document` e `create_opportunity` pré-visualizam sempre, e a confirmação é
-  sempre o cartão: a gravação precisa de uma autorização de uso único que a aplicação emite ao
+- Saltar a confirmação de uma gravação. As oito ferramentas que escrevem (`create_entity`,
+  `update_entity`, `create_article`, `create_sales_document`, `create_purchase_document`,
+  `create_settlement`, `create_opportunity` e `update_sales_series`) pré-visualizam sempre, e
+  a confirmação é sempre o cartão: a gravação precisa de um token de uso único que a aplicação emite ao
   desenhar esse cartão e que o clique do utilizador devolve. Uma skill que mande o assistente
   gravar diretamente, ou aceitar um "sim" escrito, não muda nada — a chamada é recusada e
   auditada.
@@ -84,13 +86,13 @@ parar e perguntar.
   próprio programa de e-mail.
 - Chegar a sistemas para os quais o addon não tem ferramenta. Chamar APIs externas
   (pagamentos, CRMs, tickets) precisa de uma ferramenta própria com credenciais e auditoria;
-  ver [ROADMAP.md](../ROADMAP.md).
+  ver o [roadmap](../ROADMAP.pt.md).
 
 ## Skills incluídas
 
 | Skill | O que faz |
 |---|---|
-| `prospecao-de-leads` | Pesquisa web de empresas-alvo → verificação de cliente existente → ficha de cliente (preview, cartão) → oportunidade de venda no CRM (preview, cartão) → rascunho de e-mail para revisão |
+| `prospecao-de-leads` | Pesquisa web de empresas-alvo → verificação de cliente existente → ficha de cliente (pré-visualização, cartão) → oportunidade de venda no CRM (pré-visualização, cartão) → rascunho de e-mail para revisão |
 | `_modelo` | O modelo por trás de "Nova skill" (e o que se copia à mão); não aparece como skill nem é oferecido ao assistente |
 
 ## Skills a partir do que o assistente aprendeu
@@ -109,6 +111,6 @@ primeiro pedido, sem gastar uma ida ao modelo a pedi-la com `use_skill`.
 ## Partilhar skills
 
 Uma skill é uma pasta: comprima-a, envie-a, ou publique-a num repositório Git. Uma coleção
-pública revista por pull request está planeada como `BolaLabs/AITOOL-skills`; até existir, a
-pasta `_modelo` e esta página são a especificação. Nunca ponha credenciais nem dados de
+pública revista por pull request, `BolaLabs/AITOOL-skills`, está no [roadmap](../ROADMAP.pt.md)
+em estudo; até existir, a pasta `_modelo` e esta página são a especificação. Nunca ponha credenciais nem dados de
 clientes num `SKILL.md`: é lido em cada pedido que usa a skill.

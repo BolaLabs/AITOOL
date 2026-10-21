@@ -1,6 +1,6 @@
 ﻿# Security Policy
 
-## Supported Versions
+## Supported versions
 
 | Version | Supported |
 | ------- | --------- |
@@ -11,11 +11,11 @@
 This table is verified by `scripts/checks/Test-VersionCoherence.ps1`, which fails when the
 version stamped in `Properties/AssemblyInfo.cs` is not listed here.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-We take security vulnerabilities seriously. If you discover a security issue, please follow responsible disclosure practices:
+If you discover a security issue, please report it privately:
 
-### How to Report
+### How to report
 
 1. **DO NOT** create a public GitHub issue for security vulnerabilities
 2. Open a private advisory at
@@ -27,14 +27,14 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
    - Potential impact
    - Suggested fix (if any)
 
-### What to Expect
+### What to expect
 
 - **Acknowledgment**: We will acknowledge receipt within 48 hours
 - **Assessment**: We will assess the vulnerability within 7 days
 - **Resolution**: Critical vulnerabilities will be prioritized and patched as soon as possible
 - **Credit**: You will be credited for responsible disclosure (unless you prefer anonymity)
 
-## Security Best Practices
+## Security practices
 
 This project follows these security practices:
 
@@ -68,11 +68,12 @@ This project follows these security practices:
 ### ERP access
 
 - **Writes exist and are deliberate.** The assistant can create customer and supplier
-  records, articles, sales documents and CRM sales opportunities, update records, extend a
-  sales series (administrators and technicians only), and drive ERP windows. E-mail drafts open in the default mail client and are never sent by the addon. It cannot create
-  purchase documents through the object model (it can fill the purchase editor, where saving
-  is the user's click on the confirmation card), post accounting entries, delete anything, or write
-  directly to ERP tables — writes go through the Primavera BSO object model
+  records, articles, sales and purchase documents, customer receipts, supplier payments,
+  payment approvals (APR), encontros de contas and CRM sales opportunities, update records,
+  extend a sales series (administrators and technicians only), and drive ERP windows. E-mail
+  drafts open in the default mail client and are never sent by the addon. It cannot post
+  accounting entries, void or delete documents, or write directly to ERP tables — writes go
+  through the PRIMAVERA BSO object model
   (`ErpCreationService`), so the ERP's own validation runs and document numbers are
   ERP-assigned. Commits are single-flight.
 - **How confirmation actually works.** Write tools take a `confirm` flag. With it false the
@@ -121,7 +122,7 @@ call the user did not intend. What bounds it is the tool set, the SQL guard, the
 confirmation card — which no injected text can click — and the audit trail. See the
 confirmation note above.
 
-### Telemetry & Logging
+### Telemetry and logging
 
 - **No Sentry DSN ships.** In a default install nothing is sent anywhere. When an operator
   configures a DSN, RELEASE builds send Error-level events (sanitized), release-health
@@ -131,7 +132,7 @@ confirmation note above.
 - Local logs live in `%LocalAppData%\Cegid\Extensions\AITOOL\Logs\` with 7-day retention and
   are never uploaded. Web-search queries are not logged.
 
-### Configuration Security
+### Configuration security
 
 ```
 # Files that should NEVER be committed:
@@ -145,7 +146,7 @@ appsettings.Development.example.json
 appsettings.Production.example.json
 ```
 
-## Third-Party Dependencies
+## Third-party dependencies
 
 This project uses the following third-party components:
 
@@ -153,7 +154,7 @@ This project uses the following third-party components:
 |-----------|------------------------|
 | OpenAI SDK (Betalgo) | API keys stored securely |
 | WebView2 | Runs in Edge sandbox; navigation is default-deny |
-| DevExpress | Licensed commercial component, redistributed with the setup |
+| DevExpress | Provided by the ERP (21.2); checked by the setup, not shipped |
 | FlaUI (UIA3) | Drives the ERP's own windows; every mutating action is audited |
 | System.Data.SqlClient | Runs on the ERP's connection; `run_query` is read-only by application guard |
 | Costura.Fody | Embeds dependencies into the assembly at build time |
@@ -161,7 +162,7 @@ This project uses the following third-party components:
 | NLog | Local file logging only |
 | Sentry | Error tracking with sanitization |
 
-## Security Updates
+## Security updates
 
 - We monitor security advisories for all dependencies
 - NuGet packages are kept up-to-date with security patches

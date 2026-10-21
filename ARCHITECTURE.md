@@ -1,13 +1,13 @@
 ﻿# Architecture (EN)
 
-This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET Framework 4.8 with DevExpress WinForms 21.2.3. The UI is classic WinForms with a modern chat surface powered by WebView2. Telemetry is centralized via NLog with Sentry integration for RELEASE builds.
+This repository hosts a WinForms extension for ERP PRIMAVERA v10 targeting .NET Framework 4.8 with DevExpress WinForms 21.2.3. The UI is classic WinForms with a modern chat surface powered by WebView2. Telemetry is centralized via NLog with Sentry integration for RELEASE builds.
 
 ## Solution layout
 
 - **AITOOL** (WinForms app): Modular structure organized by domain/functionality:
   - `/AI` - Provider abstraction (`Providers/`), ViewModels, Services, Tools
   - `/Chat` - Chat functionality (Models, Repository, Services, ViewModels, Export)
-  - `/ERP` - Primavera integration (Editores, Services, automation)
+  - `/ERP` - PRIMAVERA integration (Editores, Services, automation)
   - `/Common` - Shared utilities (Extensions, Helpers, Utils, Models, Results, Data)
   - `/UI` - User interface (Forms, Dialogs, Resources, Views, Messaging, Services)
   - `/Infrastructure` - DI (ServiceProviderFactory, ServiceConfigurator)
@@ -51,7 +51,7 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
 
 ## ERP integration safety
 
-- Never write directly to ERP core tables. Writes go through the Primavera BSO object model,
+- Never write directly to ERP core tables. Writes go through the PRIMAVERA BSO object model,
   in `ERP/Services/ErpCreationService.cs`:
   - `commit=false` runs the ERP's own `ValidaActualizacao` and returns a preview, saving nothing
   - `commit=true` calls `Actualiza` on the BSO, so the ERP assigns numbers and enforces its rules
@@ -76,7 +76,7 @@ This repository hosts a WinForms extension for ERP Primavera v10 targeting .NET 
 
 ## Build/compatibility
 
-- .NET Framework 4.8 only; DevExpress WinForms 21.2.3; ERP Primavera v10 SDK
+- .NET Framework 4.8 only; DevExpress WinForms 21.2.3; ERP PRIMAVERA v10 SDK
 - Do not introduce .NET 5+ APIs or WPF
 - Keep OpenAI.SDK independent from AITOOL (no cross-references)
 
@@ -114,12 +114,12 @@ build).
 
 Choices that look odd from the outside and are deliberate:
 
-- **.NET Framework 4.8.** The addon runs in-process inside the Primavera v10 client, which is
+- **.NET Framework 4.8.** The addon runs in-process inside the PRIMAVERA v10 client, which is
   a .NET Framework host. The runtime is imposed, not chosen — no .NET 5+ APIs anywhere.
 - **WinForms + WebView2.** The host is WinForms/DevExpress; rebuilding the shell was never on
   the table. The chat needed a modern surface, so it is a WebView2 page with all rendering
   libraries vendored — no CDN, works offline, and the CSP enforces it.
-- **UIA fallback for window automation.** Primavera still ships classic VB6-era editors that
+- **UIA fallback for window automation.** PRIMAVERA still ships classic VB6-era editors that
   the .NET object model cannot see. Automation tries the in-process object model first and
   falls back to UI Automation (FlaUI/UIA3) on a dedicated worker thread — slower, but it makes
   native windows scriptable too.
@@ -142,14 +142,14 @@ Choices that look odd from the outside and are deliberate:
 
 # Arquitetura (PT)
 
-Este repositório contém uma extensão WinForms para o ERP Primavera v10 direcionada ao .NET Framework 4.8 com DevExpress WinForms 21.2.3. A UI é WinForms clássico com uma superfície moderna de chat suportada por WebView2. A telemetria é centralizada via NLog com integração Sentry para builds RELEASE.
+Este repositório contém uma extensão WinForms para o ERP PRIMAVERA v10 direcionada ao .NET Framework 4.8 com DevExpress WinForms 21.2.3. A UI é WinForms clássico com uma superfície moderna de chat suportada por WebView2. A telemetria é centralizada via NLog com integração Sentry para builds RELEASE.
 
 ## Estrutura da solução
 
 - **AITOOL** (WinForms app): Estrutura modular organizada por domínio/funcionalidade:
   - `/AI` - Abstração de fornecedores (`Providers/`), ViewModels, Services, Tools
   - `/Chat` - Funcionalidade de chat (Models, Repository, Services, ViewModels, Export)
-  - `/ERP` - Integração Primavera (Editores, Services, automação)
+  - `/ERP` - Integração PRIMAVERA (Editores, Services, automação)
   - `/Common` - Utilitários partilhados (Extensions, Helpers, Utils, Models, Results, Data)
   - `/UI` - Interface de utilizador (Forms, Dialogs, Resources, Views, Messaging, Services)
   - `/Infrastructure` - DI (ServiceProviderFactory, ServiceConfigurator)
@@ -194,7 +194,7 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
 ## Segurança na integração ERP
 
 - Nunca escrever diretamente nas tabelas core do ERP. As escritas passam pelo modelo de
-  objetos BSO da Primavera, em `ERP/Services/ErpCreationService.cs`:
+  objetos BSO da PRIMAVERA, em `ERP/Services/ErpCreationService.cs`:
   - `commit=false` corre o `ValidaActualizacao` do próprio ERP e devolve uma pré-visualização, sem gravar
   - `commit=true` chama `Actualiza` no BSO, para o ERP atribuir números e aplicar as suas regras
   - Cada documento usa o motor que o próprio ERP usa para ele: vendas e compras pelos serviços
@@ -218,7 +218,7 @@ Este repositório contém uma extensão WinForms para o ERP Primavera v10 direci
 
 ## Build/compatibilidade
 
-- Apenas .NET Framework 4.8; DevExpress WinForms 21.2.3; SDK do ERP Primavera v10
+- Apenas .NET Framework 4.8; DevExpress WinForms 21.2.3; SDK do ERP PRIMAVERA v10
 - Não introduzir APIs .NET 5+ ou WPF
 - Manter OpenAI.SDK independente do AITOOL (sem referências cruzadas)
 
@@ -257,14 +257,14 @@ para os PDFs oficiais de documentos) e **Installer** (conduz a construção do I
 
 Escolhas que parecem estranhas vistas de fora e são deliberadas:
 
-- **.NET Framework 4.8.** O addon corre in-process dentro do cliente Primavera v10, que é um
+- **.NET Framework 4.8.** O addon corre in-process dentro do cliente PRIMAVERA v10, que é um
   host .NET Framework. O runtime é imposto, não escolhido — nenhuma API .NET 5+ em lado
   nenhum.
 - **WinForms + WebView2.** O host é WinForms/DevExpress; reconstruir a shell nunca esteve em
   cima da mesa. O chat precisava de uma superfície moderna, por isso é uma página WebView2
   com todas as bibliotecas de renderização vendored — sem CDN, funciona offline, e a CSP
   obriga a isso.
-- **Fallback UIA para a automação de janelas.** O Primavera ainda traz editores clássicos da
+- **Fallback UIA para a automação de janelas.** O PRIMAVERA ainda traz editores clássicos da
   era VB6 que o modelo de objetos .NET não vê. A automação tenta primeiro o modelo de
   objetos in-process e recorre a UI Automation (FlaUI/UIA3) numa worker thread dedicada —
   mais lento, mas torna as janelas nativas automatizáveis também.

@@ -2,17 +2,17 @@
 
 # Instalar o AITOOL
 
-O AITOOL é uma extensão para o cliente desktop do Primavera v10 (SG100).
+O AITOOL é uma extensão para o cliente desktop do PRIMAVERA v10 (SG100).
 
 ## Requisitos
 
-- Uma instalação licenciada do **Primavera v10 (SG100)**, **versão 10.20 ou superior**, na
+- Uma instalação licenciada do **PRIMAVERA v10 (SG100)**, **versão 10.20 ou superior**, na
   edição **Evolution, Executive ou Professional** (Evolution e Executive estão validadas;
   Professional instala com as mesmas regras e aguarda confirmação de um cliente). O ERP
   fornece o SDK que o AITOOL usa em runtime, os controlos DevExpress 21.2 e o componente
   WebView2 em que o chat corre (`Apl\Cegid.Platform.WebBrowserControl.dll`). Builds v10
   mais antigas, que ainda embebem o browser Chromium (CefSharp), não têm esse componente;
-  o setup deteta-o e pára antes de copiar seja o que for.
+  o setup deteta-o e para antes de copiar seja o que for.
 - **Microsoft .NET Framework 4.8.** O próprio ERP corre a partir do 4.7.2; o setup instala o
   4.8 automaticamente quando falta (atualização in-place, sem impacto no ERP).
 - **Microsoft Edge WebView2 Runtime** (Evergreen), 125 ou superior recomendado. A maioria
@@ -23,12 +23,12 @@ O AITOOL é uma extensão para o cliente desktop do Primavera v10 (SG100).
 
 ## Instalações cliente-servidor
 
-O Primavera v10 instala-se tipicamente em cliente-servidor: o ERP vive num servidor e cada
+O PRIMAVERA v10 instala-se tipicamente em cliente-servidor: o ERP vive num servidor e cada
 posto de trabalho chega à pasta partilhada `SG100` (mapas, configuração, extensões) através
 de uma partilha Windows. O AITOOL é uma extensão dentro dessa pasta, por isso:
 
 - **Corra o setup uma vez**, na máquina que tem o `SG100` (o servidor, ou o PC que partilha
-  a pasta), com o cliente Primavera fechado em todo o lado. O setup encontra a instalação,
+  a pasta), com o cliente PRIMAVERA fechado em todo o lado. O setup encontra a instalação,
   escreve os ficheiros em `<SG100>\Config\<EV|LE|LP>\Extensions\AITOOL\` para cada edição
   que encontrar e regista o addon no ecrã de Extensibilidade do ERP.
 - **Os postos não precisam de mais nada.** Apanham o assistente no arranque seguinte. O
@@ -46,14 +46,14 @@ pasta.
 ## Instalação
 
 Descarregue o `AITOOL-Setup-<versão>.exe` da página da release e corra-o na máquina que tem
-o `SG100`, com o cliente Primavera fechado. O instalador ainda não está assinado
+o `SG100`, com o cliente PRIMAVERA fechado. O instalador ainda não está assinado
 digitalmente, por isso o Windows SmartScreen avisa na primeira execução: clique em **Mais
 informações → Executar mesmo assim**. O SHA256 publicado com a release é a forma de
 verificar o download antes disso.
 
 O assistente de instalação faz sozinho o trabalho do lado do ERP:
 
-1. **Encontra a instalação Primavera** — `PERCURSOSGE100`/`PERCURSOSGV100`/
+1. **Encontra a instalação PRIMAVERA** — `PERCURSOSGE100`/`PERCURSOSGV100`/
    `PERCURSOSGP100`, depois o registo, depois uma instalação anterior do AITOOL, e só
    pergunta se tudo isso falhar. Recusa-se a continuar com o cliente do ERP aberto.
 2. **Pré-verificação**, antes de copiar qualquer ficheiro: a versão do ERP em cada edição,
@@ -77,42 +77,42 @@ Para departamentos de IT: `/VERYSILENT /INSTANCES=ALL /EDITIONS=ALL /SQLSERVER=S
 `/VERYSILENT /DIR="<SG100>\Config\LE\Extensions\AITOOL"` para uma pasta exata. Em modo
 silencioso a pré-verificação também corre e aborta com a lista dos pontos bloqueantes.
 
-Depois inicie o cliente Primavera. O AITOOL aparece no friso (ribbon).
+Depois inicie o cliente PRIMAVERA. O AITOOL aparece no friso, no separador **BOLA LABS**.
 
 ### Cópia manual, em alternativa
 
 Útil quando o instalador não pode correr — uma topologia invulgar, ou uma política contra
 instaladores.
 
-1. Fechar o cliente Primavera.
-2. Copiar os ficheiros do AITOOL para a pasta de extensões da edição que usa:
+1. Feche o cliente PRIMAVERA.
+2. Copie os ficheiros do AITOOL para a pasta de extensões da edição que usa:
    `<SG100>\Config\<EDIÇÃO>\Extensions\AITOOL\`, em que `<EDIÇÃO>` é `EV` para Evolution
    (`Erp100EV.exe`), `LE` para Executive (`Erp100LE.exe`) ou `LP` para Professional
    (`Erp100LP.exe`) — tipicamente
    `C:\Program Files\PRIMAVERA\SG100\Config\LE\Extensions\AITOOL\` num posto Executive.
-   Se o Primavera estiver instalado noutro local, a variável de ambiente
+   Se o PRIMAVERA estiver instalado noutro local, a variável de ambiente
    `PERCURSOSGE100`/`PERCURSOSGV100`/`PERCURSOSGP100` aponta para a respetiva pasta `Apl`;
    `<SG100>` é a pasta-mãe dessa pasta. Com mais do que uma edição instalada, copie os
    mesmos ficheiros para cada pasta de edição: partilham um único registo.
-   (Copiar a pasta completa que lhe foi entregue; não deixar cópias antigas para trás.)
+   (Copie a pasta completa que lhe foi entregue; não deixe cópias antigas para trás.)
 
-   **Múltiplas instâncias do ERP:** cada instância Primavera além da `DEFAULT` tem a sua
+   **Múltiplas instâncias do ERP:** cada instância PRIMAVERA além da `DEFAULT` tem a sua
    própria árvore de pastas com sufixo (`Config_<INSTANCE>`, p. ex. `Config_ALEX`).
-   Repetir a cópia para `<SG100>\Config_<INSTANCE>\<EDIÇÃO>\Extensions\AITOOL\` em cada
+   Repita a cópia para `<SG100>\Config_<INSTANCE>\<EDIÇÃO>\Extensions\AITOOL\` em cada
    instância que deva ter o assistente.
-3. Registar a extensão à mão no ecrã de Extensibilidade do ERP — o passo que o instalador
+3. Registe a extensão à mão no ecrã de Extensibilidade do ERP — o passo que o instalador
    faria por si.
-4. Iniciar o cliente Primavera. O AITOOL aparece no friso (ribbon).
+4. Inicie o cliente PRIMAVERA. O AITOOL aparece no friso, no separador **BOLA LABS**.
 
 ## Primeira execução — configurar um fornecedor
 
-1. Abrir o AITOOL e clicar no ícone de definições (engrenagem).
-2. Escolher um fornecedor (OpenAI, OpenRouter, Anthropic, ou um endpoint compatível).
-3. Colar a chave de API e escolher um modelo (a lista carrega a partir do fornecedor). A
-   chave é guardada encriptada na máquina (Windows DPAPI) e nunca é escrita em texto
-   simples nem enviada para lado nenhum exceto o fornecedor escolhido. Ver
-   [SECURITY.md](SECURITY.md).
-4. Começar a conversar. As definições (fornecedor, modelo, chave) persistem entre
+1. Abra o AITOOL e clique no ícone de definições (engrenagem).
+2. Escolha um fornecedor (OpenAI, OpenRouter, Anthropic, ou um endpoint compatível).
+3. Cole a chave de API e escolha um modelo (a lista carrega a partir do fornecedor). A
+   chave é guardada cifrada na máquina (Windows DPAPI) e nunca é escrita em texto simples
+   nem enviada para lado nenhum exceto o fornecedor escolhido. Ver
+   [Segurança e privacidade, secção 5](docs/SECURITY-AND-PRIVACY.pt.md#5-credenciais).
+4. Comece a conversar. As definições (fornecedor, modelo, chave) persistem entre
    reinícios.
 
 Na primeira execução o addon cria cinco tabelas `AI_*` na base de dados do ERP, para o
@@ -128,12 +128,16 @@ instalações onde o addon não pode fazer `CREATE TABLE`, estão em
 
 ## Atualizar
 
-Fechar o cliente, substituir os ficheiros na pasta de extensões do AITOOL pela nova build
-e reiniciar. As definições de fornecedor e a chave encriptada são preservadas.
+Corra o novo instalador da mesma forma, na máquina que tem o `SG100`, com o cliente
+PRIMAVERA fechado em todo o lado. Substitui os ficheiros em todas as pastas de edição que
+encontrar, atualiza a linha de Extensibilidade e mantém as suas definições e a chave cifrada.
+
+Depois de uma cópia manual, atualize também a linha de Extensibilidade: o ERP confere o MD5
+do ficheiro registado e recusa uma extensão cujo ficheiro mudou.
 
 ## Desinstalar
 
-Feche o cliente Primavera e desinstale o AITOOL pelas **Aplicações** do Windows
+Feche o cliente PRIMAVERA e desinstale o AITOOL pelas **Aplicações** do Windows
 (Definições → Aplicações → Aplicações instaladas). São removidos os ficheiros de todas as
 pastas registadas na instalação, a linha do AITOOL sai da configuração de Extensibilidade do
 ERP e a chave `HKLM\SOFTWARE\Bola Labs\AITOOL`, com a lista `InstallDirs`, é apagada.

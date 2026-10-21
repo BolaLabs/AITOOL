@@ -1,6 +1,6 @@
 ﻿# AITOOL user guide
 
-For the people who use the assistant inside Primavera v10 every day: accounts, sales,
+For the people who use the assistant inside PRIMAVERA v10 every day: accounts, sales,
 purchasing, the back office. Installation is in [INSTALL.md](../INSTALL.md); what the product
 is and how it is built is in the [README](../README.md).
 
@@ -15,7 +15,7 @@ ships with. Codes such as `SOFRIO`, `F0003` or `A0001` are that company's.
 | A line in the open editor | *Põe uma linha de 3 A0002 a 250 €* | [4](#4-fill-a-screen-by-writing) |
 | An article with variants | *Põe 2 do I0001 com DDR2-1024 e MT2200* | [4](#4-fill-a-screen-by-writing) |
 | A formula article | *Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento* | [4](#4-fill-a-screen-by-writing) |
-| A receipt, payment or settlement | *Faz um recibo ao cliente SOFRIO de 100 euros* | [5](#receipts-payments-and-encontros-de-contas) |
+| A receipt, payment or account offsetting | *Faz um recibo ao cliente SOFRIO de 100 euros* | [5](#receipts-payments-and-encontros-de-contas) |
 | Invoices approved for payment | *Aprova para pagamento as faturas do fornecedor F0003* | [5](#receipts-payments-and-encontros-de-contas) |
 | An amount distributed in the settlement editor | *Põe 500 em valor a liquidar e distribui* | [5](#receipts-payments-and-encontros-de-contas) |
 | What is going on | *Quais os pendentes da SOFRIO?* | [2](#2-ask-about-your-data) |
@@ -27,7 +27,7 @@ Anything that saves waits for your click on the card ([section 6](#6-the-confirm
 
 ## 1. Open it
 
-The ribbon has a **BOLA LABS** tab with an **Assistente AI** button. The chat opens docked at
+The ribbon has a **BOLA LABS** tab with an **Assistente de IA** button. The chat opens docked at
 the right of the ERP; the button at the top of the panel pops it out into its own window.
 `Ctrl+N` starts a new conversation, `Ctrl+B` opens the list of conversations, `Ctrl+,` the
 settings.
@@ -79,13 +79,18 @@ to, drives the ERP windows by text.
   their current values.
 - *"Põe o cliente SOFRIO"* puts the customer in the document's entity field, checks that the
   document accepts that kind of entity, and reads back the name the ERP shows.
-- *"Data de hoje, condição de pagamento a 45 dias, armazém 2"* fills several fields at once.
-  Words such as "Fatura a 45 dias" or "Armazém 2" are turned into the codes the company's
-  tables have for them; when two codes fit, it asks which.
+- *"Data de hoje e condição de pagamento a 45 dias"* fills several fields at once. Words such
+  as "Fatura a 45 dias" are turned into the codes the company's tables have for them; when two
+  codes fit, it asks which. In documents the warehouse is a column of each line: *"põe a linha
+  2 no armazém A2"*; *"armazém 2"* becomes A2 when the company has it, and when several
+  warehouses fit it asks which.
 - *"Uma linha do artigo A0002, quantidade 3, preço 250"* adds a document line. In the sales,
   purchase and internal-document editors the article goes into the grid and quantity, price,
   discount, description and warehouse go into the document line through the editor's own
   events, so the ERP computes the line as if you had typed it.
+- *"Põe 2 do processador Intel"*: an article can be named instead of coded. The assistant
+  looks it up by description and puts the code on the line; when more than one article fits,
+  it lists them and asks instead of writing.
 - *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"*: for an article with
   dimensions the assistant fills the ERP's variant grid and confirms it; the document gets the
   article's aggregator line and one line per variant, as if you had picked them. Without saying
@@ -94,7 +99,8 @@ to, drives the ERP windows by text.
   right click on that line, "Remove Linha".
 - *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"*: for a formula article the
   measures go into the ERP's "Fórmula" dialog and the line carries the quantity the ERP computes.
-- *"Lê o diálogo"* reads a message box the ERP opened, and says what each answer does.
+- *"Lê o diálogo"* reads a message box the ERP opened, and says what each answer does. An
+  answer that saves, such as "Sim" to "save changes?", comes as a confirmation card.
 
 When the ERP opens a window that blocks the rest (the variant grid, "Fórmula", "Números de
 Série", a warning), the assistant moves to a window of its own in the same place and keeps
@@ -105,8 +111,7 @@ Fields on tabs that are not in view are reached without changing tab by hand.
 
 **What it never does on its own:** press a button that saves, cancels or deletes. Gravar,
 Confirmar, Anular, Apagar and the like go through the confirmation card (section 6), and so
-does answering "Sim" to an ERP dialog such as "save changes?". With the assistant docked in the
-panel, that answer is yours, in the ERP.
+does answering "Sim" to an ERP dialog such as "save changes?".
 
 ## 5. Create documents and records without opening the editor
 
@@ -117,8 +122,8 @@ numbering is the ERP's.
 | You write | It prepares |
 | --- | --- |
 | *Cria o cliente Exemplo Lda, NIF 999999990* | A customer record |
-| *Cria o artigo AIT1018 "Cabo HDMI 2 m", unidade UN, IVA 23* | An article record |
-| *Faz uma proposta ao SOFRIO com 2 A0001* | A sales document, with the ERP's prices and totals |
+| *Cria o artigo AIT1018 'Cabo HDMI 2 m', unidade UN, IVA 23* | An article record |
+| *Faz uma proposta à SOFRIO com 2 A0001* | A sales document, with the ERP's prices and totals |
 | *Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros* | A purchase document |
 | *Faz um recibo ao cliente SOFRIO de 100 euros* | A customer receipt |
 | *Paga 200 euros ao fornecedor F0001* | A supplier payment |
@@ -156,15 +161,16 @@ Every write is shown before it happens, as a card with:
 - every line, or every settled document, with the amount that will be settled;
 - the ERP's own totals: goods, discounts, VAT, withholding tax, total, or the amount
   compensated in an encontro de contas;
-- warnings, in amber: a default the tool chose, a credit left open, a field the ERP filled.
+- warnings, in amber: a default the tool chose, a credit left open, a field the ERP filled;
+- the lines the ERP adds by itself (an associated article, a fee), listed before you save.
 
 The save runs when you press the card's button and on nothing else. Writing "sim" in the
-chat does not save. After the save the card says **Gravado** with the number the ERP gave;
-if the ERP stopped with a dialog, the card says what is missing there.
+chat does not save. While the ERP saves, the card says **A gravar**; then **Gravado** with
+the number the ERP gave. If the ERP stopped with a dialog, the card says what is missing there.
 
 Every save, refusal and failure goes to `AI_AuditLog` in the company database, with the user,
-the tool and the outcome. `/auditoria` shows yours; supervisors (administrators and
-technicians) see everyone's with `/auditoria todos`.
+the tool and the outcome. `/auditoria` shows yours; supervisors (the ERP's administrators,
+super administrators and technicians) see everyone's with `/auditoria todos`.
 
 ## 7. What it does by itself
 
@@ -220,13 +226,18 @@ each request.
 | `/ajuda` | Help |
 
 `Ctrl+N` new chat · `Ctrl+B` conversations · `Ctrl+E` export · `Ctrl+,` settings · `Enter` sends ·
-`Shift+Enter` new line.
+`Shift+Enter` new line · `Esc` stops the answer.
+
+The message box stays open while the assistant answers: a request sent during an answer goes
+as soon as that answer ends.
 
 ## 10. When something goes wrong
 
 - Error cards carry a reference such as **ref. T-1a2b**. Give it to support: it identifies
   the turn in the log.
-- Settings → Diagnóstico builds a support bundle (report and seven days of logs, redacted).
+- Definições → Avançado → Diagnóstico → **Exportar pacote de apoio** builds a support bundle:
+  the report and seven days of logs, with keys and passwords redacted (customer and article
+  names may remain).
 - A window that does not respond to the assistant usually has an ERP dialog open behind it:
   answer it in the ERP and ask again.
 - A wording that went to the wrong place: answer **Não era isto** on the card. It will not
@@ -234,8 +245,8 @@ each request.
 
 ## 11. Limits worth knowing
 
-- It does not enforce Primavera's per-user permissions on what it reads; see
-  [SECURITY.md](../SECURITY.md).
+- It does not enforce PRIMAVERA's per-user permissions on what it reads; see
+  [Security and privacy](SECURITY-AND-PRIVACY.md).
 - It never cancels or deletes documents by itself, and has no tool for that.
 - The sales explorer has no article restriction: sales of an article are answered from the
   data, not in that window.

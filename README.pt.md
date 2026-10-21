@@ -4,7 +4,9 @@
 
 <img src="docs/assets/hero.svg" alt="AITOOL, o assistente de IA dentro do Cegid PRIMAVERA v10" width="920">
 
-### O assistente de IA que trabalha dentro do PRIMAVERA: nas suas máquinas, com o seu modelo, e nada gravado sem o seu clique
+# AITOOL para PRIMAVERA
+
+**O assistente de IA que trabalha dentro do PRIMAVERA: nas suas máquinas, com o seu modelo, e nada gravado sem o seu clique**
 
 Pergunte pelos seus dados, abra qualquer ecrã pelo nome, preencha janelas e crie documentos em linguagem corrente.
 Sem conta no fabricante, sem licença por posto, sem créditos a contar.
@@ -15,6 +17,7 @@ Sem conta no fabricante, sem licença por posto, sem créditos a contar.
 [![PRIMAVERA v10.20+](https://img.shields.io/badge/PRIMAVERA%20v10.20%2B-Evolution%20%C2%B7%20Executive-1E3A5F)](#instalar)
 
 **[Descarregar](https://github.com/BolaLabs/AITOOL/releases/latest)** ·
+[Instalar](#instalar) ·
 [Ver o filme](https://bolalabs.pt/pt/aitool/#filme) ·
 [Guia do utilizador](docs/USER-GUIDE.pt.md) ·
 [Segurança](docs/SECURITY-AND-PRIVACY.pt.md) ·
@@ -30,15 +33,16 @@ Sem conta no fabricante, sem licença por posto, sem créditos a contar.
 <tr>
 <td width="33%" valign="top">
 <img src="docs/assets/pillar-runs.svg" width="48" alt=""><br>
-<b>Corre onde decide</b><br>
+<b>Corre onde decidir</b><br>
 Dentro do ERP, nas suas máquinas. Nenhum servidor da Bola Labs no caminho. OpenAI, Anthropic,
 OpenRouter, qualquer endpoint compatível, ou um modelo local de onde nada sai.
 </td>
 <td width="33%" valign="top">
 <img src="docs/assets/pillar-works.svg" width="48" alt=""><br>
 <b>Trabalha no ERP, não ao lado</b><br>
-Responde com as consultas do próprio ERP, abre qualquer ecrã pelo nome, preenche os editores
-de vendas, compras e internos por texto, e cria documentos, recibos e pagamentos.
+Responde com os dados vivos do ERP (os pendentes pela consulta do próprio ERP), abre qualquer
+ecrã pelo nome, preenche os editores de vendas, compras e internos por texto, e cria documentos,
+recibos e pagamentos.
 </td>
 <td width="33%" valign="top">
 <img src="docs/assets/pillar-confirms.svg" width="48" alt=""><br>
@@ -58,7 +62,7 @@ Um pedido por área do ERP. O que está marcado com **grava** fica à espera do 
 | **Documentos** | *"Faz uma fatura à SOFRIO com 2 A0002"* · **grava** | Uma pré-visualização com os totais do ERP e um cartão com **Gravar documento** |
 | **Linhas no editor** | *"Põe uma linha de 3 A0002 a 250 €"* | A linha é escrita pelos eventos do próprio editor; quem a calcula é o ERP |
 | **Variantes** | *"Põe 2 do I0001 com DDR2-1024 e MT2200 e 1 com DDR2-512 e MT2500"* | A grelha de variantes do ERP é preenchida e confirmada: uma linha por variante sob o artigo |
-| **Fórmulas** | *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"* | As medidas vão para a janela «Fórmula» do ERP; a linha fica com a quantidade que ele calcula |
+| **Fórmulas** | *"Põe 2 peças do A0005 com 1,5 de largura e 2 de comprimento"* | As medidas vão para a janela "Fórmula" do ERP; a linha fica com a quantidade que ele calcula |
 | **Recibos e pagamentos** | *"Faz um recibo ao cliente SOFRIO de 100 euros"* · **grava** | Liquida primeiro as dívidas mais antigas, a última em parte; cada documento e valor está no cartão |
 | **Aprovações** | *"Aprova para pagamento as faturas do fornecedor F0003"* · **grava** | O documento APR do ERP: as faturas passam a Aprovada, nada é pago |
 | **Perguntas e ecrãs** | *"Quais os pendentes da SOFRIO?"* | A consulta de pendentes do próprio ERP, em cartões e numa tabela viva |
@@ -68,9 +72,9 @@ Um pedido por área do ERP. O que está marcado com **grava** fica à espera do 
 <summary><b>Mais exemplos, por área</b></summary>
 
 **Documentos e fichas** · **grava**
-- *"Faz uma proposta ao SOFRIO com 2 A0001"*: um documento de venda com os preços e totais do ERP
+- *"Faz uma proposta à SOFRIO com 2 A0001"*: um documento de venda com os preços e totais do ERP
 - *"Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros"*: um documento de compra
-- *"Cria o artigo AIT1018 "Cabo HDMI 2 m", unidade UN, IVA 23"*: uma ficha de artigo; o código de IVA nunca é adivinhado
+- *"Cria o artigo AIT1018 'Cabo HDMI 2 m', unidade UN, IVA 23"*: uma ficha de artigo; o código de IVA nunca é adivinhado
 
 **Preencher o editor**
 - *"Muda a quantidade da linha 2 para 5"*: muda essa linha, as outras ficam
@@ -114,18 +118,18 @@ A [página do produto](https://bolalabs.pt/pt/aitool/#filme) tem o filme complet
 
 ## Nada é gravado sem o seu clique
 
-<img src="docs/assets/write-gate.pt.svg" alt="Pede, o ERP valida, o seu clique, gravado e auditado. Escrever sim no chat não grava nada." width="920">
+<img src="docs/assets/write-gate.pt.svg" alt="Pede, o ERP valida, o seu clique, gravado e auditado. Escrever &quot;sim&quot; no chat não grava nada." width="920">
 
 - Cada escrita passa pelos objetos de negócio do PRIMAVERA: correm as validações do ERP e a numeração é a do ERP.
 - A gravação precisa de um token de uso único emitido com o cartão que vê. O modelo nunca o vê, e escrever "sim" é recusado e registado.
 - Um botão que grava ou destrói dados numa janela do ERP passa pelo mesmo cartão.
-- Os supervisores (administradores e técnicos) veem a auditoria e as conversas de todos os utilizadores.
+- Os supervisores (administradores, superadministradores e técnicos do ERP) veem a auditoria e as conversas de todos os utilizadores.
 
 **O limite honesto.** As ferramentas de leitura consultam a base de dados com a ligação do ERP, por isso
 não aplicam as permissões por utilizador do PRIMAVERA. Desligue ferramentas por utilizador, ou aponte
 o addon a um login SQL só de leitura. Detalhes: [Segurança e privacidade](docs/SECURITY-AND-PRIVACY.pt.md).
 
-## Corre onde decide
+## Corre onde decidir
 
 <img src="docs/assets/where-it-runs.pt.svg" alt="A sua rede: o servidor do ERP com histórico e auditoria, os postos com o AITOOL, um modelo local opcional; uma ligação ao fornecedor de IA que escolher" width="920">
 
@@ -136,14 +140,14 @@ o addon a um login SQL só de leitura. Detalhes: [Segurança e privacidade](docs
 
 ## Novidades da 2.22
 
-<img src="docs/assets/release-2-22.png" alt="O assistente ancorado depois de «Faz uma fatura à SOFRIO com 2 A0002»: o cliente e o artigo que encontrou e o cartão de gravação com os totais do ERP e o botão dourado Gravar documento" width="560">
+<img src="docs/assets/release-2-22.png" alt="O assistente ancorado depois de 'Faz uma fatura à SOFRIO com 2 A0002': o cliente e o artigo que encontrou e o cartão de confirmação com os totais do ERP e o botão dourado Gravar documento" width="560">
 
 | | |
 | --- | --- |
-| **Os pedidos do guia chegam à ferramenta certa** | «Faz uma proposta ao SOFRIO…», «Prepara um orçamento…» e «Quais os pendentes da SOFRIO?» vão às ferramentas de documentos e de pendentes, não ao SQL |
-| **Menos perguntas de volta** | «Põe 1 A0007 branco» escolhe a variante, «jmf» encontra a J.M.F. e um código de artigo que a empresa não tem é apanhado antes do aviso do ERP |
-| **Um cartão de gravação mais claro** | Gravar maior, bem distinto do «Não gravar», e o foco no cartão quando uma resposta o deixa; o cartão é a única confirmação |
-| **O painel ancorado lê-se melhor** | Uma recusa ou um passo corrigido já não aparecem como falha, as tabelas deixam os valores à vista e as definições falam português simples |
+| **Artigos pelo nome, armazéns pelo código** | "Põe 2 do processador Intel" põe esse artigo na linha e "armazém 2" passa a A2; quando servem vários, pergunta em vez de escrever |
+| **Os pedidos do guia chegam à ferramenta certa** | "Faz uma proposta à SOFRIO…" e "Quais os pendentes da SOFRIO?" vão às ferramentas de documentos e de pendentes, não ao SQL; "Põe 1 A0007 branco" escolhe a variante e "jmf" encontra a J.M.F. |
+| **Continue a escrever enquanto responde** | A caixa de mensagem fica aberta durante a resposta; um pedido enviado com Enter segue quando a resposta acaba, e o Esc para-a |
+| **A gravação acontece no cartão** | Gravar maior, bem distinto do "Não gravar", o progresso e o número do ERP no próprio cartão, e as linhas que o ERP acrescenta sozinho listadas antes de gravar |
 
 Todas as versões: [CHANGELOG.md](CHANGELOG.md).
 
@@ -153,7 +157,7 @@ Todas as versões: [CHANGELOG.md](CHANGELOG.md).
 
 1. **[Descarregue o instalador](https://github.com/BolaLabs/AITOOL/releases/latest)** e confira o SHA256 com as notas da versão (o setup ainda não está assinado, por isso o SmartScreen avisa uma vez).
 2. **Corra-o na máquina que tem o `SG100`.** Encontra o PRIMAVERA, verifica o posto, regista o addon na Extensibilidade e confirma o resultado.
-3. **Abra o PRIMAVERA**, carregue no assistente no friso, escolha um fornecedor e cole a sua chave.
+3. **Abra o PRIMAVERA** e, no friso, abra o separador **BOLA LABS** › **Assistente de IA**; escolha um fornecedor e cole a sua chave (ou indique um modelo local).
 
 **Requisitos:** PRIMAVERA v10.20 ou superior (Evolution e Executive validados; Professional
 a aguardar confirmação de um cliente) · .NET Framework 4.8 · Microsoft Edge WebView2 (o setup
@@ -204,7 +208,7 @@ Cada ferramenta desliga-se individualmente em Definições → Ferramentas; `Erp
 ## Limites
 
 - Não faz lançamentos de contabilidade, nem anula ou apaga documentos.
-- Ainda não lê faturas em PDF: está no [roadmap](ROADMAP.md).
+- Ainda não lança faturas de fornecedor a partir de um PDF ou de uma foto: é o primeiro ponto do [roadmap](ROADMAP.pt.md).
 - Não exporta tabelas para Excel: as tabelas permitem copiar, as conversas exportam para Markdown, HTML ou texto.
 - Não corre sem supervisão: cada turno tem um limite de passos e cada escrita espera pelo seu clique.
 - Precisa de chamada de ferramentas: abaixo de cerca de 8B parâmetros a 4 bits, os modelos locais deixam de ser fiáveis.
@@ -220,7 +224,7 @@ Cada ferramenta desliga-se individualmente em Definições → Ferramentas; `Erp
 | [Skills](docs/SKILLS.pt.md) | Ensine-lhe os seus fluxos em Markdown |
 | [Configuração](docs/CONFIGURATION.md) | Todas as definições e variáveis de ambiente |
 | [Arquitetura](ARCHITECTURE.md) | Como corre um turno, compromissos de design, o repositório |
-| [Roadmap](ROADMAP.md) | O que vem a seguir, e o que fica de fora |
+| [Roadmap](ROADMAP.pt.md) | O que vem a seguir, e o que não muda |
 | [Changelog](CHANGELOG.md) | Todas as versões |
 
 Perguntas e problemas: [Issues e Discussions](https://github.com/BolaLabs/AITOOL/issues), ver

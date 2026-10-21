@@ -24,7 +24,7 @@
     <rect x="0" y="86" width="196" height="64" rx="14" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".18" stroke-width="1.5"/>
     <path d="M24 150 L24 166 L42 150 z" fill="#FFFFFF" stroke="#1E3A5F" stroke-opacity=".18" stroke-width="1.5" stroke-linejoin="round"/>
     <rect x="23" y="146" width="20" height="5" fill="#FFFFFF"/>
-    <text class="b" x="16" y="124">“Fatura à Sofrio 2 monitores”</text>
+    <text class="b" x="16" y="124">“Fatura à SOFRIO, 2 A0002”</text>
     <text class="s" x="0" y="204">em linguagem corrente</text>
   </g>
   <g transform="translate(288 0)">

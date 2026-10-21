@@ -4,7 +4,9 @@
 
 <img src="docs/assets/hero.svg" alt="AITOOL, the AI assistant inside Cegid PRIMAVERA v10" width="920">
 
-### The AI assistant that works inside PRIMAVERA: on your machines, with your model, and nothing saved without your click
+# AITOOL for PRIMAVERA
+
+**The AI assistant that works inside PRIMAVERA: on your machines, with your model, and nothing saved without your click**
 
 Ask about your data, open any screen by name, fill windows and create documents in plain language.
 No vendor account, no per-seat licence, no metered credits.
@@ -15,6 +17,7 @@ No vendor account, no per-seat licence, no metered credits.
 [![PRIMAVERA v10.20+](https://img.shields.io/badge/PRIMAVERA%20v10.20%2B-Evolution%20%C2%B7%20Executive-1E3A5F)](#install)
 
 **[Download](https://github.com/BolaLabs/AITOOL/releases/latest)** ·
+[Install](#install) ·
 [Watch the film](https://bolalabs.pt/en/aitool/#filme) ·
 [User guide](docs/USER-GUIDE.md) ·
 [Security](docs/SECURITY-AND-PRIVACY.md) ·
@@ -37,8 +40,9 @@ OpenRouter, any compatible endpoint, or a local model where nothing leaves the b
 <td width="33%" valign="top">
 <img src="docs/assets/pillar-works.svg" width="48" alt=""><br>
 <b>Works in the ERP, not beside it</b><br>
-Answers with the ERP's own queries, opens any screen by name, fills the sales, purchase and
-internal editors by text, and creates documents, receipts and payments.
+Answers from the ERP's live data (pending items through the ERP's own query), opens any screen
+by name, fills the sales, purchase and internal editors by text, and creates documents, receipts
+and payments.
 </td>
 <td width="33%" valign="top">
 <img src="docs/assets/pillar-confirms.svg" width="48" alt=""><br>
@@ -68,16 +72,16 @@ One request per area of the ERP. Those marked **saves** wait for your click on t
 <summary><b>More examples, by area</b></summary>
 
 **Documents and records** · **saves**
-- *"Faz uma proposta ao SOFRIO com 2 A0001"*: a sales document with the ERP's prices and totals
+- *"Faz uma proposta à SOFRIO com 2 A0001"*: a sales document with the ERP's prices and totals
 - *"Lança a fatura do fornecedor F0003, documento FT 2026/123, 5 A0002 a 300 euros"*: a purchase document
-- *"Cria o artigo AIT1018 "Cabo HDMI 2 m", unidade UN, IVA 23"*: an article record; the VAT code is never guessed
+- *"Cria o artigo AIT1018 'Cabo HDMI 2 m', unidade UN, IVA 23"*: an article record; the VAT code is never guessed
 
 **Filling the editor**
 - *"Muda a quantidade da linha 2 para 5"*: that line changes, the others stay
 - *"Põe o cliente SOFRIO"*: the customer goes into the document and the ERP's name is read back
 - *"Põe um I0001, que eu escolho as variantes na grelha"*: the grid opens for you, and the chat keeps answering in its own window
 
-**Receipts, payments and settlement** · **saves**
+**Receipts, payments and account offsetting** · **saves**
 - *"Paga 200 euros ao fornecedor F0001"*: a supplier payment
 - *"Faz um encontro de contas do cliente SOFRIO de 150 euros"*: account offsetting (encontro de contas) between the customer and its supplier
 - *"Recebe tudo o que o cliente MICROSOFTPOR deve"*: a receipt for the whole balance, credit notes included
@@ -114,12 +118,12 @@ The [product page](https://bolalabs.pt/en/aitool/#filme) has the full film, reco
 
 ## Nothing is saved without your click
 
-<img src="docs/assets/write-gate.svg" alt="Ask, the ERP validates, your click, saved and audited. Typing yes in the chat saves nothing." width="920">
+<img src="docs/assets/write-gate.svg" alt="Ask, the ERP validates, your click, saved and audited. Typing &quot;sim&quot; in the chat saves nothing." width="920">
 
 - Every write goes through the PRIMAVERA business objects: the ERP's validations run and the numbering is the ERP's.
 - The save needs a single-use token issued with the card you see. The model never sees it, and typing "sim" is refused and logged.
 - A button that saves or destroys data in an ERP window goes through the same card.
-- Supervisors (administrators and technicians) see every user's audit trail and conversations.
+- Supervisors (the ERP's administrators, super administrators and technicians) see every user's audit trail and conversations.
 
 **The honest limit.** Reading tools query the database with the ERP's connection, so they do not
 apply PRIMAVERA's per-user permissions. Switch tools off per user, or point the addon at a
@@ -136,14 +140,14 @@ read-only SQL login. Details: [Security and privacy](docs/SECURITY-AND-PRIVACY.m
 
 ## New in 2.22
 
-<img src="docs/assets/release-2-22.png" alt="The docked assistant after 'Faz uma fatura à SOFRIO com 2 A0002': the customer and article it found, then the save card with the ERP's totals and a gold Gravar documento button" width="560">
+<img src="docs/assets/release-2-22.png" alt="The docked assistant after 'Faz uma fatura à SOFRIO com 2 A0002': the customer and article it found, then the confirmation card with the ERP's totals and a gold Gravar documento button" width="560">
 
 | | |
 | --- | --- |
-| **Requests from the guide reach the right tool** | "Faz uma proposta ao SOFRIO…", "Prepara um orçamento…" and "Quais os pendentes da SOFRIO?" go to the document and pending-items tools, not to SQL |
-| **Fewer questions back** | "Põe 1 A0007 branco" picks the variant, "jmf" finds J.M.F., and an article code the company does not have is caught before the ERP's notice |
-| **A clearer save card** | A larger Gravar that stands apart from "Não gravar", and the focus on the card when an answer leaves one; the card is the only confirmation |
-| **The docked panel reads better** | A refusal or a corrected step no longer shows as a failure, tables keep their amounts in view, and settings speak plain Portuguese |
+| **Articles by name, warehouses by their codes** | "Põe 2 do processador Intel" puts that article on the line and "armazém 2" becomes A2; when more than one fits, it asks instead of writing |
+| **Requests from the guide reach the right tool** | "Faz uma proposta à SOFRIO…" and "Quais os pendentes da SOFRIO?" go to the document and pending-items tools, not to SQL; "Põe 1 A0007 branco" picks the variant and "jmf" finds J.M.F. |
+| **Keep typing while it answers** | The message box stays open during an answer; a request sent with Enter goes when the answer ends, and Esc stops it |
+| **Saving happens on the card** | A larger Gravar that stands apart from "Não gravar", the progress and the ERP's number on the card itself, and the lines the ERP adds by itself listed before you save |
 
 Every release: [CHANGELOG.md](CHANGELOG.md).
 
@@ -153,7 +157,7 @@ Every release: [CHANGELOG.md](CHANGELOG.md).
 
 1. **[Download the installer](https://github.com/BolaLabs/AITOOL/releases/latest)** and check its SHA256 against the release notes (the setup is not code-signed yet, so SmartScreen warns once).
 2. **Run it on the machine that holds `SG100`.** It finds PRIMAVERA, checks the workstation, registers the addon in the Extensibility screen and verifies the result.
-3. **Open PRIMAVERA**, click the assistant on the ribbon, choose a provider and paste your key.
+3. **Open PRIMAVERA** and, on the ribbon, open the **BOLA LABS** tab › **Assistente de IA**; choose a provider and paste your key (or point it to a local model).
 
 **Requirements:** PRIMAVERA v10.20 or later (Evolution and Executive validated; Professional
 pending a customer confirmation) · .NET Framework 4.8 · Microsoft Edge WebView2 (the setup
@@ -176,7 +180,7 @@ Silent deployment and manual steps: [INSTALL.md](INSTALL.md).
 | `check_stock` | Current, minimum and maximum stock of an article per warehouse |
 | `render_document` | Header and lines of a commercial document, shown as an interactive card |
 | `run_query` | Model-written read-only SQL: `SELECT`/`WITH` only, writes and DDL blocked by a guard |
-| `open_record` | Opens a record (file, document, account statement) in its native ERP editor |
+| `open_record` | Opens a record (customer, supplier, article, document, account statement) in its native ERP editor |
 | `open_erp_function` | Opens any ERP function by name, navigating the ribbon |
 | `interact_erp_window` | Lists windows and fields, fills fields and grid lines, clicks buttons, on .NET and VB6 windows |
 | `erp_steps` | Runs a sequence of ERP steps in one call, stopping at the first failure or confirmation |
@@ -184,27 +188,27 @@ Silent deployment and manual steps: [INSTALL.md](INSTALL.md).
 | `get_sales_document_types` | The sales document types of this installation, with the nature the ERP gives each |
 | `get_sales_series` | The series of a document type, with default and today's validity |
 | `get_article_price` | Suggested price and discount from the ERP's price rules |
-| `create_entity` | Creates a customer or supplier file, saved from the confirmation card |
+| `create_entity` | Creates a customer or supplier record, saved from the confirmation card |
 | `create_sales_document` | Creates a sales document with the ERP's totals, saved from the confirmation card |
 | `create_purchase_document` | Creates a supplier invoice or order, saved from the confirmation card |
 | `create_settlement` | Receipts, supplier payments, payment approvals and encontros de contas, saved from the card |
-| `update_entity` | Updates fields of a customer or supplier file, saved from the confirmation card |
+| `update_entity` | Updates fields of a customer or supplier record, saved from the confirmation card |
 | `create_article` | Creates an article with unit, VAT code and price; the VAT code is never guessed |
 | `update_sales_series` | Extends or reactivates a sales series that ran out (administrators and technicians) |
 | `create_opportunity` | Creates a CRM sales opportunity for an existing customer |
 | `draft_email` | Prepares an e-mail draft you open in your own mail client; nothing is sent |
 | `use_skill` | Loads a skill: a workflow written in Markdown, see [docs/SKILLS.md](docs/SKILLS.md) |
-| `enrich_entity` | Fills a file from public registries by tax id (VIES, NIF.pt), with a field-by-field diff |
+| `enrich_entity` | Fills a record from public registries by tax id (VIES, NIF.pt), with a field-by-field diff |
 | `web_search` | Public web search (Brave, Tavily, Exa, Serper or SearXNG); results flagged as untrusted |
 
-Each tool switches off individually in Settings → Ferramentas; `ErpTools:Enabled` turns the whole layer off.
+Each tool switches off individually in Definições (Settings) → Ferramentas; `ErpTools:Enabled` turns the whole layer off.
 
 </details>
 
 ## Limits
 
 - No accounting postings, no voiding or deleting documents.
-- No invoice intake from a PDF yet: it is on the [roadmap](ROADMAP.md).
+- No supplier invoices from a PDF or a photo yet: it is the first item on the [roadmap](ROADMAP.md).
 - No Excel export of result tables: tables offer copy, conversations export to Markdown, HTML or text.
 - No unattended runs: every turn has a step limit and every write waits for your click.
 - Tool calling is required: below roughly 8B parameters at 4-bit, local models stop being reliable.
@@ -220,7 +224,7 @@ Each tool switches off individually in Settings → Ferramentas; `ErpTools:Enabl
 | [Skills](docs/SKILLS.md) | Teach it your own workflows in Markdown |
 | [Configuration](docs/CONFIGURATION.md) | Every setting and environment variable |
 | [Architecture](ARCHITECTURE.md) | How a turn runs, design trade-offs, the repository |
-| [Roadmap](ROADMAP.md) | What comes next, and what is out of scope |
+| [Roadmap](ROADMAP.md) | What comes next, and what does not change |
 | [Changelog](CHANGELOG.md) | Every release |
 
 Questions and reports: [Issues and Discussions](https://github.com/BolaLabs/AITOOL/issues), see

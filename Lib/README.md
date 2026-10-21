@@ -1,13 +1,13 @@
-# Lib — vendored Primavera assemblies
+# Lib — vendored PRIMAVERA assemblies
 
-116 assemblies from a Cegid Primavera v10 installation, committed so the solution
+116 assemblies from a Cegid PRIMAVERA v10 installation, committed so the solution
 builds on any machine without an ERP installed.
 
 ## Why they are here
 
 Building against the ERP means referencing its object model — `ErpBS100`, `IBasBS100`,
 `StdPlatBS100` and their dependencies. Resolving those from a local installation would
-make the build depend on where (and whether) Primavera is installed, which breaks CI
+make the build depend on where (and whether) PRIMAVERA is installed, which breaks CI
 and every new developer's first clone. Vendoring them makes `msbuild AITOOL.sln`
 work anywhere.
 
@@ -60,9 +60,9 @@ objects loaded into the ERP process is a category of bug that is very hard to di
 
 ## Version drift is expected — and harmless
 
-Primavera ships service releases often, so these files fall behind any given
+PRIMAVERA ships service releases often, so these files fall behind any given
 installation. That is fine, because .NET binds on `AssemblyVersion`, not on
-`FileVersion`, and Primavera keeps `AssemblyVersion` pinned at `10.0.0.0` across the
+`FileVersion`, and PRIMAVERA keeps `AssemblyVersion` pinned at `10.0.0.0` across the
 whole v10 line:
 
 | | vendored here | a live installation |
@@ -85,7 +85,7 @@ pwsh -File scripts\Update-PrimaveraLibs.ps1 -Apply   # refresh from this machine
 ```
 
 The script resolves the installation from the `PERCURSOSGE100` / `PERCURSOSGV100`
-environment variables the Primavera installer sets — the same source
+environment variables the PRIMAVERA installer sets — the same source
 `Directory.Build.props` uses — so there is nothing to configure. Override with
 `-PrimaveraRoot <path to SG100>` for a second install, and add `-IncludeOutsideApl` to
 also match assemblies that live outside `Apl\`.
@@ -103,17 +103,17 @@ reference copies of that closure, but nothing resolves from there.
 
 ## Licensing and disclaimer
 
-These are Cegid Primavera binaries. They are **not** covered by this repository's
+These are Cegid PRIMAVERA binaries. They are **not** covered by this repository's
 licence, and no license to them is granted or implied by it — see
 [TRADEMARKS.md](../TRADEMARKS.md) and [COMMERCIAL.md](../COMMERCIAL.md).
 
 They are present for one reason: so the solution compiles and can be developed without a
-Primavera installation on the machine. They are compile-time metadata, never copied to any
+PRIMAVERA installation on the machine. They are compile-time metadata, never copied to any
 output, never packaged, never executed, and never delivered to an end user — at runtime the
 addon binds to the assemblies of the licensed ERP it is loaded into.
 
 **Provided as is, with no warranty of any kind.** Anyone building from this repository is
-responsible for holding their own valid Primavera/Cegid licensing, and for their own use of
+responsible for holding their own valid PRIMAVERA/Cegid licensing, and for their own use of
 these files. If Cegid asks for their removal, they come out and the build reverts to
 resolving references from a licensed installation — which is the arrangement this folder
 exists to avoid, not one it makes impossible.

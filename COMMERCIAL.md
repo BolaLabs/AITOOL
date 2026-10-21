@@ -9,7 +9,7 @@ is about.
 
 - Using AITOOL in your company, on as many workstations as you have, for as long as you
   want.
-- Deploying it for your own customers as a Primavera partner, with the official installer
+- Deploying it for your own customers as a PRIMAVERA partner, with the official installer
   unmodified. You may charge for your installation, configuration, training and support;
   not for AITOOL itself.
 - Configuring it for each customer through custom instructions, providers and models.
@@ -25,7 +25,7 @@ released later as premium will be marked as premium; nothing you already have is
   partner.
 - **Custom tools and integrations**: new ERP tools, entity handlers, connectors to the
   systems your customers already run, local model deployments on their infrastructure.
-- **Deployment and support**: installing and configuring the addon in a Primavera v10
+- **Deployment and support**: installing and configuring the addon in a PRIMAVERA v10
   environment, connecting AI providers, SQL Server setup, priority fixes and upgrade help
   for production.
 - **Premium features** as they are released: purchase invoice intake, purchase documents,
@@ -33,7 +33,7 @@ released later as premium will be marked as premium; nothing you already have is
 
 Pricing is set case by case; there is no public price list yet.
 
-Running AITOOL always requires your own licensed Primavera v10 environment. The
+Running AITOOL always requires your own licensed PRIMAVERA v10 environment. The
 third-party components listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) keep their
 own licences; no agreement with us can waive them.
 

@@ -1,4 +1,4 @@
-# Skills
+﻿# Skills
 
 A skill is a workflow written for the assistant in plain Markdown: which tools to use, in
 what order, what to confirm, what never to do. The assistant reads it when a request
@@ -14,13 +14,13 @@ Portuguese version: [SKILLS.pt.md](SKILLS.pt.md).
 |---|---|---|
 | `<ERP>\Config\<ED>\Extensions\AITOOL\Skills\<name>\SKILL.md` (`ED` = `EV`, `LE` or `LP`) | The addon itself | The skills that ship with each version (`incluída` in `/skills`); replaced on every update, so do not edit here |
 | `%ProgramData%\AITOOL\Skills\<name>\SKILL.md` | Everyone on this machine (and, in client-server setups, every workstation that shares it) | Created empty by the installer, which resets its ACL on every run so that only SYSTEM and administrators can write; an update never touches what is in it |
-| `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<name>\SKILL.md` | You | Settings → Skills → "Nova skill" creates one here from the template and opens it; "Abrir a minha pasta" opens the folder |
+| `%LocalAppData%\Cegid\Extensions\AITOOL\Skills\<name>\SKILL.md` | You | Definições (Settings) → Skills → "Nova skill" creates one here from the template and opens it; "Abrir a minha pasta" opens the folder |
 
 A shared skill with the same name as a shipped one replaces it, and a skill in your folder
 replaces both. A folder or `name` starting with `_` is a template: listed, never offered to
 the assistant. Skills you switch off are remembered in
 `%LocalAppData%\Cegid\Extensions\AITOOL\skills-disabled.json` — a per-user file, so
-switching off a shared skill affects only you. Settings → Skills lists how many skills were
+switching off a shared skill affects only you. Definições → Skills lists how many skills were
 found and, for each one, an Incluída / Partilhada / Minha pill, the description, the phrases
 that trigger it, the switch and an "Editar SKILL.md" button ("Ver SKILL.md" for shipped
 skills, which every update replaces, and for shared ones unless you are a supervisor). A
@@ -42,7 +42,7 @@ triggers: leads, prospeção, empresas-alvo, oportunidade de venda
 tools: web_search, search_entities, enrich_entity, create_entity,
   create_opportunity, draft_email
 version: 1.0
-author: BolaLabs
+author: Bola Labs
 ---
 
 # Prospeção de leads
@@ -61,9 +61,10 @@ Header keys:
 - `description` (required): one sentence; the assistant reads it to decide whether the skill applies.
 - `triggers`: words that usually appear in the request, comma-separated.
 - `tools`: the tools the skill expects to use, comma-separated. The list guides the
-  assistant; it does not restrict it. What the assistant may call is decided in Settings, and
+  assistant; it does not restrict it. What the assistant may call is decided in Definições →
+  Ferramentas, and
   a tool switched off there stays off whatever the skill says.
-- `version`, `author`: free text, shown in Settings.
+- `version`, `author`: free text, shown in Definições → Skills.
 
 The body is free Markdown. Keep the instructions under 12 000 characters (the header does not
 count); a longer body is listed with a problem and never used. Write it the way you would brief a new colleague: what to ask first,
@@ -71,9 +72,10 @@ which tool answers each step, what to do with the result, where to stop and ask.
 
 ## What a skill cannot do
 
-- Skip the confirmation of a save. `create_entity`, `update_entity`,
-  `create_sales_document` and `create_opportunity` always preview first, and the confirmation
-  is always the card: the commit needs a single-use token the application issues when it draws
+- Skip the confirmation of a save. The eight tools that write (`create_entity`,
+  `update_entity`, `create_article`, `create_sales_document`, `create_purchase_document`,
+  `create_settlement`, `create_opportunity` and `update_sales_series`) always preview first,
+  and the confirmation is always the card: the commit needs a single-use token the application issues when it draws
   that card and the user's click returns. A skill that tells the assistant to save directly,
   or to accept a typed "sim", changes nothing — the call is refused and audited.
 - Override the system prompt. The skill's instructions are loaded after it, and the prompt
@@ -105,6 +107,6 @@ request, so it does not spend a round trip asking for it with `use_skill`.
 ## Sharing skills
 
 A skill is a folder: zip it, mail it, or publish it in a Git repository. A public collection
-reviewed by pull request is planned as `BolaLabs/AITOOL-skills`; until it exists, the
-`_modelo` folder and this page are the spec. Never put credentials or customer data in a
+reviewed by pull request, `BolaLabs/AITOOL-skills`, is on the [roadmap](../ROADMAP.md) under
+Exploring; until it exists, the `_modelo` folder and this page are the spec. Never put credentials or customer data in a
 `SKILL.md`: it is read into every request that uses the skill.
