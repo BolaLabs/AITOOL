@@ -4,8 +4,8 @@
 
 AITOOL already answers from PRIMAVERA, fills its windows and saves documents, receipts and
 payments from a card you click. Next, it reads the paperwork that arrives: supplier invoices
-from a photo or a PDF, checked against e-Fatura, and collections by MB WAY that come back as
-receipts. Every item ships only after it works in a real PRIMAVERA ERP, and
+from a photo or a PDF, read by the AT QR code and a vision model and filed in the ERP, checked
+against e-Fatura, and collections by MB WAY that come back as receipts. Every item ships only after it works in a real PRIMAVERA ERP, and
 nothing here is a promise of a date: the [README](README.md) describes what exists today, and
 the [CHANGELOG](CHANGELOG.md) what each version added.
 
@@ -27,14 +27,27 @@ the [CHANGELOG](CHANGELOG.md) what each version added.
 
 ## Next
 
-### Supplier invoices from a photo or a PDF
+### Supplier invoices from a photo or a PDF, filed in the ERP
 
-Drop the PDF or the photo of a supplier invoice into the chat. The assistant reads the AT QR
-code that Portuguese invoices carry as the source of truth for the issuer, the date and the
-VAT totals, reads the lines the QR does not carry, checks that both add up, and prepares the
-purchase document with the original file attached in the ERP's own archive. If something
-does not reconcile it stops and says what is missing. You confirm every document; nothing is
-posted on its own.
+Drop the PDF, a scan or a phone photo of a supplier invoice into the chat, or a month of them
+at once. Two readings meet on each page:
+
+- **The AT QR code** that Portuguese invoices carry is the source of truth for the issuer's
+  tax id, the number, the date, the ATCUD and the VAT totals.
+- **A vision model** reads the rest of the page as a person would: the supplier's name, every
+  line with its description, quantity, unit price, discount and VAT rate, the due date, the
+  payment reference or IBAN, the order it refers to. It also reads invoices with no QR code,
+  from abroad or photographed at an angle. It is the multimodal model of the AI provider you
+  already use, or a local vision model on your own network, in which case the invoice never
+  leaves it.
+
+The assistant then matches each line to an article in the ERP (by the supplier's own code, by
+the description, by what was bought from that supplier before), checks that the lines add up
+to the QR totals to the cent, and warns when the supplier is not in the ERP yet or the IBAN on
+the invoice differs from the supplier's record. The purchase document comes as a confirmation
+card with the ERP's own totals and the original file attached in the ERP's archive; the
+approval for payment and the payment are the next cards. A line that does not reconcile is
+shown, not guessed; nothing is posted on its own.
 
 ### Purchases and sales checked against e-Fatura
 

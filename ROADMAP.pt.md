@@ -4,8 +4,8 @@
 
 O AITOOL já responde a partir do PRIMAVERA, preenche as janelas e grava documentos, recibos e
 pagamentos a partir de um cartão em que carrega. A seguir, lê a papelada que chega: faturas de
-fornecedor a partir de uma foto ou de um PDF, conferidas com o e-Fatura, e cobranças por MB WAY
-que voltam como recibos. Cada ponto só sai depois de funcionar num ERP
+fornecedor a partir de uma foto ou de um PDF, lidas pelo QR da AT e por um modelo de visão e
+arquivadas no ERP, conferidas com o e-Fatura, e cobranças por MB WAY que voltam como recibos. Cada ponto só sai depois de funcionar num ERP
 PRIMAVERA real, e nada aqui é uma data prometida: o [README](README.pt.md) descreve o que já
 existe, e o [CHANGELOG](CHANGELOG.md) o que cada versão acrescentou.
 
@@ -27,13 +27,26 @@ existe, e o [CHANGELOG](CHANGELOG.md) o que cada versão acrescentou.
 
 ## A seguir
 
-### Faturas de fornecedor a partir de uma foto ou de um PDF
+### Faturas de fornecedor a partir de uma foto ou de um PDF, arquivadas no ERP
 
-Largue no chat o PDF ou a foto de uma fatura de fornecedor. O assistente lê o código QR da AT
-que as faturas portuguesas trazem como fonte de verdade do emitente, da data e dos totais de
-IVA, lê as linhas que o QR não traz, confirma que tudo bate certo e prepara o documento de
-compra com o ficheiro original anexado no arquivo do próprio ERP. Se alguma coisa não bater
-certo, para e diz o que falta. Cada documento é confirmado por si; nada é lançado sozinho.
+Largue no chat o PDF, a digitalização ou a fotografia de uma fatura de fornecedor, ou as de um
+mês inteiro de uma vez. Em cada página encontram-se duas leituras:
+
+- **O código QR da AT** que as faturas portuguesas trazem é a fonte de verdade do NIF do
+  emitente, do número, da data, do ATCUD e dos totais de IVA.
+- **Um modelo de visão** lê o resto da página como uma pessoa: o nome do fornecedor, cada linha
+  com a descrição, a quantidade, o preço unitário, o desconto e a taxa de IVA, o vencimento, a
+  referência de pagamento ou o IBAN, a encomenda a que se refere. Lê também faturas sem QR, do
+  estrangeiro ou fotografadas de lado. É o modelo multimodal do fornecedor de IA que já usa, ou
+  um modelo de visão local na sua rede, e nesse caso a fatura nunca sai dela.
+
+Depois o assistente associa cada linha a um artigo do ERP (pelo código do próprio fornecedor,
+pela descrição, pelo que já se comprou a esse fornecedor), confirma que as linhas somam os
+totais do QR ao cêntimo e avisa quando o fornecedor ainda não está no ERP ou quando o IBAN da
+fatura difere do da ficha. O documento de compra vem num cartão de confirmação com os totais do
+próprio ERP e o ficheiro original anexado no arquivo do ERP; a aprovação para pagamento e o
+pagamento são os cartões seguintes. Uma linha que não bate certo é mostrada, não adivinhada;
+nada é lançado sozinho.
 
 ### Compras e vendas conferidas com o e-Fatura
 
